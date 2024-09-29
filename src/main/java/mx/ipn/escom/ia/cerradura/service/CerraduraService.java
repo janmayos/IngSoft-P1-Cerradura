@@ -40,7 +40,7 @@ public class CerraduraService {
     // Método auxiliar para generar cadenas binarias de longitud 'n'
     private String generarBinarios(int n) {
         return java.util.stream.IntStream.range(0, (int) Math.pow(2, n))
-                .mapToObj(i -> String.format("%" + n + "s", Integer.toBinaryString(i)).replace(' ', '0'))
+                .mapToObj(i -> String.format("%"+n+"s", Integer.toBinaryString(i)).replace(' ', '0'))
                 .collect(Collectors.joining(", "));
     }
     
