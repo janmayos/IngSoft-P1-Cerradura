@@ -16,19 +16,30 @@ public class CerraduraController{
 
 	
 	@GetMapping("/estrella/{numero}")
-	public String estrella(@PathVariable int numero) {
-		CerraduraService service = new CerraduraService();
-		Map<String, String> response = service.kleeneCerradura(numero);
-		return ""+response;
+	public String estrella(@PathVariable String numero) {
+		
+		try {
+			int valor = Integer.parseInt(numero);
+			CerraduraService service = new CerraduraService();
+			Map<String, String> response = service.kleeneCerradura(valor);
+			return ""+response;
+		} catch (NumberFormatException e) {
+			return "Argumento no valido: "+numero;	
+		}
+
 	}
 
 	@GetMapping("/positiva/{numero}")
-	public String positiva(@PathVariable int numero) {
-		CerraduraService service = new CerraduraService();
-		Map<String, String> response = service.kleeneClausuraPositiva(numero);
-		return ""+response;
+	public String positiva(@PathVariable String numero) {
+
+		try {
+			int valor = Integer.parseInt(numero);
+			CerraduraService service = new CerraduraService();
+			Map<String, String> response = service.kleeneClausuraPositiva(valor);
+			return ""+response;
+		} catch (NumberFormatException e) {
+			return "Argumento no valido: "+numero;	
+		}
+		
 	}
-
-	
-
 }
