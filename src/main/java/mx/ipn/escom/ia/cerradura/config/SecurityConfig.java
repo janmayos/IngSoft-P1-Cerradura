@@ -19,15 +19,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF si no es necesario
-                .authorizeHttpRequests(requests -> requests
+                .csrf(csrf -> csrf.disable());  // Deshabilitar CSRF si no es necesario
+                /*.authorizeHttpRequests(requests -> requests
                         .requestMatchers("/auth/**").permitAll()  // Permitir acceso a /auth sin autenticación
                         .requestMatchers("/admin/**").hasRole("ADMIN")  // Rutas solo para administradores
                         .requestMatchers("/user/**").hasRole("USER")    // Rutas solo para usuarios
                         .anyRequest().authenticated())
                 .formLogin(login -> login.permitAll())
                 .logout(logout -> logout.permitAll());  // Permitir logout para todos los usuarios
-
+         */
         return http.build();
     }
 }

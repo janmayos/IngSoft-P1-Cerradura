@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,11 +30,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody Usuario usuario) {
+    
         // Codificar la contraseña si usas un password encoder
-        System.out.println(usuario);
+        
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         
-        Set<Rol> roles = new HashSet<>();
+        /*Set<Rol> roles = new HashSet<>();
         for (Rol rol : usuario.getRoles()) {
             // Buscar el rol en la base de datos
             Rol existingRol = rolRepository.findByNombre(rol.getNombre()) // <-- Ahora está correctamente inyectado
@@ -42,11 +44,12 @@ public class AuthController {
         }
         
         // Asignar roles al usuario
-        usuario.setRoles(roles);
+        usuario.setRoles(roles);*/
         
         // Guardar el usuario
         usuarioRepository.save(usuario);
         return ResponseEntity.ok("Usuario registrado exitosamente");
+        
     }
 
     @PostMapping("/login")
@@ -56,5 +59,11 @@ public class AuthController {
             return "Inicio de sesión exitoso";
         }
         return "Credenciales inválidas";
+    }
+
+    @GetMapping("/encoder")
+    public String loginUser(@PathVariable String password) {
+        return passwordEncoder.encode(password);
+        
     }
 }
