@@ -18,13 +18,13 @@ import java.util.Set;
 @RequestMapping("/auth")
 
 public class AuthController {
-    @Autowired
+    //@Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
+    //@Autowired
     private RolRepository rolRepository; // <-- Asegúrate de inyectar el repositorio de roles
 
-    @Autowired
+    //@Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
