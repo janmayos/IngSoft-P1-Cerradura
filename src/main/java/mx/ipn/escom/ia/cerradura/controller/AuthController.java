@@ -30,6 +30,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody Usuario usuario) {
         // Codificar la contraseña si usas un password encoder
+        System.out.println(usuario);
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         
         Set<Rol> roles = new HashSet<>();
