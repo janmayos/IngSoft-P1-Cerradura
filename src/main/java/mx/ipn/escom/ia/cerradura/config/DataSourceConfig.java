@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfig {
 
+    /*
     @Bean
     public DataSource getDataSource() {
         return DataSourceBuilder.create()
@@ -16,5 +17,5 @@ public class DataSourceConfig {
                 .password("admin")
                 .driverClassName("com.mysql.cj.jdbc.Driver")
                 .build();
-    }
+    }*/
 }
