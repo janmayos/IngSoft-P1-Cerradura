@@ -12,4 +12,8 @@ public class LoginController {
         return "auth/login";
     }
     
+    @GetMapping("/formregister")
+    public String registro() {
+        return "auth/Registro";
+    }
 }

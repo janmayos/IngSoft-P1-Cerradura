@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF si no es necesario
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/formlogin", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/formlogin", "/formregister","/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/**").permitAll() // Permitir acceso a /auth sin autenticación
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas solo para administradores

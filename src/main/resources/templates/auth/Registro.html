@@ -8,7 +8,7 @@
     <script src="https://kit.fontawesome.com/1ab94d0eba.js" crossorigin="anonymous"></script>
     <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
     
-    <title>Login</title>
+    <title>Registro</title>
 </head>
 
 <body>
@@ -16,7 +16,19 @@
 
     <main class="container">
         <h2>Login</h2>
-        <form th:action="@{/auth/login}" method="post">
+        <form th:action="@{/auth/register}" method="post">
+            <div class="input-field">
+                <input type="text" name="nombre" id="nombre" placeholder="Ingresa tu nombre" />
+                <div class="underline"></div>
+            </div>
+            <div class="input-field">
+                <input type="text" name="apellidoP" id="apellidoP" placeholder="Ingresa apellido paterno" />
+                <div class="underline"></div>
+            </div>
+            <div class="input-field">
+                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
+                <div class="underline"></div>
+            </div>
             <div class="input-field">
                 <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
                 <div class="underline"></div>
