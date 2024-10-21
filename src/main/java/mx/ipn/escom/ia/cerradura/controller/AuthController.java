@@ -1,6 +1,7 @@
 package mx.ipn.escom.ia.cerradura.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class AuthController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody Usuario usuario) {
+    public ResponseEntity<String> registerUser(@RequestBody Usuario usuario) {
         // Codificar la contraseña si usas un password encoder
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         
@@ -45,7 +46,8 @@ public class AuthController {
         
         // Guardar el usuario
         usuarioRepository.save(usuario);
-        return ResponseEntity.ok("Usuario registrado exitosamente");
+        
+        return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
