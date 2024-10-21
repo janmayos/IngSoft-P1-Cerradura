@@ -14,6 +14,9 @@ import mx.ipn.escom.ia.cerradura.repository.UsuarioRepository;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -50,6 +53,8 @@ public class AuthController {
         return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.CREATED);
     }
 
+
+
     @PostMapping("/login")
     public String loginUser(@RequestBody Usuario usuario) {
         Optional<Usuario> foundUser = usuarioRepository.findByCorreo(usuario.getCorreo());
@@ -58,4 +63,6 @@ public class AuthController {
         }
         return "Credenciales inválidas";
     }
+
+
 }
