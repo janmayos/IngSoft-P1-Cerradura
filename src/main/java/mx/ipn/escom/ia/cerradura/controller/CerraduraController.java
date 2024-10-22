@@ -2,6 +2,7 @@ package mx.ipn.escom.ia.cerradura.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,9 @@ import mx.ipn.escom.ia.cerradura.service.CerraduraService;
 @RequestMapping("/cerradura")
 public class CerraduraController{
 
+	@Autowired
+	private CerraduraService service;
+
 	
 	@GetMapping("/estrella/{numero}")
 	@ResponseBody
@@ -23,7 +27,7 @@ public class CerraduraController{
 		
 		try {
 			int valor = Integer.parseInt(numero);
-            CerraduraService service = new CerraduraService();
+            
             return service.kleeneCerradura(valor);
 		} catch (NumberFormatException e) {
 			return Map.of("error", "Argumento no valido: " + numero);	
@@ -34,10 +38,9 @@ public class CerraduraController{
 	@GetMapping("/positiva/{numero}")
 	@ResponseBody
 	public Map<String, String> positiva(@PathVariable String numero) {
-
 		try {
 			int valor = Integer.parseInt(numero);
-            CerraduraService service = new CerraduraService();
+            
             return service.kleeneClausuraPositiva(valor);
 		} catch (NumberFormatException e) {
 			return Map.of("error", "Argumento no valido: " + numero);	
