@@ -1,0 +1,30 @@
+services:
+  app-spring:
+    #image: maven:3.9.9-amazoncorretto-21-al2023
+    container_name: app-spring
+    ports:
+      - 8080:8080
+    build: .
+    #command: 
+    #  - "mvn clean install"
+    # - "mvn spring-boot:run"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://bd-mysql:3306/practica2?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: admin 
+      SPRING_DATASOURCE_PASSWORD: admin 
+    depends_on:
+      - bd-mysql
+  bd-mysql:
+    image: mysql:latest
+    container_name: bd-mysql
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      DATABASE_HOST: bd-mysql
+      DATABASE_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: practica2
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      
