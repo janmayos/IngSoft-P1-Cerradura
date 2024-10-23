@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY pom.xml .
 COPY . .
 
-EXPOSE 8008
+EXPOSE 8080
 
 
 CMD [ "mvn","clean","install","spring-boot:run" ]
