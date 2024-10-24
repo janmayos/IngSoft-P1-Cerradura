@@ -22,7 +22,7 @@ http://localhost:8080/auth/register
     "apellidoPaterno":"Gasca",
     "apellidoMaterno":"Molinero",
     "correo":"janmayos@example2.com",
-    "username":"ja2nmayos",
+    "username":"janmayos",
     "password":"1234",
     "edad":25,
     "genero":"Masculino",
