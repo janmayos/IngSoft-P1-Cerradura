@@ -1,49 +1,35 @@
 <!DOCTYPE html>
-<html lang="Spanish" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/1ab94d0eba.js" crossorigin="anonymous"></script>
-    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
-    
-    <title>Registro</title>
+  <!-- Design by foolishdeveloper.com -->
+    <title>Glassmorphism login Form Tutorial in html css</title>
+ 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/main/resources/static/css/styleRegistro.css" type="text/css">
+    <!--Stylesheet-->
 </head>
-
 <body>
-    <h1 class="titulo">Bienvenido ingresa tus credenciales!</h1>
+    <div class="background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <form>
+        <h3>Registrate</h3>
 
-    <main class="container">
-        <h2>Login</h2>
-        <form th:action="@{/auth/register}" method="post">
-            <div class="input-field">
-                <input type="text" name="nombre" id="nombre" placeholder="Ingresa tu nombre" />
-                <div class="underline"></div>
-            </div>
-            <div class="input-field">
-                <input type="text" name="apellidoP" id="apellidoP" placeholder="Ingresa apellido paterno" />
-                <div class="underline"></div>
-            </div>
-            <div class="input-field">
-                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
-                <div class="underline"></div>
-            </div>
-            <div class="input-field">
-                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
-                <div class="underline"></div>
-            </div>
+        <label for="username">Username</label>
+        <input type="text" placeholder="Ingresa tu usuario" id="userU">
 
-            <div class="input-field">
-                <input type="password" name="passwordU" id="passwordU" placeholder="Ingresa contraseña" />
-                <div class="underline"></div>
-            </div>
-            
-            <input type="submit" value="Ingresar" />
-            
-        </form>
+        <label for="password">Password</label>
+        <input type="password" placeholder="Password" id="passwordU">
 
-    </main>
+        <button>Registrarse</button>
+        
+    </form>
 </body>
-
+</html>
+<!-- partial -->
+  
+</body>
 </html>
