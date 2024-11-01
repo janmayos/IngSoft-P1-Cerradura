@@ -9,18 +9,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <!-- <link href="../../static/js/materialize/css/materialize.min.css" rel="stylesheet"> -->
     <!-- <link href="./css/general.css" rel="stylesheet"> -->
-    <script src="../../static/js/plugins/jquery-3.7.1.slim.min.js"></script>
+    <!-- <script src="../../static/js/plugins/jquery.js"></script>
     <script src="../../static/js/materialize/js/materialize.min.js"></script>
-    <script src="../../static/js/plugins/just-validate.min.js"></script>
-    <script src="../../static/js/plugins/sweetalert2.all.min.js"></script>
-    <!-- <script src="./js/index.js"></script> -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../static/js/plugins/sweetalert2.js"></script>
+    <script src="../../static/js/plugins/just-validate.js"></script>
     
+    <script src="../../static/js/login.js"></script> -->
 
+    <script th:src="@{/js/plugins/jquery.js}"></script>
+    <script th:src="@{/js/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/js/plugins/sweetalert2.js}"></script>
+    <script th:src="@{/js/plugins/just-validate.js}"></script>
+    
+    <script th:src="@{/js/login.js}"></script>
+
+    <script th:src="@{https://cdn.tailwindcss.com}"></script>
+    
+    
 </head>
 
 <body class="h-full">
+    
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <h1 class="mt-10 text-center text-5xl/9 font-bold tracking-tight text-gray-900">Login</h1>
@@ -28,11 +37,11 @@
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6"  th:action="@{/auth/login}" action="#" method="POST">
+            <form class="space-y-6" id="formLogin" autocomplete="off">
                 <div>
                     <label for="Usuario" class="block text-sm/6 font-medium text-gray-900">Usuario</label>
                     <div class="mt-2">
-                        <input type="text" name="userU" id="userU" class="bg-black border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Ingresa tu usuario" required />
+                        <input type="text" name="userU" id="userU" class="bg-black border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
                     </div>
                 </div>
 
@@ -42,7 +51,7 @@
 
                     </div>
                     <div class="mt-2">
-                        <input name="passwordU" id="passwordU" type="password" class="bg-black border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Ingresa tu contraseña" required />
+                        <input name="passwordU" id="passwordU" type="password" class="bg-black border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                         
                         
                     </div>

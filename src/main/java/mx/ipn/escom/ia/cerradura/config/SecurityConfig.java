@@ -16,7 +16,7 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -28,7 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas solo para administradores
                         .requestMatchers("/user/**").hasRole("USER") // Rutas solo para usuarios
                         .anyRequest().authenticated())
-
+                
                 .formLogin(login -> login.loginPage("/formlogin")
                         .defaultSuccessUrl("/home", true) // Página a la que se redirige tras login exitoso
                         .permitAll())
@@ -36,6 +36,8 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    
 
     
 }

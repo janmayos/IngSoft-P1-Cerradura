@@ -56,16 +56,16 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam(name="userU",required = true) String nombreUsuario,@RequestParam(name="passwordU",required = true) String passwordUsuario,Model model) {
+    public ResponseEntity<String> loginUser(@RequestParam(name="userU",required = true) String nombreUsuario, @RequestParam(name="passwordU",required = true) String passwordUsuario,Model model) {
         model.addAttribute("userU", nombreUsuario);
         Usuario usuario = new Usuario();
         usuario.setUsername(nombreUsuario);
         usuario.setPassword(passwordUsuario);
         Optional<Usuario> foundUser = usuarioRepository.findByUsername(usuario.getUsername());
         if (foundUser.isPresent() && passwordEncoder.matches(usuario.getPassword(), foundUser.get().getPassword())) {
-            return "Inicio de sesión exitoso";
+            return new ResponseEntity<>("Bienvenido "+foundUser.get().getNombre()+"!!", HttpStatus.OK);
         }
-        return "Credenciales inválidas";
+        return new ResponseEntity<>("Credenciales inválidas", HttpStatus.UNAUTHORIZED);
     }
 
 
