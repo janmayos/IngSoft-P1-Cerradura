@@ -38,7 +38,7 @@ $(document).ready(() => {
             text: "Bienvenido " + respServ.nombre,
             icon: "success",
             didDestroy: () => {
-              //window.location.href=window.location.origin+"/PaginaInicio";
+              window.location.href=window.location.origin+"/PaginaInicio";
               // console.log(respServ)
               // superagent
               //   .get(window.location.origin+"/PaginaInicio")
