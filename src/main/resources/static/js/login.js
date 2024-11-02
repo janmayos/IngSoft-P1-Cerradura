@@ -35,10 +35,30 @@ $(document).ready(() => {
           console.log(respServ);
           Swal.fire({
             title: "Exito!!",
-            text: respServ,
+            text: "Bienvenido " + respServ.nombre,
             icon: "success",
             didDestroy: () => {
-              location.reload();
+              //window.location.href=window.location.origin+"/PaginaInicio";
+              // console.log(respServ)
+              // superagent
+              //   .get(window.location.origin+"/PaginaInicio")
+              //   .send(respServ) // sends a JSON post body
+              //   .type('json')
+              //   .redirects(1)
+              //   .end(function (err, res) {
+              //     console.log("error")
+              //     console.log(err)
+              //     console.log(res)
+                  
+              //     // Calling the end function will send the request
+              //   });
+
+              
+              //window.location.href=window.location.origin+"/PaginaInicio";
+              // $.get(window.location.origin+"/PaginaInicio", function( data ) {
+              //   $( ".result" ).html( respServ );
+              //   alert( "Load was performed." );
+              // });
             }
           });
         },
@@ -49,7 +69,7 @@ $(document).ready(() => {
 
           Swal.fire({
             title: "Upps..",
-            text: respServ.responseText,
+            text: "Credenciales inválidas",
             icon: "error",
             didDestroy: () => {
               location.reload();
