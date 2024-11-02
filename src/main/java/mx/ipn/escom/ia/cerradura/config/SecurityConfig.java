@@ -31,7 +31,7 @@ public class SecurityConfig {
             .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas solo para administradores
             .requestMatchers("/user/**").hasRole("USER") // Rutas solo para usuarios
             .anyRequest().permitAll()) // Rutas restantes permitidas
-    
+    a
         .formLogin(login -> login
             .loginPage("/formlogin")
             .defaultSuccessUrl("/PaginaInicio", true) // Página a la que se redirige tras login exitoso
