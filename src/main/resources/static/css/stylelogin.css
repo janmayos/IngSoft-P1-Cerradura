@@ -122,19 +122,4 @@ button:active {
     color: #000000;
 }
 
-select {
-    appearance: none;
-    -webkit-appearance: none; /* Para Safari */
-    background-color: #000; /* Fondo negro para el select */
-    color: #fff; /* Texto blanco */
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 100%;
-}
 
-/* Para las opciones del menú desplegable */
-select option {
-    background-color: #000; /* Fondo negro */
-    color: #fff; /* Texto blanco */
-}

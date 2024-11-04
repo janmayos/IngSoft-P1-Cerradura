@@ -1,35 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <!-- Design by foolishdeveloper.com -->
-    <title>Glassmorphism login Form Tutorial in html css</title>
- 
+    <title>Glassmorphism Login Form Tutorial in HTML CSS</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/src/main/resources/static/css/styleRegistro.css" type="text/css">
-    <!--Stylesheet-->
+    <link th:href="@{/css/styleRegistro.css}" rel="stylesheet" type="text/css">
+    <script src="../../static/js/resgistro.js"></script>
 </head>
 <body>
-    <div class="background">
+    <div class="background">    
+        <div class="shape"></div>
+        <div class="shape"></div>
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form>
-        <h3>Registrate</h3>
+    <form th:action="@{/auth/register}" method="post">
+        <h3>Regístrate</h3>
 
-        <label for="username">Username</label>
-        <input type="text" placeholder="Ingresa tu usuario" id="userU">
+        <label for="nombre">Nombre</label>
+        <input type="text" placeholder="Vicente" id="nombre" required>
 
-        <label for="password">Password</label>
-        <input type="password" placeholder="Password" id="passwordU">
+        <label for="apellidoP">Apellido paterno</label>
+        <input type="text" placeholder="Morales" id="apellidoP" required>
 
-        <button>Registrarse</button>
+        <label for="apellidoM">Apellido materno</label>
+        <input type="text" placeholder="Díaz" id="apellidoM">
+
+        <label for="correo">Correo electrónico</label>
+        <input type="email" placeholder="vicente.morales@example.com" id="correo" required>
+
+        <label for="username">Nombre de usuario</label>
+        <input type="text" placeholder="Strack2112" id="username" required>
+
+        <label for="passwordU">Contraseña</label>
+        <input type="password" placeholder="********" id="passwordU" required>
+
+        <label for="edad">Edad</label>
+        <input type="text" placeholder="24" id="edad" required>
+
+        <!-- Select para género sin estilos personalizados -->
+        <label for="genero">Género</label>
+        <select id="genero" name="genero" required>
+            <option value="">Seleccionar género</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+        </select>
         
+        <button type="submit">Registrar</button>
+
+        <button type="button" onclick="location.href='auth/login'">Regresar al Registro</button>
     </form>
-</body>
-</html>
-<!-- partial -->
-  
+    
 </body>
 </html>
