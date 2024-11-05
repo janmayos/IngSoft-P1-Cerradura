@@ -3,10 +3,10 @@ package mx.ipn.escom.ia.cerradura.model;
 import jakarta.persistence.*;
 import java.util.Set;
 
-
 @Entity
 @Table(name = "rol")
 public class Rol {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rol")
@@ -42,5 +42,4 @@ public class Rol {
     public void setUsuarios(Set<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-    
 }

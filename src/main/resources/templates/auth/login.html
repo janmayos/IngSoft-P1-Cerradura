@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="Spanish" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/1ab94d0eba.js" crossorigin="anonymous"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    
+    <title>Login</title>
+</head>
+
+<body>
+    <h1 class="titulo">Bienvenido ingresa tus credenciales!</h1>
+
+    <main class="container">
+        <h2>Login</h2>
+        <form th:action="@{/auth/login}" method="post">
+            <div class="input-field">
+                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
+                <div class="underline"></div>
+            </div>
+
+            <div class="input-field">
+                <input type="password" name="passwordU" id="passwordU" placeholder="Ingresa contraseña" />
+                <div class="underline"></div>
+            </div>
+            
+            <input type="submit" value="Ingresar" />
+            
+        </form>
+
+    </main>
+</body>
+
+</html>
