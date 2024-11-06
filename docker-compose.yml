@@ -14,6 +14,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: admin 
     depends_on:
       - bd-mysql
+    volumes:
+      - m2:/root/.m2
   bd-mysql:
     image: mysql:latest
     container_name: bd-mysql
@@ -27,4 +29,11 @@ services:
       MYSQL_DATABASE: practica2
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    volumes:
+      - dataSQL:/var/lib/mysql
+volumes:
+  dataSQL:
+  m2:
+
       
+  #docker run --hostname=2ff3364b8575 --env=DATABASE_PORT=3306 --env=MYSQL_ROOT_PASSWORD=root --env=MYSQL_DATABASE=practica2 --env=MYSQL_USER=admin --env=MYSQL_PASSWORD=admin --env=DATABASE_HOST=bd-mysql --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=GOSU_VERSION=1.17 --env=MYSQL_MAJOR=innovation --env=MYSQL_VERSION=9.1.0-1.el9 --env=MYSQL_SHELL_VERSION=9.1.0-1.el9 --volume=/var/lib/mysql --network=ia-p1-cerradura_default --workdir=/ -p 3306:3306 --restart=always --label='com.docker.compose.config-hash=a8d2948336c385e8aae23c9bc80cbd0861968e861078f0418a42c0ce17fe9f5b' --label='com.docker.compose.container-number=1' --label='com.docker.compose.depends_on=' --label='com.docker.compose.image=sha256:be960704dfac8744a2e2df80c90087551a998ac008916b9d1423d7b0c5ee33ea' --label='com.docker.compose.oneoff=False' --label='com.docker.compose.project=ia-p1-cerradura' --label='com.docker.compose.project.config_files=C:\Users\PC\Documents\ESCOM\2025-1\Ingenieria de Software\Parcial1\Practica1\IA-P1-Cerradura\docker-compose.yml' --label='com.docker.compose.project.working_dir=C:\Users\PC\Documents\ESCOM\2025-1\Ingenieria de Software\Parcial1\Practica1\IA-P1-Cerradura' --label='com.docker.compose.service=bd-mysql' --label='com.docker.compose.version=2.29.2' --runtime=runc -d mysql:latest
