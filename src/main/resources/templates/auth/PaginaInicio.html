@@ -7,25 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <!-- <link href="../../static/js/materialize/css/materialize.min.css" rel="stylesheet"> -->
-    <!-- <link href="./css/general.css" rel="stylesheet"> -->
-    <!-- <script src="../../static/js/plugins/jquery.js"></script>
-    <script src="../../static/js/materialize/js/materialize.min.js"></script>
-    <script src="../../static/js/plugins/sweetalert2.js"></script>
-    <script src="../../static/js/plugins/just-validate.js"></script>
-    
-    <script src="../../static/js/login.js"></script> -->
 
     <script th:src="@{/js/plugins/jquery.js}"></script>
     <script th:src="@{/js/materialize/js/materialize.min.js}"></script>
     <script th:src="@{/js/plugins/sweetalert2.js}"></script>
     <script th:src="@{/js/plugins/just-validate.js}"></script>
-
-    <!-- <script th:src="@{/js/login.js}"></script> -->
-
     <script th:src="@{https://cdn.tailwindcss.com}"></script>
 
-
+    <!-- Aquí va tu código JS para cargar el nombre desde localStorage -->
+    <script>
+        window.onload = function() {
+        // Obtén el objeto usuarioDTO desde el localStorage
+        const usuarioDTO = JSON.parse(localStorage.getItem('usuarioDTO'));
+        
+        // Verifica si el objeto existe y tiene el nombre
+        if (usuarioDTO && usuarioDTO.nombre) {
+          // Inyecta el nombre del usuario en un contenedor con id "username"
+          document.getElementById("username").textContent = usuarioDTO.nombre;
+        }
+      };
+    </script>
 </head>
 
 <body class="h-full">
@@ -36,66 +37,20 @@
                     <div class="p-6 sm:p-16">
                         <div class="space-y-4">
 
-                            <h2 class="mb-8 text-2xl text-cyan-900 font-bold">Bienvenido</h2>
+                            <!-- Aquí se inyectará el nombre del usuario -->
+                            <h2 id="username" class="mb-8 text-2xl text-cyan-900 font-bold">Bienvenido</h2>
                         </div>
                         <div class="mt-16 grid space-y-4">
-                            <button class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
-    hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
+                            <!-- Los botones o contenido adicional van aquí -->
+                            <button class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
                                 <div class="relative flex items-center space-x-4 justify-center">
                                     <a href="">
-                                        <span
-                                            class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Title
-                                            1</span>
+                                        <span class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Title 1</span>
                                     </a>
                                 </div>
                             </button>
-                            <button class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
-    hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
-                                <div class="relative flex items-center space-x-4 justify-center">
-
-                                    <a href="">
-                                        <span
-                                            class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Title
-                                            2</span>
-                                    </a>
-                                </div>
-                            </button>
-                            <button class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
-                                        hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
-                                <div class="relative flex items-center space-x-4 justify-center">
-
-                                    <a href="">
-                                        <span
-                                            class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Title
-                                            3</span>
-                                    </a>
-                                </div>
-                            </button>
-                            <button class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
-                                        hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
-                                <div class="relative flex items-center space-x-4 justify-center">
-
-                                    <a href="">
-                                        <span
-                                            class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Title
-                                            4</span>
-                                    </a>
-                                </div>
-                            </button>
-                            <button class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
-                                        hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
-                                <div class="relative flex items-center space-x-4 justify-center">
-
-                                    <a href="">
-                                        <span
-                                            class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Title
-                                            5</span>
-                                    </a>
-                                </div>
-                            </button>
+                            <!-- Más botones -->
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -104,29 +59,3 @@
 </body>
 
 </html>
-
-
-<!-- <body>
-    <h1 class="titulo">Bienvenido ingresa tus credenciales!</h1>
-
-    <main class="container">
-        <h2>Login</h2>
-        <form th:action="@{/auth/login}" method="post">
-            <div class="input-field">
-                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
-                <div class="underline"></div>
-            </div>
-
-            <div class="input-field">
-                <input type="password" name="passwordU" id="passwordU" placeholder="Ingresa contraseña" />
-                <div class="underline"></div>
-            </div>
-            
-            <input type="submit" value="Ingresar" />
-            
-        </form>
-
-    </main>
-</body>
-
-</html> -->

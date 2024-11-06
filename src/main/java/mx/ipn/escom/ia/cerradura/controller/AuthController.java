@@ -90,7 +90,7 @@ public class AuthController  {
             // Generar el token
             String token = jwtUtils.generateToken(usuarioDTO);
     
-            return ResponseEntity.ok().body(token);
+            return ResponseEntity.status(HttpStatus.OK).body(token);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
