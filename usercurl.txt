@@ -1,0 +1,32 @@
+curl --location "http://localhost:8080/auth/register" --header "Content-Type: application/json" --header "Cookie: JSESSIONID=3B8D10C592D9EF4E3382EA5CF1E66810" --data-raw "{
+    \"nombre\":\"Jan\",
+    \"apellidoPaterno\":\"Gasca\",
+    \"apellidoMaterno\":\"Molinero\",
+    \"correo\":\"janmayos@example2.com\",
+    \"username\":\"janmayos\",
+    \"password\":\"1234\",
+    \"edad\":25,
+    \"genero\":\"Masculino\",
+    \"roles\":[
+        {\"nombre\":\"ROLE_USER\"},{\"nombre\":\"ROLE_ADMIN\"}
+        ]
+    }
+    
+    "
+
+
+http://localhost:8080/auth/register
+
+    {
+    "nombre":"Jan",
+    "apellidoPaterno":"Gasca",
+    "apellidoMaterno":"Molinero",
+    "correo":"janmayos@example2.com",
+    "username":"janmayos",
+    "password":"1234",
+    "edad":25,
+    "genero":"Masculino",
+    "roles":[
+        {"nombre":"ROLE_USER"},{"nombre":"ROLE_ADMIN"}
+        ]
+    }
