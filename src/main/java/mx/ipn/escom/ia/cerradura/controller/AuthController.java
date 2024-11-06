@@ -8,12 +8,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.security.authentication.AuthenticationManager;
+
 
 import mx.ipn.escom.ia.cerradura.model.Rol;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.model.UsuarioDTO;
 import mx.ipn.escom.ia.cerradura.repository.RolRepository;
 import mx.ipn.escom.ia.cerradura.repository.UsuarioRepository;
+import mx.ipn.escom.ia.cerradura.jwt.JwtUtils;
+import mx.ipn.escom.ia.cerradura.response.JwtResponse;
+
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -21,18 +26,26 @@ import java.util.Set;
 
 
 
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController  {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private RolRepository rolRepository; // <-- Asegúrate de inyectar el repositorio de roles
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private RolRepository rolRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody Usuario usuario) {
@@ -59,26 +72,30 @@ public class AuthController  {
 
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioDTO> loginUser(@RequestParam(name="userU",required = true) String nombreUsuario,
-    @RequestParam(name="passwordU",required = true) String passwordUsuario
-    ) {
+    public ResponseEntity<?> login(@RequestParam String userU, @RequestParam String passwordU) {
+        Optional<Usuario> foundUser = usuarioRepository.findByUsername(userU);
         
-        Usuario usuario = new Usuario();
-        usuario.setUsername(nombreUsuario);
-        usuario.setPassword(passwordUsuario);
-        Optional<Usuario> foundUser = usuarioRepository.findByUsername(usuario.getUsername());
-        if (foundUser.isPresent() && passwordEncoder.matches(usuario.getPassword(), foundUser.get().getPassword())) {
-            
+        if (foundUser.isPresent() && passwordEncoder.matches(passwordU, foundUser.get().getPassword())) {
+            // Crear el UsuarioDTO a partir de Usuario
+            Usuario usuario = foundUser.get();
             UsuarioDTO usuarioDTO = new UsuarioDTO();
-            usuarioDTO.setNombre(foundUser.get().getNombre());
-            //zstatus.setComplete();
-            
-            return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setApellidoPaterno(usuario.getApellidoPaterno());
+            usuarioDTO.setApellidoMaterno(usuario.getApellidoMaterno());
+            usuarioDTO.setCorreo(usuario.getCorreo());
+            usuarioDTO.setEdad(usuario.getEdad());
+            usuarioDTO.setGenero(usuario.getGenero());
+            usuarioDTO.setRoles(usuario.getRoles());
+    
+            // Generar el token
+            String token = jwtUtils.generateToken(usuarioDTO);
+    
+            return ResponseEntity.ok().body(token);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
-
     }
+
 
 
 }
