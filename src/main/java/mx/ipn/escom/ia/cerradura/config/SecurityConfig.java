@@ -28,6 +28,7 @@ public class SecurityConfig {
             .requestMatchers("/formlogin", "/formregister",  "/css/**", "/js/**", "/images/**").permitAll()
             .requestMatchers("/auth/**").permitAll() // Permitir acceso a /auth sin autenticación
             .requestMatchers("/api/**").permitAll()
+            .requestMatchers("/libros/**").permitAll()
             .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas solo para administradores
             .requestMatchers("/user/**").hasRole("USER")
             .requestMatchers("/PaginaInicio").hasRole("USER") // Rutas solo para usuarios
