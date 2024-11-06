@@ -1,49 +1,57 @@
 <!DOCTYPE html>
-<html lang="Spanish" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/1ab94d0eba.js" crossorigin="anonymous"></script>
-    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
-    
-    <title>Registro</title>
+    <title>Glassmorphism Login Form Tutorial in HTML CSS</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="/src/main/resources/static/css/styleRegistro.css" type="text/css"> -->
+    <link th:href="@{/antes/css/styleRegistro.css}" rel="stylesheet" type="text/css">
+    <!-- <script src="../../static/js/resgistro.js"></script> -->
 </head>
-
 <body>
-    <h1 class="titulo">Bienvenido ingresa tus credenciales!</h1>
+    <div class="background">    
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <form th:action="@{/auth/register}" method="post">
+        <h3>Regístrate</h3>
 
-    <main class="container">
-        <h2>Login</h2>
-        <form th:action="@{/auth/register}" method="post">
-            <div class="input-field">
-                <input type="text" name="nombre" id="nombre" placeholder="Ingresa tu nombre" />
-                <div class="underline"></div>
-            </div>
-            <div class="input-field">
-                <input type="text" name="apellidoP" id="apellidoP" placeholder="Ingresa apellido paterno" />
-                <div class="underline"></div>
-            </div>
-            <div class="input-field">
-                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
-                <div class="underline"></div>
-            </div>
-            <div class="input-field">
-                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
-                <div class="underline"></div>
-            </div>
+        <label for="nombre">Nombre</label>
+        <input type="text" placeholder="Vicente" id="nombre" required>
 
-            <div class="input-field">
-                <input type="password" name="passwordU" id="passwordU" placeholder="Ingresa contraseña" />
-                <div class="underline"></div>
-            </div>
-            
-            <input type="submit" value="Ingresar" />
-            
-        </form>
+        <label for="apellidoP">Apellido paterno</label>
+        <input type="text" placeholder="Morales" id="apellidoP" required>
 
-    </main>
+        <label for="apellidoM">Apellido materno</label>
+        <input type="text" placeholder="Díaz" id="apellidoM">
+
+        <label for="correo">Correo electrónico</label>
+        <input type="email" placeholder="vicente.morales@example.com" id="correo" required>
+
+        <label for="username">Nombre de usuario</label>
+        <input type="text" placeholder="Strack2112" id="username" required>
+
+        <label for="passwordU">Contraseña</label>
+        <input type="password" placeholder="********" id="passwordU" required>
+
+        <label for="edad">Edad</label>
+        <input type="text" placeholder="24" id="edad" required>
+
+        <!-- Select para género sin estilos personalizados -->
+        <label for="genero">Género</label>
+        <select id="genero" name="genero" required>
+            <option value="">Seleccionar género</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+        </select>
+        
+        <button type="submit">Registrar</button>
+
+        <button type="button" onclick="location.href='/formlogin'">Regresar al Login</button>
+    </form>
+    
 </body>
-
 </html>
