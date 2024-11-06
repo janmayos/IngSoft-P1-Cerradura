@@ -7,9 +7,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.stereotype.Controller;
 
 import mx.ipn.escom.ia.cerradura.model.Rol;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
+import mx.ipn.escom.ia.cerradura.model.UsuarioDTO;
 import mx.ipn.escom.ia.cerradura.repository.RolRepository;
 import mx.ipn.escom.ia.cerradura.repository.UsuarioRepository;
 
@@ -18,9 +20,10 @@ import java.util.Optional;
 import java.util.Set;
 
 
-@RestController
+
+@Controller
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController  {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -56,16 +59,25 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam(name="userU",required = true) String nombreUsuario,@RequestParam(name="passwordU",required = true) String passwordUsuario,Model model) {
-        model.addAttribute("userU", nombreUsuario);
+    public ResponseEntity<UsuarioDTO> loginUser(@RequestParam(name="userU",required = true) String nombreUsuario,
+    @RequestParam(name="passwordU",required = true) String passwordUsuario
+    ) {
+        
         Usuario usuario = new Usuario();
         usuario.setUsername(nombreUsuario);
         usuario.setPassword(passwordUsuario);
         Optional<Usuario> foundUser = usuarioRepository.findByUsername(usuario.getUsername());
         if (foundUser.isPresent() && passwordEncoder.matches(usuario.getPassword(), foundUser.get().getPassword())) {
-            return "Inicio de sesión exitoso";
+            
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setNombre(foundUser.get().getNombre());
+            //zstatus.setComplete();
+            
+            return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-        return "Credenciales inválidas";
+
     }
 
 
