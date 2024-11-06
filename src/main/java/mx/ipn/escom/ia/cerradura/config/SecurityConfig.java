@@ -25,16 +25,17 @@ public class SecurityConfig {
             ) // Ignorar CSRF para las rutas de /auth
     
         .authorizeHttpRequests(requests -> requests
-            .requestMatchers("/formlogin", "/formregister", "/PaginaInicio", "/css/**", "/js/**", "/images/**").permitAll()
+            .requestMatchers("/formlogin", "/formregister",  "/css/**", "/js/**", "/images/**").permitAll()
             .requestMatchers("/auth/**").permitAll() // Permitir acceso a /auth sin autenticación
             .requestMatchers("/api/**").permitAll()
             .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas solo para administradores
-            .requestMatchers("/user/**").hasRole("USER") // Rutas solo para usuarios
+            .requestMatchers("/user/**").hasRole("USER")
+            .requestMatchers("/PaginaInicio").hasRole("USER") // Rutas solo para usuarios
             .anyRequest().permitAll()) // Rutas restantes permitidas
     
         .formLogin(login -> login
             .loginPage("/formlogin")
-            .defaultSuccessUrl("/PaginaInicio", true) // Página a la que se redirige tras login exitoso
+            //.defaultSuccessUrl("/PaginaInicio", true) // Página a la que se redirige tras login exitoso
             .permitAll())
         .logout(logout -> logout
             .permitAll()); // Permitir logout para todos los usuarios
