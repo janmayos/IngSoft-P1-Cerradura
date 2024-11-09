@@ -8,10 +8,13 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.List;
+
 
 import mx.ipn.escom.ia.cerradura.response.JwtResponse;
 import mx.ipn.escom.ia.cerradura.model.UsuarioDTO;
 import mx.ipn.escom.ia.cerradura.model.Rol;
+
 
 @Component
 public class JwtUtils {
@@ -39,7 +42,7 @@ public class JwtUtils {
     }
     
 
-    // Extraer usuario del token
+    // Extraer el nombre de usuario del token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -50,8 +53,9 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
 
+    // Extraer todos los claims
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder() // Usar parserBuilder en lugar de parser
+        return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)
                 .build()
                 .parseClaimsJws(token)
@@ -64,7 +68,15 @@ public class JwtUtils {
         return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
 
+    // Verificar si el token ha expirado
     private Boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
+
+    // Extraer los roles del token
+    public List<String> extractRoles(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("roles", List.class);  // Extrae los roles como lista de strings
+    }
+
 }

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.repository.UsuarioRepository;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
@@ -21,11 +24,12 @@ public class CustomUserDetailsService implements org.springframework.security.co
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
+        // Crear una lista de authorities basadas en los roles del usuario
+        var authorities = usuario.getRoles().stream()
+                .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
+                .collect(Collectors.toList());
+
         // Crear un UserDetails con el usuario encontrado
-        return User.builder()
-                .username(usuario.getUsername())
-                .password(usuario.getPassword())
-                .roles(usuario.getRoles().stream().map(rol -> rol.getNombre()).toArray(String[]::new)) // Asignar roles al usuario
-                .build();
+        return new User(usuario.getUsername(), usuario.getPassword(), authorities);
     }
 }

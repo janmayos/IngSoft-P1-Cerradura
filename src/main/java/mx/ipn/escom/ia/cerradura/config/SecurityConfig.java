@@ -3,6 +3,7 @@ package mx.ipn.escom.ia.cerradura.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,9 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import  mx.ipn.escom.ia.cerradura.jwt.JwtAuthenticationFilter;
-import  mx.ipn.escom.ia.cerradura.jwt.CustomUserDetailsService;
-
+import mx.ipn.escom.ia.cerradura.jwt.JwtAuthenticationFilter;
+import mx.ipn.escom.ia.cerradura.jwt.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +31,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // Configurar el UserDetailsService para usar CustomUserDetailsService
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+    }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -39,14 +45,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-            .cors().disable()
-            .authorizeRequests()
-            .requestMatchers("/formlogin", "/formregister",  "/css/**", "/js/**", "/images/**").permitAll()
-            .requestMatchers("/auth/**","/api/check-connection","/","/formlogin","/auth/login","/PaginaInicio").permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Desactivar sesiones
+            .cors(cors -> cors.disable()) // Configura CORS si es necesario en lugar de deshabilitarlo
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin", "/auth/login", "/PaginaInicio").permitAll()
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Desactivar sesiones
+            );
 
         // Añadir el filtro JWT antes de la autenticación estándar de Spring
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -54,6 +61,7 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
 
 // @Bean
 // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
