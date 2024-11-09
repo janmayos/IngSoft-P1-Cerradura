@@ -22,8 +22,8 @@ $(document).ready(() => {
         cache: false,
 
         success: (respServ) => {
-          console.log(respServ.status);
-          console.log(respServ);
+          //console.log(respServ.status);
+          //console.log(respServ);
 
           // Verifica si la respuesta contiene un token
           if (respServ) {
@@ -43,9 +43,15 @@ $(document).ready(() => {
                 window.location.href = window.location.origin + "/PaginaInicio";
               }
             });
-          } else {
-            // Si la respuesta no contiene el token
-            Swal.fire({
+          } 
+        },
+
+        error: (respServ) => {
+
+
+          if (respServ.status == 401) {
+             // Si la respuesta no contiene el token
+              Swal.fire({
               title: "Upps..",
               text: "Credenciales inválidas",
               icon: "error",
@@ -53,11 +59,8 @@ $(document).ready(() => {
                 location.reload(); // Recarga la página si las credenciales son incorrectas
               }
             });
-          }
-        },
-
-        error: (respServ) => {
-          // Manejo de error si ocurre algo en la solicitud
+          }else{
+            // Manejo de error si ocurre algo en la solicitud
           console.log("Error", respServ.status);
           console.log("Error details:", respServ.responseText);
 
@@ -69,6 +72,9 @@ $(document).ready(() => {
               location.reload(); // Recarga la página si hay un error
             }
           });
+
+          }
+          
         }
       });
     });

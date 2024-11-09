@@ -16,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import mx.ipn.escom.ia.cerradura.jwt.JwtAuthenticationFilter;
 import mx.ipn.escom.ia.cerradura.jwt.CustomUserDetailsService;
 
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
