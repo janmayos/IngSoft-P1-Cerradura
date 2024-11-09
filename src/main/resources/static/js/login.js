@@ -31,12 +31,12 @@ $(document).ready(() => {
             localStorage.setItem('jwt_token', respServ);
             
             // Almacena la información del usuario en localStorage
-            localStorage.setItem('usuarioDTO', JSON.stringify(respServ.usuarioDTO)); // Almacena el objeto usuarioDTO
+            localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO
 
             // Muestra mensaje de éxito con Swal
             Swal.fire({
               title: "Exito!!",
-              text: "Bienvenido " + respServ.usuarioDTO.nombre, // Muestra el nombre del usuario desde la respuesta
+              text: "Bienvenido " + respServ.nombre, // Muestra el nombre del usuario desde la respuesta
               icon: "success",
               didDestroy: () => {
                 // Redirige a la página de inicio después de login exitoso

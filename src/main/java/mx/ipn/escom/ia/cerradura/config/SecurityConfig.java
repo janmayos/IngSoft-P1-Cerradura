@@ -42,7 +42,7 @@ public class SecurityConfig {
             .cors().disable()
             .authorizeRequests()
             .requestMatchers("/formlogin", "/formregister",  "/css/**", "/js/**", "/images/**").permitAll()
-            .requestMatchers("/auth/**","/","/formlogin","/auth/login").permitAll()
+            .requestMatchers("/auth/**","/api/check-connection","/","/formlogin","/auth/login","/PaginaInicio").permitAll()
             .anyRequest().authenticated()
             .and()
             .sessionManagement()

@@ -18,14 +18,19 @@
     <script>
         window.onload = function() {
         // Obtén el objeto usuarioDTO desde el localStorage
-        const usuarioDTO = JSON.parse(localStorage.getItem('usuarioDTO'));
+        const nombre = localStorage.getItem('nombre');
+        const token = localStorage.getItem('jwt_token')
         
         // Verifica si el objeto existe y tiene el nombre
-        if (usuarioDTO && usuarioDTO.nombre) {
+        if (nombre && token) {
           // Inyecta el nombre del usuario en un contenedor con id "username"
-          document.getElementById("username").textContent = usuarioDTO.nombre;
+            document.getElementById("username").textContent ="Bienvenido "+nombre;
         }
-      };
+        else{
+            window.location.href="/formlogin"
+        }
+
+        };
     </script>
 </head>
 

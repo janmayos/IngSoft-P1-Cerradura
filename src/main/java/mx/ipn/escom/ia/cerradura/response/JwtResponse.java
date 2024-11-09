@@ -4,11 +4,15 @@ import mx.ipn.escom.ia.cerradura.model.UsuarioDTO;
 public class JwtResponse {
 
     private String token;
-    private UsuarioDTO usuarioDTO;
+    private String nombre;
+    private String apellidoPaterno;
+    private String apellidoMaterno;
 
-    public JwtResponse(String token, UsuarioDTO usuarioDTO) {
+    public JwtResponse(String token, String nombre,String apellidoPaterno, String apellidoMaterno) {
         this.token = token;
-        this.usuarioDTO = usuarioDTO;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
     }
 
     // Getters y Setters
@@ -20,11 +24,28 @@ public class JwtResponse {
         this.token = token;
     }
 
-    public UsuarioDTO getUsuarioDTO() {
-        return usuarioDTO;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setUsuarioDTO(UsuarioDTO usuarioDTO) {
-        this.usuarioDTO = usuarioDTO;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-}
+
+    public String getApellidoPaterno() {
+        return apellidoPaterno;
+    }
+
+    public void setApellidoPaterno(String apellidoPaterno) {
+        this.apellidoPaterno = apellidoPaterno;
+    }
+
+    public String getApellidoMaterno() {
+        return apellidoMaterno;
+    }
+
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
+    }
+
+}   

@@ -77,6 +77,7 @@ public class AuthController  {
         
         if (foundUser.isPresent() && passwordEncoder.matches(passwordU, foundUser.get().getPassword())) {
             // Crear el UsuarioDTO a partir de Usuario
+            
             Usuario usuario = foundUser.get();
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setNombre(usuario.getNombre());
@@ -86,11 +87,12 @@ public class AuthController  {
             usuarioDTO.setEdad(usuario.getEdad());
             usuarioDTO.setGenero(usuario.getGenero());
             usuarioDTO.setRoles(usuario.getRoles());
-    
+            
             // Generar el token
             String token = jwtUtils.generateToken(usuarioDTO);
-    
-            return ResponseEntity.status(HttpStatus.OK).body(token);
+            JwtResponse responsejwt = new JwtResponse(token,usuarioDTO.getNombre(),usuarioDTO.getApellidoPaterno(),usuarioDTO.getApellidoMaterno());
+            
+            return ResponseEntity.status(HttpStatus.OK).body(responsejwt);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
