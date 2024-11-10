@@ -22,9 +22,9 @@ public class AuthController  {
 
     
     @PostMapping(value = "login")
-    public ResponseEntity<AuthResponse> login(@RequestParam String userU, @RequestParam String passwordU ){
+    public ResponseEntity<?> login(@RequestParam String userU, @RequestParam String passwordU ){
         LoginRequest request = new LoginRequest(userU, passwordU);
-        return ResponseEntity.ok(authService.login(request));
+        return authService.login(request);
     }
 
     @PostMapping(value = "register")

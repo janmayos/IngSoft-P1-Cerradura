@@ -10,7 +10,9 @@ import mx.ipn.escom.ia.cerradura.response.ErrorResponse;
 import mx.ipn.escom.ia.cerradura.response.LoginRequest;
 import mx.ipn.escom.ia.cerradura.response.RegisterRequest;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,14 +39,25 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse login(LoginRequest request) {
-        authenticationManager
+    public ResponseEntity<?> login(LoginRequest request) {
+        
+        Optional<Usuario> foundUser = userRepository.findByUsername(request.getUsername());
+        System.out.println(foundUser.isPresent());
+        if (foundUser.isPresent() && passwordEncoder.matches(request.getPassword(), foundUser.get().getPassword())) {
+            authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token = jwtService.getToken(user);
-        return AuthResponse.builder()
-                .token(token)
-                .build();
+            UserDetails user = foundUser.orElseThrow();
+            HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("nombre", foundUser.get().getNombre());
+            String token = jwtService.getToken(claims,user);
+
+            return ResponseEntity.ok().body(AuthResponse.builder()
+                    .token(token)
+                    .nombre(foundUser.get().getNombre())
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.builder().msg("Error usuario y/o contraseña invalidad").build());
+        
 
     }
 

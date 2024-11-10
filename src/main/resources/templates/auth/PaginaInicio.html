@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="Spanish" xmlns:th="http://www.thymeleaf.org" class="h-full bg-white">
+<html lang="Spanish" xmlns:th="http://www.thymeleaf.org" class="h-full dark:bg-gray-900">
 
 <head>
     <meta charset="UTF-8">
@@ -14,50 +14,49 @@
     <script th:src="@{/js/plugins/just-validate.js}"></script>
     <script th:src="@{https://cdn.tailwindcss.com}"></script>
 
-    <!-- Aquí va tu código JS para cargar el nombre desde localStorage -->
+    <!-- Script para cargar nombre desde localStorage -->
     <script>
         window.onload = function() {
-        // Obtén el objeto usuarioDTO desde el localStorage
-        const nombre = localStorage.getItem('nombre');
-        const token = localStorage.getItem('jwt_token')
-        
-        // Verifica si el objeto existe y tiene el nombre
-        if (nombre && token) {
-          // Inyecta el nombre del usuario en un contenedor con id "username"
-            document.getElementById("username").textContent ="Bienvenido "+nombre;
-        }
-        else{
-            window.location.href="/formlogin"
-        }
-
+            const nombre = localStorage.getItem('nombre');
+            const token = localStorage.getItem('token');
+            if (nombre && token) {
+                document.getElementById("username").textContent = "Bienvenido " + nombre;
+            } else {
+                window.location.href = "/formlogin";
+            }
         };
     </script>
 </head>
 
-<body class="h-full">
-    <div class="relative py-16 bg-gradient-to-br from-sky-50 to-gray-200">
-        <div class="relative container m-auto px-6 text-gray-500 md:px-12 xl:px-40">
-            <div class="m-auto md:w-8/12 lg:w-6/12 xl:w-6/12">
-                <div class="rounded-xl bg-white shadow-xl">
-                    <div class="p-6 sm:p-16">
-                        <div class="space-y-4">
-
-                            <!-- Aquí se inyectará el nombre del usuario -->
-                            <h2 id="username" class="mb-8 text-2xl text-cyan-900 font-bold">Bienvenido</h2>
+<body class="h-full bg-gray-900 text-white">
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div class="rounded-xl bg-white dark:bg-gray-800 shadow-xl p-6 sm:p-16">
+                <h2 id="username" class="mb-8 text-2xl text-cyan-900 dark:text-cyan-200 font-bold">Bienvenido</h2>
+                <div class="mt-16 grid space-y-4">
+                    <button class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a href="">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Modificar datos</span>
+                            </a>
                         </div>
-                        <div class="mt-16 grid space-y-4">
-                            <!-- Los botones o contenido adicional van aquí -->
-                            <button class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
-                                <div class="relative flex items-center space-x-4 justify-center">
-                                    <a href="">
-                                        <span class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Title 1</span>
-                                    </a>
-                                </div>
-                            </button>
-                            <!-- Más botones -->
+                    </button>
+                    <button class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a href="">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Eliminar usuario</span>
+                            </a>
                         </div>
-                    </div>
+                    </button>
+                    <button class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a href="">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Realizar busqueda libros</span>
+                            </a>
+                        </div>
+                    </button>
                 </div>
+                
             </div>
         </div>
     </div>

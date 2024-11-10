@@ -22,13 +22,13 @@ $(document).ready(() => {
         cache: false,
 
         success: (respServ) => {
-          //console.log(respServ.status);
-          //console.log(respServ);
+          console.log(respServ.status);
+          console.log(respServ);
 
           // Verifica si la respuesta contiene un token
           if (respServ) {
             // Almacena el token en localStorage
-            localStorage.setItem('jwt_token', respServ);
+            localStorage.setItem('token', respServ.token);
             
             // Almacena la información del usuario en localStorage
             localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO

@@ -19,14 +19,14 @@ public class VistasController {
     }
 
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/PaginaInicio")
     public String paginaInicio() {
+        
         return "auth/PaginaInicio";
     }
 
     @GetMapping("/")
-	public String   home() {
+	public String home() {
 		return "redirect:/formlogin";
 	}
 

@@ -20,10 +20,14 @@ public class JwtService {
     private String SECRET_KEY = "b87c504a2ffea6d2c947c19784b0d1c98f3df1fcd6ca5a2ee1cda0b01b86307b"; // Cambia esto a una clave segura
 
     public String getToken(UserDetails user) {
-        return getToken(new HashMap<>(), user);
+        return getTokenInternal(new HashMap<>(), user);
     }
 
-    private String getToken(Map<String, Object> extraClaims, UserDetails user) {
+    public String getToken(Map<String, Object> extraClaims,UserDetails user) {
+        return getTokenInternal(extraClaims, user);
+    }
+
+    private String getTokenInternal(Map<String, Object> extraClaims, UserDetails user) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
