@@ -5,23 +5,15 @@ $(document).ready(() => {
   validaLogin
     .addField("#userU", [
       { rule: "required", errorMessage: "Falta tu usuario" },
-      // {rule:"number", errorMessage:"Solo números"},
-      // {rule:"minLength", value:8, errorMessage:"Mínimo 8 digitos"},
-      // {rule:"maxLength", value:10, errorMessage:"Máximo 10 digitos"}
     ])
     .addField("#passwordU", [
       { rule: "required", errorMessage: "Falta tu contraseña" },
-      // {rule:"minLength", value:18, errorMessage:"Formato incorrecto"},
-      // {rule:"maxLength", value:18, errorMessage:"Formato incorrecto"}
     ])
     .onSuccess((event) => {
       event.preventDefault();
-      // console.log($("#formLogin").serialize())
-      // let formData = jQuery.param({  userU : $("#userU").val(),  passwordU : $("#passwordU").val()})
-      // console.log(formData)
-      //console.log($("#formLogin").serialize())
+      // Realiza la solicitud AJAX al backend para hacer el login
       $.ajax({
-        url: window.location.origin + "/auth/login", //?userU=" + $("#userU").val() + "&passwordU=" + $("#passwordU").val(),
+        url: window.location.origin + "/auth/login", // Endpoint de login
         method: "POST",
         data: {
           userU: $("#userU").val(),
@@ -29,52 +21,60 @@ $(document).ready(() => {
         },
         cache: false,
 
-
         success: (respServ) => {
           console.log(respServ.status);
           console.log(respServ);
-          Swal.fire({
-            title: "Exito!!",
-            text: "Bienvenido " + respServ.nombre,
-            icon: "success",
-            didDestroy: () => {
-              window.location.href=window.location.origin+"/PaginaInicio";
-              // console.log(respServ)
-              // superagent
-              //   .get(window.location.origin+"/PaginaInicio")
-              //   .send(respServ) // sends a JSON post body
-              //   .type('json')
-              //   .redirects(1)
-              //   .end(function (err, res) {
-              //     console.log("error")
-              //     console.log(err)
-              //     console.log(res)
-                  
-              //     // Calling the end function will send the request
-              //   });
 
-              
-              //window.location.href=window.location.origin+"/PaginaInicio";
-              // $.get(window.location.origin+"/PaginaInicio", function( data ) {
-              //   $( ".result" ).html( respServ );
-              //   alert( "Load was performed." );
-              // });
-            }
-          });
+          // Verifica si la respuesta contiene un token
+          if (respServ) {
+            // Almacena el token en localStorage
+            localStorage.setItem('token', respServ.token);
+            
+            // Almacena la información del usuario en localStorage
+            localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO
+
+            // Muestra mensaje de éxito con Swal
+            Swal.fire({
+              title: "Exito!!",
+              text: "Bienvenido " + respServ.nombre, // Muestra el nombre del usuario desde la respuesta
+              icon: "success",
+              didDestroy: () => {
+                // Redirige a la página de inicio después de login exitoso
+                window.location.href = window.location.origin + "/PaginaInicio";
+              }
+            });
+          } 
         },
+
         error: (respServ) => {
-          // console.log(respServ.status);
-          // console.log(respServ.responseText);
-          // console.log("error");
+
+
+          if (respServ.status == 401) {
+             // Si la respuesta no contiene el token
+              Swal.fire({
+              title: "Upps..",
+              text: "Credenciales inválidas",
+              icon: "error",
+              didDestroy: () => {
+                location.reload(); // Recarga la página si las credenciales son incorrectas
+              }
+            });
+          }else{
+            // Manejo de error si ocurre algo en la solicitud
+          console.log("Error", respServ.status);
+          console.log("Error details:", respServ.responseText);
 
           Swal.fire({
             title: "Upps..",
-            text: "Credenciales inválidas",
+            text: "Hubo un error al procesar tu solicitud",
             icon: "error",
             didDestroy: () => {
-              location.reload();
+              location.reload(); // Recarga la página si hay un error
             }
           });
+
+          }
+          
         }
       });
     });

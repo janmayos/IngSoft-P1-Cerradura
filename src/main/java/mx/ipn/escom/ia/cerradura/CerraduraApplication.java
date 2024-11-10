@@ -10,6 +10,7 @@ public class CerraduraApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CerraduraApplication.class, args);
+		
 	}
 
 }
