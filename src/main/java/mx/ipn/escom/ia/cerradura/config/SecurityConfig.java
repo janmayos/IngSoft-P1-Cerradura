@@ -2,93 +2,41 @@ package mx.ipn.escom.ia.cerradura.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import lombok.RequiredArgsConstructor;
 import mx.ipn.escom.ia.cerradura.jwt.JwtAuthenticationFilter;
-import mx.ipn.escom.ia.cerradura.jwt.CustomUserDetailsService;
-
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    // Configurar el UserDetailsService para usar CustomUserDetailsService
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.disable()) // Configura CORS si es necesario en lugar de deshabilitarlo
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin", "/auth/login", "/PaginaInicio").permitAll()
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Desactivar sesiones
-            );
+                .cors(cors -> cors.disable()) // Configura CORS si es necesario en lugar de deshabilitarlo
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**", "/antes/**")
+                        .permitAll()
+                        .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin", "/auth/login",
+                                "/PaginaInicio")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Desactivar sesiones
 
-        // Añadir el filtro JWT antes de la autenticación estándar de Spring
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                ).authenticationProvider(authProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 }
-
-
-// @Bean
-// public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//     http
-//     .csrf(csrf -> csrf
-//         .disable() // Deshabilitar CSRF si no es necesario
-//         ) // Ignorar CSRF para las rutas de /auth
-
-//     .authorizeHttpRequests(requests -> requests
-//         .requestMatchers("/formlogin", "/formregister",  "/css/**", "/js/**", "/images/**").permitAll()
-//         .requestMatchers("/auth/**").permitAll() // Permitir acceso a /auth sin autenticación
-//         .requestMatchers("/api/**").permitAll()
-//         .requestMatchers("/libros/**").permitAll()
-//         .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas solo para administradores
-//         .requestMatchers("/user/**").hasRole("USER")
-//         .requestMatchers("/PaginaInicio").hasRole("USER") // Rutas solo para usuarios
-//         .anyRequest().permitAll()) // Rutas restantes permitidas
-
-//     .formLogin(login -> login
-//         .loginPage("/formlogin")
-//         //.defaultSuccessUrl("/PaginaInicio", true) // Página a la que se redirige tras login exitoso
-//         .permitAll())
-//     .logout(logout -> logout
-//         .permitAll()); // Permitir logout para todos los usuarios
-    
-//     return http.build();
-// }
