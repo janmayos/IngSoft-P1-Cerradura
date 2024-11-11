@@ -75,14 +75,22 @@ public class AuthService {
 
                 .build();
         Set<Rol> roles = new HashSet<>();
-        for (Rol rol : request.getRoles()) {
-            // Buscar el rol en la base de datos
-            Rol existingRol = rolRepository.findByNombre(rol.getNombre()) // <-- Ahora está correctamente inyectado
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rol.getNombre()));
-            roles.add(existingRol);
+        
+        if (request.getRoles() == null){
+            Optional<Rol> existingRol = rolRepository.findByNombre("ROLE_USER");
+            if (existingRol.isPresent()){
+                roles.add(existingRol.get());
+            }
+        }else{
+            for (Rol rol : request.getRoles()) {
+                // Buscar el rol en la base de datos
+                Rol existingRol = rolRepository.findByNombre(rol.getNombre()) // <-- Ahora está correctamente inyectado
+                    .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rol.getNombre()));
+                roles.add(existingRol);
+            }
         }
+        
         user.setRoles(roles);
-
 
         try {
             // Código que interactúa con la base de datos (por ejemplo, guardar una entidad)

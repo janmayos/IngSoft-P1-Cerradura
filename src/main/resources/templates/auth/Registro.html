@@ -5,9 +5,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="/src/main/resources/static/css/styleRegistro.css" type="text/css"> -->
     <link th:href="@{/antes/css/styleRegistro.css}" rel="stylesheet" type="text/css">
-    <!-- <script src="../../static/js/resgistro.js"></script> -->
+    <script th:src="@{/js/plugins/jquery.js}"></script>
+    <script th:src="@{/js/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/js/plugins/sweetalert2.js}"></script>
+    <script th:src="@{/js/plugins/just-validate.js}"></script>
+    <script th:src="@{/js/registro.js}"></script>
 </head>
 <body>
     <div class="background">    
@@ -16,41 +19,60 @@
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form th:action="@{/auth/register}" method="post">
-        <h3>Regístrate</h3>
+    <form id="formRegister" autocomplete="off">
+        <div>
+            <h3>Regístrate</h3>
+        <div>
+            <label for="nombre">Nombre</label>
+            <input  type="text" autocomplete="off" placeholder="Vicente" id="nombre">
+        </div>
+        
+        <div>
+            <label for="apellidoPaterno">Apellido paterno</label>
+            <input  type="text" autocomplete="off" placeholder="Morales" id="apellidoPaterno">
+        </div>
+        
 
-        <label for="nombre">Nombre</label>
-        <input type="text" placeholder="Vicente" id="nombre" required>
+        <div>
+            <label for="apellidoMaterno">Apellido materno</label>
+            <input  type="text" autocomplete="off" placeholder="Díaz" id="apellidoMaterno">
+        </div>
 
-        <label for="apellidoP">Apellido paterno</label>
-        <input type="text" placeholder="Morales" id="apellidoP" required>
+        <div>
+            <label for="correo">Correo electrónico</label>
+            <input  type="email" autocomplete="off" placeholder="vicente.morales@example.com" id="correo">
+        </div>
 
-        <label for="apellidoM">Apellido materno</label>
-        <input type="text" placeholder="Díaz" id="apellidoM">
+        <div>
+            <label for="username">Nombre de usuario</label>
+            <input  type="text" autocomplete="off" placeholder="Strack2112" id="username">
+        </div>
 
-        <label for="correo">Correo electrónico</label>
-        <input type="email" placeholder="vicente.morales@example.com" id="correo" required>
+        <div>
+            <label for="password">Contraseña</label>
+            <input  type="password" autocomplete="off" placeholder="********" id="password">
+        </div>
 
-        <label for="username">Nombre de usuario</label>
-        <input type="text" placeholder="Strack2112" id="username" required>
-
-        <label for="passwordU">Contraseña</label>
-        <input type="password" placeholder="********" id="passwordU" required>
-
-        <label for="edad">Edad</label>
-        <input type="text" placeholder="24" id="edad" required>
+        <div>
+            <label for="edad">Edad</label>
+            <input  type="text" autocomplete="off" placeholder="24" id="edad">
+        </div>
 
         <!-- Select para género sin estilos personalizados -->
-        <label for="genero">Género</label>
-        <select id="genero" name="genero" required>
-            <option value="">Seleccionar género</option>
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-        </select>
+        <div>
+            <label for="genero">Género</label>
+            <select id="genero" name="genero">
+                <option value="">Seleccionar género</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+            </select>
+        </div>
         
         <button type="submit">Registrar</button>
 
         <button type="button" onclick="location.href='/formlogin'">Regresar al Login</button>
+        </div>
+        
     </form>
     
 </body>
