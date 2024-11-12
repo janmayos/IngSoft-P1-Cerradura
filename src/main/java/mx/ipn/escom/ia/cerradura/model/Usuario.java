@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -51,12 +53,13 @@ public class Usuario  implements UserDetails{
     @Column(name = "genero", nullable = false)
     private String genero;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "usuario_rol",
         joinColumns = @JoinColumn(name = "id_usuario"),
         inverseJoinColumns = @JoinColumn(name = "id_rol")
     )
+    @JsonManagedReference
     private Set<Rol> roles;
 
     // Getters y Setters

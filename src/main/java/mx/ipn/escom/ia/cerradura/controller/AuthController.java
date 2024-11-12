@@ -3,8 +3,6 @@ package mx.ipn.escom.ia.cerradura.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import mx.ipn.escom.ia.cerradura.response.AuthResponse;
-
 import mx.ipn.escom.ia.cerradura.response.LoginRequest;
 import mx.ipn.escom.ia.cerradura.response.RegisterRequest;
 import mx.ipn.escom.ia.cerradura.service.AuthService;

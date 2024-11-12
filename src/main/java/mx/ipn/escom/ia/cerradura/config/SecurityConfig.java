@@ -28,7 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**", "/antes/**")
                         .permitAll()
                         .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin",
-                                "/PaginaInicio")
+                                "/PaginaInicio","/api/usuarios/**","favicon.ico")
                         .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session

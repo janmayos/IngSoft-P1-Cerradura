@@ -9,4 +9,5 @@ import mx.ipn.escom.ia.cerradura.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByCorreo(String correo);
     Optional<Usuario> findByUsername(String userU);
+    
 }

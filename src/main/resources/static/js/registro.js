@@ -55,10 +55,10 @@ $(document).ready(() => {
           // Verifica si la respuesta contiene un token
           if (respServ) {
             // Almacena el token en localStorage
-            localStorage.setItem('token', respServ.token);
+            // localStorage.setItem('token', respServ.token);
             
             // Almacena la información del usuario en localStorage
-            localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO
+            // localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO
 
             // Muestra mensaje de éxito con Swal
             Swal.fire({
@@ -67,7 +67,7 @@ $(document).ready(() => {
               icon: "success",
               didDestroy: () => {
                 // Redirige a la página de inicio después de login exitoso
-                //window.location.href = window.location.origin + "/PaginaInicio";
+                window.location.href = window.location.origin + "/formlogin";
               }
             });
           } 
