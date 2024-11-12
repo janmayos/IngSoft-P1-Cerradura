@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Usuarios</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="container mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Lista de Usuarios</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-md">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-4 py-2 border-b border-gray-300">ID</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Nombre</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Apellido Paterno</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Apellido Materno</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Correo</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Username</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Edad</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Género</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Roles</th>
+                        <th class="px-4 py-2 border-b border-gray-300">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usuario : ${usuarios}" class="text-center border-b border-gray-300 hover:bg-gray-100">
+                        <td class="px-4 py-2" th:text="${usuario.idUsuario}"></td>
+                        <td class="px-4 py-2" th:text="${usuario.nombre}"></td>
+                        <td class="px-4 py-2" th:text="${usuario.apellidoPaterno}"></td>
+                        <td class="px-4 py-2" th:text="${usuario.apellidoMaterno}"></td>
+                        <td class="px-4 py-2" th:text="${usuario.correo}"></td>
+                        <td class="px-4 py-2" th:text="${usuario.username}"></td>
+                        <td class="px-4 py-2" th:text="${usuario.edad}"></td>
+                        <td class="px-4 py-2" th:text="${usuario.genero}"></td>
+                        <td class="px-4 py-2">
+                            <span th:each="rol, iterStat : ${usuario.roles}" th:text="${rol.nombre} + (iterStat.last ? '' : ', ')" class="inline-block"></span>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a th:href="@{'/usuarios/editar/' + ${usuario.idUsuario}}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Editar</a>
+                            <a th:href="@{'/usuarios/eliminar/' + ${usuario.idUsuario}}" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-2" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

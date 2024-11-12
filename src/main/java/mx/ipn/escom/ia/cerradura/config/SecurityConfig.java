@@ -25,10 +25,10 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable()) // Configura CORS si es necesario en lugar de deshabilitarlo
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**", "/antes/**")
+                        .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**", "/antes/**","/Usuarios/**")
                         .permitAll()
                         .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin",
-                                "/PaginaInicio","/api/usuarios/**","favicon.ico")
+                                "/PaginaInicio","/api/usuarios/**","favicon.ico","/vista/usuarios/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
