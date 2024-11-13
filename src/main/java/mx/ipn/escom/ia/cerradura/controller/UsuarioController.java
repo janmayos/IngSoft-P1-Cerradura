@@ -23,44 +23,31 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-
-    // @GetMapping("/buscar")
-    // public ResponseEntity<List<Usuario>> buscarUsuarios(
-    //         @RequestParam(required = false) String nombre,
-    //         @RequestParam(required = false) String correo,
-    //         @RequestParam(required = false) Integer edad
-    // ) {
-    //     List<Usuario> usuarios = usuarioService.buscarUsuarios(nombre, correo, edad);
-    //     return ResponseEntity.ok(usuarios);
-    // }
-
-
-    //Endpoint para obtener un usuario por ID
-    
-    @GetMapping("username")
+    // Endpoint para obtener un usuario por username
+    @GetMapping("/username")
     public ResponseEntity<Usuario> obtenerUsuarioPorUsername(@RequestParam String user) {
-        System.out.println(user);
         Usuario usuario = usuarioService.obtenerUsuarioPorUsername(user);
         return ResponseEntity.ok(usuario);
     }
-    
+
+    // Endpoint para obtener un usuario por ID
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
-        System.out.println(id);
         Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
         return ResponseEntity.ok(usuario);
     }
 
     // Endpoint para actualizar un usuario por ID
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody RegisterRequest request) {
-        //Usuario usuarioActualizado = usuarioService.actualizarUsuario(id, request);
-        //return ResponseEntity.ok(usuarioActualizado);
-        return ResponseEntity.ok(request);
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
+        Usuario usuario = usuarioService.actualizarUsuario(id, usuarioActualizado);
+        return ResponseEntity.ok(usuario);
     }
-    
 
-    
-
-
+    // Endpoint para eliminar un usuario por ID
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
+        usuarioService.eliminarUsuario(id);
+        return ResponseEntity.ok().build();
+    }
 }
