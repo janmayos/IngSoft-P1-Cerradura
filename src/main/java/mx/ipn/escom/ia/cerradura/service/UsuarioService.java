@@ -31,25 +31,25 @@ public class UsuarioService {
     // Actualizar un usuario
     public Usuario actualizarUsuario(Long id, Usuario detallesUsuario) {
         Usuario usuarioExistente = obtenerUsuarioPorId(id);
-        
+    
         // Validar que el nuevo correo no esté en uso por otro usuario
         Optional<Usuario> usuarioConMismoCorreo = usuarioRepository.findByCorreo(detallesUsuario.getCorreo());
         if (usuarioConMismoCorreo.isPresent() && !usuarioConMismoCorreo.get().getIdUsuario().equals(id)) {
             throw new IllegalArgumentException("El correo ya está en uso.");
         }
-
+    
         // Validar que el nuevo username no esté en uso por otro usuario
         Optional<Usuario> usuarioConMismoUsername = usuarioRepository.findByUsername(detallesUsuario.getUsername());
         if (usuarioConMismoUsername.isPresent() && !usuarioConMismoUsername.get().getIdUsuario().equals(id)) {
             throw new IllegalArgumentException("El username ya está en uso.");
         }
-
+    
         usuarioExistente.setNombre(detallesUsuario.getNombre());
         usuarioExistente.setApellidoPaterno(detallesUsuario.getApellidoPaterno());
         usuarioExistente.setApellidoMaterno(detallesUsuario.getApellidoMaterno());
         usuarioExistente.setCorreo(detallesUsuario.getCorreo());
         usuarioExistente.setUsername(detallesUsuario.getUsername());
-
+    
         // Solo actualizar la contraseña si se ha proporcionado una nueva
         if (detallesUsuario.getPassword() != null && !detallesUsuario.getPassword().isEmpty()) {
             if (passwordEncoder.matches(detallesUsuario.getPassword(), usuarioExistente.getPassword())) {
@@ -58,12 +58,13 @@ public class UsuarioService {
                 usuarioExistente.setPassword(passwordEncoder.encode(detallesUsuario.getPassword()));
             }
         }
-
+    
         usuarioExistente.setEdad(detallesUsuario.getEdad());
         usuarioExistente.setGenero(detallesUsuario.getGenero());
         usuarioExistente.setRoles(detallesUsuario.getRoles());
         return usuarioRepository.save(usuarioExistente);
     }
+    
 
     // Obtener un usuario por username
     public Usuario obtenerUsuarioPorUsername(String user) {

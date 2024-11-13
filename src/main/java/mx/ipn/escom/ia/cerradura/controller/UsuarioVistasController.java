@@ -60,6 +60,9 @@ public class UsuarioVistasController {
         @RequestParam(value = "roles", required = false) List<Long> rolesIds, 
         Model model) {
     
+        Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
+        usuarioActualizado.setRoles(rolesSet);
+    
         if (result.hasErrors()) {
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("usuario", usuarioActualizado);
@@ -67,10 +70,19 @@ public class UsuarioVistasController {
             return "Usuarios/editar";  // Redirigir a la misma página si hay errores
         }
     
-        Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
-        usuarioActualizado.setRoles(rolesSet);
-        usuarioService.actualizarUsuario(id, usuarioActualizado);
+        try {
+            usuarioService.actualizarUsuario(id, usuarioActualizado);
+        } catch (IllegalArgumentException e) {
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("usuario", usuarioActualizado);
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            model.addAttribute("error", e.getMessage());
+            return "Usuarios/editar";
+        }
+    
         return "redirect:/vista/usuarios";
     }
+    
+    
     
 }
