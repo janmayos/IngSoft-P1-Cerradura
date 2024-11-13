@@ -22,6 +22,9 @@
         </div>
 
         <form id="edit-user-form" th:action="@{'/vista/usuarios/editar/' + ${usuario.idUsuario}}" method="post" class="space-y-4">
+            <!-- Campo oculto para el ID del usuario -->
+            <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.idUsuario}">
+
             <!-- Nombre -->
             <div>
                 <label for="nombre" class="block text-gray-300 font-medium">Nombre</label>
