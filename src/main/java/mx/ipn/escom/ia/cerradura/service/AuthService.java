@@ -23,8 +23,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
@@ -40,16 +38,13 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public ResponseEntity<?> login(LoginRequest request) {
-        
         Optional<Usuario> foundUser = userRepository.findByUsername(request.getUsername());
-        System.out.println(foundUser.isPresent());
         if (foundUser.isPresent() && passwordEncoder.matches(request.getPassword(), foundUser.get().getPassword())) {
-            authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             UserDetails user = foundUser.orElseThrow();
-            HashMap<String, Object> claims = new HashMap<String, Object>();
+            HashMap<String, Object> claims = new HashMap<>();
             claims.put("nombre", foundUser.get().getNombre());
-            String token = jwtService.getToken(claims,user);
+            String token = jwtService.getToken(claims, user);
 
             return ResponseEntity.ok().body(AuthResponse.builder()
                     .token(token)
@@ -57,11 +52,19 @@ public class AuthService {
                     .build());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.builder().msg("Error usuario y/o contraseña invalidad").build());
-        
-
     }
 
     public ResponseEntity<?> register(RegisterRequest request) {
+        // Validar si el correo ya existe
+        if (userRepository.findByCorreo(request.getCorreo()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().msg("El correo ya está en uso").build());
+        }
+    
+        // Validar si el username ya existe
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().msg("El nombre de usuario ya está en uso").build());
+        }
+    
         Usuario user = Usuario.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -72,67 +75,34 @@ public class AuthService {
                 .edad(request.getEdad())
                 .genero(request.getGenero())
                 .roles(null)
-
                 .build();
+    
         Set<Rol> roles = new HashSet<>();
-        
-        if (request.getRoles() == null){
+        if (request.getRoles() == null) {
             Optional<Rol> existingRol = rolRepository.findByNombre("ROLE_USER");
-            if (existingRol.isPresent()){
-                roles.add(existingRol.get());
-            }
-        }else{
+            existingRol.ifPresent(roles::add);
+        } else {
             for (Rol rol : request.getRoles()) {
-                // Buscar el rol en la base de datos
-                Rol existingRol = rolRepository.findByNombre(rol.getNombre()) // <-- Ahora está correctamente inyectado
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rol.getNombre()));
+                Rol existingRol = rolRepository.findByNombre(rol.getNombre())
+                        .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rol.getNombre()));
                 roles.add(existingRol);
             }
         }
-        
         user.setRoles(roles);
-
+    
         try {
-            // Código que interactúa con la base de datos (por ejemplo, guardar una entidad)
             userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            // Capturar excepciones de violación de integridad de datos (más genérica en Spring Data)
-            System.out.println("Error de integridad de datos: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().msg("Error al crear usuario").build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().msg("Error al crear usuario: " + e.getMessage()).build());
         } catch (PersistenceException e) {
-            // Capturar excepciones específicas de JPA
-            System.out.println("Error de persistencia: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.builder().msg("Error de persistencia").build());
         } catch (Exception e) {
-            // Capturar cualquier otra excepción
-            System.out.println("Error general: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.builder().msg("Error general").build());
         }
-
+    
         return ResponseEntity.ok().body(AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build());
-
     }
-
-    /*@PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody Usuario usuario) {
-        // Codificar la contraseña si usas un password encoder
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        
-        Set<Rol> roles = new HashSet<>();
-        for (Rol rol : usuario.getRoles()) {
-            // Buscar el rol en la base de datos
-            Rol existingRol = rolRepository.findByNombre(rol.getNombre()) // <-- Ahora está correctamente inyectado
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rol.getNombre()));
-            roles.add(existingRol);
-        }
-        
-        // Asignar roles al usuario
-        usuario.setRoles(roles);
-        
-        // Guardar el usuario
-        usuarioRepository.save(usuario);
-        
-        return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.CREATED);
-    } */
-
+    
 }

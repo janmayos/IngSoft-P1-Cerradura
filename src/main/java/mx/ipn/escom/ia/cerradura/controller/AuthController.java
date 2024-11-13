@@ -9,27 +9,21 @@ import mx.ipn.escom.ia.cerradura.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 
-
-
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController  {
+public class AuthController {
 
     private final AuthService authService;
 
-    
     @PostMapping(value = "login")
-    public ResponseEntity<?> login(@RequestParam String userU, @RequestParam String passwordU ){
+    public ResponseEntity<?> login(@RequestParam String userU, @RequestParam String passwordU) {
         LoginRequest request = new LoginRequest(userU, passwordU);
         return authService.login(request);
     }
 
     @PostMapping(value = "register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         return authService.register(request);
     }
-
-
-
 }

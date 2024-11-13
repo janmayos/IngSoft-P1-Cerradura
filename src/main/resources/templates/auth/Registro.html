@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Glassmorphism Login Form Tutorial in HTML CSS</title>
+    <title>Registro de Usuario</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
@@ -24,38 +24,39 @@
             <h3>Regístrate</h3>
         <div>
             <label for="nombre">Nombre</label>
-            <input  type="text" autocomplete="off" placeholder="Vicente" id="nombre">
+            <input type="text" autocomplete="off" placeholder="Vicente" id="nombre">
         </div>
         
         <div>
             <label for="apellidoPaterno">Apellido paterno</label>
-            <input  type="text" autocomplete="off" placeholder="Morales" id="apellidoPaterno">
+            <input type="text" autocomplete="off" placeholder="Morales" id="apellidoPaterno">
         </div>
         
-
         <div>
             <label for="apellidoMaterno">Apellido materno</label>
-            <input  type="text" autocomplete="off" placeholder="Díaz" id="apellidoMaterno">
+            <input type="text" autocomplete="off" placeholder="Díaz" id="apellidoMaterno">
         </div>
 
         <div>
             <label for="correo">Correo electrónico</label>
-            <input  type="email" autocomplete="off" placeholder="vicente.morales@example.com" id="correo">
+            <input type="email" autocomplete="off" placeholder="vicente.morales@example.com" id="correo">
+            <span id="correo-error" class="error-message"></span>
         </div>
 
         <div>
             <label for="username">Nombre de usuario</label>
-            <input  type="text" autocomplete="off" placeholder="Strack2112" id="username">
+            <input type="text" autocomplete="off" placeholder="Strack2112" id="username">
+            <span id="username-error" class="error-message"></span>
         </div>
 
         <div>
             <label for="password">Contraseña</label>
-            <input  type="password" autocomplete="off" placeholder="********" id="password">
+            <input type="password" autocomplete="off" placeholder="********" id="password">
         </div>
 
         <div>
             <label for="edad">Edad</label>
-            <input  type="text" autocomplete="off" placeholder="24" id="edad">
+            <input type="text" autocomplete="off" placeholder="24" id="edad">
         </div>
 
         <!-- Select para género sin estilos personalizados -->
@@ -68,12 +69,11 @@
             </select>
         </div>
         
-        <button type="submit">Registrar</button>
+        <button type="submit" id="submitBtn">Registrar</button>
 
         <button type="button" onclick="location.href='/formlogin'">Regresar al Login</button>
         </div>
         
     </form>
-    
 </body>
 </html>

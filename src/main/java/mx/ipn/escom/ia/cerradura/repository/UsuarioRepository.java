@@ -1,13 +1,11 @@
 package mx.ipn.escom.ia.cerradura.repository;
 
-import java.util.Optional;
-
+import mx.ipn.escom.ia.cerradura.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import mx.ipn.escom.ia.cerradura.model.Usuario;
+import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    Optional<Usuario> findByUsername(String username);
     Optional<Usuario> findByCorreo(String correo);
-    Optional<Usuario> findByUsername(String userU);
-    
 }
