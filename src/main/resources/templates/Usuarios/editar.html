@@ -131,6 +131,15 @@
         }
 
         function confirmSave() {
+            if (!isRoleSelected()) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor, selecciona al menos un rol.'
+                });
+                return;
+            }
+
             Swal.fire({
                 title: '¿Guardar cambios?',
                 text: "¿Estás seguro de que deseas guardar los cambios?",
@@ -144,6 +153,16 @@
                     document.getElementById('edit-user-form').submit();
                 }
             });
+        }
+
+        function isRoleSelected() {
+            const roles = document.getElementsByName('roles');
+            for (let i = 0; i < roles.length; i++) {
+                if (roles[i].checked) {
+                    return true;
+                }
+            }
+            return false;
         }
     </script>
 </body>

@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -63,6 +61,15 @@ public class UsuarioVistasController {
         Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
         usuarioActualizado.setRoles(rolesSet);
     
+        if (rolesSet.isEmpty()) {
+            result.rejectValue("roles", "error.usuario", "Debe seleccionar al menos un rol.");
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("usuario", usuarioActualizado);
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            model.addAttribute("error", "Debe seleccionar al menos un rol.");
+            return "Usuarios/editar";  // Redirigir a la misma página si hay errores
+        }
+    
         if (result.hasErrors()) {
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("usuario", usuarioActualizado);
@@ -82,7 +89,4 @@ public class UsuarioVistasController {
     
         return "redirect:/vista/usuarios";
     }
-    
-    
-    
 }
