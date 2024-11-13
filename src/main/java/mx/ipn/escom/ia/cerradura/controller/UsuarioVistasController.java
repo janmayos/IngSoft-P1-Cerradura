@@ -15,6 +15,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+
 @Controller
 @RequestMapping("/vista/usuarios")
 public class UsuarioVistasController {
@@ -49,10 +53,24 @@ public class UsuarioVistasController {
 
     // Endpoint para actualizar un usuario
     @PostMapping("/editar/{id}")
-    public String actualizarUsuario(@PathVariable Long id, @ModelAttribute("usuario") Usuario usuarioActualizado, @RequestParam(value = "roles", required = false) List<Long> rolesIds) {
+    public String actualizarUsuario(
+        @PathVariable Long id, 
+        @Validated @ModelAttribute("usuario") Usuario usuarioActualizado, 
+        BindingResult result, 
+        @RequestParam(value = "roles", required = false) List<Long> rolesIds, 
+        Model model) {
+    
+        if (result.hasErrors()) {
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("usuario", usuarioActualizado);
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            return "Usuarios/editar";  // Redirigir a la misma página si hay errores
+        }
+    
         Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
         usuarioActualizado.setRoles(rolesSet);
         usuarioService.actualizarUsuario(id, usuarioActualizado);
         return "redirect:/vista/usuarios";
     }
+    
 }
