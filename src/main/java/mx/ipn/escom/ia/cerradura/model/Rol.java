@@ -3,6 +3,8 @@ package mx.ipn.escom.ia.cerradura.model;
 import jakarta.persistence.*;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "rol")
 public class Rol {
@@ -16,6 +18,7 @@ public class Rol {
     private String nombre;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore 
     private Set<Usuario> usuarios;
 
     // Getters y Setters
