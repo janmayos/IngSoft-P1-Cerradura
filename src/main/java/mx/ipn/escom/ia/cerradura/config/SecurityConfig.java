@@ -28,9 +28,9 @@ public class SecurityConfig {
                         .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**", "/antes/**","/Usuarios/**")
                         .permitAll()
                         .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin",
-                                "/PaginaInicio","/api/usuarios/**","favicon.ico","/vista/usuarios/**")
+                                "/PaginaInicio","/api/usuarios/**","favicon.ico","/vista/usuarios/**","/vista/usuarios/editar/**","/usuarios/editar/**")
                         .permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())//authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Desactivar sesiones
 

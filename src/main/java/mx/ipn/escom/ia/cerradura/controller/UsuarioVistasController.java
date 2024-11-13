@@ -2,8 +2,11 @@ package mx.ipn.escom.ia.cerradura.controller;
 
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.repository.UsuarioRepository;
+import mx.ipn.escom.ia.cerradura.service.UsuarioService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,8 @@ public class UsuarioVistasController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioService usuarioService;
 
     // Endpoint para obtener todos los usuarios
     @GetMapping({"", "/"})
@@ -28,15 +33,30 @@ public class UsuarioVistasController {
 
     // Endpoint para mostrar la vista de edición de un usuario específico
     @GetMapping("/editar/{id}")
-    public String editarUsuario(@PathVariable("id") Long id, Model model) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
-        if (usuarioOpt.isPresent()) {
-            model.addAttribute("usuario", usuarioOpt.get());
-            return "Usuarios/editar"; // Nombre de la plantilla Thymeleaf para la vista de edición
-        } else {
-            return "redirect:/vista/usuarios"; // Redirige a la lista de usuarios si el usuario no se encuentra
-        }
-    }
+    
+    public String obtenerUsuarioPorId(@PathVariable Long id, Model model) {
+        System.out.println(id);
+        Usuario usuarioOpt = usuarioService.obtenerUsuarioPorId(id);
+        if (usuarioOpt.getIdUsuario() == id) {
+                model.addAttribute("usuario", usuarioOpt);
+                return "Usuarios/editar"; // Nombre de la plantilla Thymeleaf para la vista de edición
+            } else {
+                return "redirect:/vista/usuarios"; // Redirige a la lista de usuarios si el usuario no se encuentra
+            }
+    } 
+    
+    //public String editarUsuario(@PathVariable("id") Long id, Model model) {
+    
+      //  Usuario usuarioOpt = usuarioService.obtenerUsuarioPorId(id);
+
+        //return "Usuarios/editar";
+        // if (usuarioOpt.isPresent()) {
+        //     model.addAttribute("usuario", usuarioOpt.get());
+        //     return "Usuarios/editar"; // Nombre de la plantilla Thymeleaf para la vista de edición
+        // } else {
+        //     return "redirect:/vista/usuarios"; // Redirige a la lista de usuarios si el usuario no se encuentra
+        // }
+    //}
 
     // Endpoint para actualizar los datos del usuario
     @PostMapping("/editar/{id}")

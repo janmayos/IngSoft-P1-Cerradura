@@ -37,8 +37,8 @@
                             <span th:each="rol, iterStat : ${usuario.roles}" th:text="${rol.nombre} + (iterStat.last ? '' : ', ')" class="inline-block"></span>
                         </td>
                         <td class="px-4 py-2">
-                            <a th:href="@{'/usuarios/editar/' + ${usuario.idUsuario}}" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out">Editar</a>
-                            <a th:href="@{'/usuarios/eliminar/' + ${usuario.idUsuario}}" class="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition duration-300 ease-in-out ml-2" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
+                            <a th:href="@{'/api/usuarios/editar/' + ${usuario.idUsuario}}" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out">Editar</a>
+                            <a th:href="@{'/api/usuarios/eliminar/' + ${usuario.idUsuario}}" class="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition duration-300 ease-in-out ml-2" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
                         </td>
                     </tr>
                 </tbody>
