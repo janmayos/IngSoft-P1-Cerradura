@@ -37,17 +37,22 @@ public class UsuarioService {
         usuarioExistente.setApellidoMaterno(detallesUsuario.getApellidoMaterno());
         usuarioExistente.setCorreo(detallesUsuario.getCorreo());
         usuarioExistente.setUsername(detallesUsuario.getUsername());
-        if(passwordEncoder.matches(usuarioExistente.getPassword(), usuarioExistente.getPassword())){
-            usuarioExistente.setPassword(detallesUsuario.getPassword());
-        }else{
-            usuarioExistente.setPassword(passwordEncoder.encode(detallesUsuario.getPassword()));
+    
+        // Solo actualizar la contraseña si se ha proporcionado una nueva
+        if (detallesUsuario.getPassword() != null && !detallesUsuario.getPassword().isEmpty()) {
+            if (passwordEncoder.matches(detallesUsuario.getPassword(), usuarioExistente.getPassword())) {
+                usuarioExistente.setPassword(usuarioExistente.getPassword());
+            } else {
+                usuarioExistente.setPassword(passwordEncoder.encode(detallesUsuario.getPassword()));
+            }
         }
+    
         usuarioExistente.setEdad(detallesUsuario.getEdad());
         usuarioExistente.setGenero(detallesUsuario.getGenero());
         usuarioExistente.setRoles(detallesUsuario.getRoles());
         return usuarioRepository.save(usuarioExistente);
     }
-
+    
     // Obtener un usuario por username
     public Usuario obtenerUsuarioPorUsername(String user) {
         Optional<Usuario> foundUser = usuarioRepository.findByUsername(user);
