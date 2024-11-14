@@ -35,18 +35,24 @@ public class UsuarioVistasController {
         return "Usuarios/tabla";
     }
 
-    // Endpoint para mostrar la vista de edición de un usuario específico
+    // Endpoint para mostrar la vista de edición de un usuario específico desde la tabla
     @GetMapping("/editar/{id}")
-    public String obtenerUsuarioPorId(@PathVariable Long id, Model model) {
-        Usuario usuarioOpt = usuarioService.obtenerUsuarioPorId(id);
+    public String obtenerUsuarioPorIdDesdeTabla(@PathVariable Long id, Model model) {
+        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
         List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
-        if (Objects.equals(usuarioOpt.getIdUsuario(), id)) {
-            model.addAttribute("usuario", usuarioOpt);
-            model.addAttribute("todosLosRoles", todosLosRoles);
-            return "Usuarios/editar"; // Nombre de la plantilla Thymeleaf para la vista de edición
-        } else {
-            return "redirect:/vista/usuarios"; // Redirige a la lista de usuarios si el usuario no se encuentra
-        }
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("todosLosRoles", todosLosRoles);
+        return "Usuarios/editarTabla";
+    }
+
+    // Endpoint para mostrar la vista de edición de un usuario específico desde la página de inicio
+    @GetMapping("/editarInicio/{id}")
+    public String obtenerUsuarioPorIdDesdeInicio(@PathVariable Long id, Model model) {
+        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
+        List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("todosLosRoles", todosLosRoles);
+        return "Usuarios/editarInicio";
     }
 
     // Endpoint para actualizar un usuario
@@ -56,27 +62,28 @@ public class UsuarioVistasController {
         @Validated @ModelAttribute("usuario") Usuario usuarioActualizado, 
         BindingResult result, 
         @RequestParam(value = "roles", required = false) List<Long> rolesIds, 
+        @RequestParam(value = "redirect", required = false) String redirect,
         Model model) {
-    
+        
         Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
         usuarioActualizado.setRoles(rolesSet);
-    
+
         if (rolesSet.isEmpty()) {
             result.rejectValue("roles", "error.usuario", "Debe seleccionar al menos un rol.");
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("usuario", usuarioActualizado);
             model.addAttribute("todosLosRoles", todosLosRoles);
             model.addAttribute("error", "Debe seleccionar al menos un rol.");
-            return "Usuarios/editar";  // Redirigir a la misma página si hay errores
+            return "Usuarios/editar";
         }
-    
+
         if (result.hasErrors()) {
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("usuario", usuarioActualizado);
             model.addAttribute("todosLosRoles", todosLosRoles);
-            return "Usuarios/editar";  // Redirigir a la misma página si hay errores
+            return "Usuarios/editar";
         }
-    
+
         try {
             usuarioService.actualizarUsuario(id, usuarioActualizado);
         } catch (IllegalArgumentException e) {
@@ -86,7 +93,11 @@ public class UsuarioVistasController {
             model.addAttribute("error", e.getMessage());
             return "Usuarios/editar";
         }
-    
-        return "redirect:/vista/usuarios";
+
+        if ("inicio".equals(redirect)) {
+            return "redirect:/PaginaInicio";
+        } else {
+            return "redirect:/vista/usuarios";
+        }
     }
 }
