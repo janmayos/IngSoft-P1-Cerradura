@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-    String token; 
-    String nombre;
+    private String token;
+    private String nombre;
+    private Long id; // Agrega este campo
 }

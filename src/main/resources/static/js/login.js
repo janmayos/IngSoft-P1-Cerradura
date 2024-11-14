@@ -31,7 +31,8 @@ $(document).ready(() => {
             localStorage.setItem('token', respServ.token);
             
             // Almacena la información del usuario en localStorage
-            localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO
+            localStorage.setItem('nombre', respServ.nombre); // Almacena el nombre del usuario
+            localStorage.setItem('id', respServ.id); // Almacena el id del usuario
 
             // Muestra mensaje de éxito con Swal
             Swal.fire({
