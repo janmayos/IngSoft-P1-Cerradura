@@ -85,12 +85,12 @@
                     <label for="modifyPassword" class="ml-2 text-gray-300 font-medium">Modificar</label>
                 </div>
             </div>
-            <!-- Roles -->
+            <!-- Roles (bloqueados) -->
             <div>
                 <label for="roles" class="block text-gray-300 font-medium">Roles</label>
                 <div th:each="rol : ${todosLosRoles}">
                     <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}"
-                        th:checked="${usuario.roles.contains(rol)}" />
+                        th:checked="${usuario.roles.contains(rol)}" disabled />
                     <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label><br />
                 </div>
             </div>
@@ -145,8 +145,8 @@
         }
         function isRoleSelected() {
             const roles = document.getElementsByName('roles');
-            for (let i = 0; i < roles.length; i++) {
-                if (roles[i].checked) {
+            for (let role of roles) {
+                if (role.checked) {
                     return true;
                 }
             }
