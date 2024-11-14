@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Editar Usuario</title>
+    <title>Editar Usuario - Tabla</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -20,53 +20,48 @@
                 });
             </script>
         </div>
-
+        
         <form id="edit-user-form" th:action="@{'/vista/usuarios/editar/' + ${usuario.idUsuario}}" method="post" class="space-y-4">
             <!-- Campo oculto para el ID del usuario -->
             <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.idUsuario}">
-
+            <!-- Campo oculto para el parámetro de redirección -->
+            <input type="hidden" id="redirect" name="redirect" value="tabla">
             <!-- Nombre -->
             <div>
                 <label for="nombre" class="block text-gray-300 font-medium">Nombre</label>
                 <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-
             <!-- Apellido Paterno -->
             <div>
                 <label for="apellidoPaterno" class="block text-gray-300 font-medium">Apellido Paterno</label>
                 <input type="text" id="apellidoPaterno" name="apellidoPaterno" th:value="${usuario.apellidoPaterno}"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-
             <!-- Apellido Materno -->
             <div>
                 <label for="apellidoMaterno" class="block text-gray-300 font-medium">Apellido Materno</label>
                 <input type="text" id="apellidoMaterno" name="apellidoMaterno" th:value="${usuario.apellidoMaterno}"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-
             <!-- Correo -->
             <div>
                 <label for="correo" class="block text-gray-300 font-medium">Correo</label>
                 <input type="email" id="correo" name="correo" th:value="${usuario.correo}"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-
             <!-- Username -->
             <div>
                 <label for="username" class="block text-gray-300 font-medium">Username</label>
                 <input type="text" id="username" name="username" th:value="${usuario.username}"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-
             <!-- Edad -->
             <div>
                 <label for="edad" class="block text-gray-300 font-medium">Edad</label>
                 <input type="number" id="edad" name="edad" th:value="${usuario.edad}"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-
             <!-- Género -->
             <div>
                 <label for="genero" class="block text-gray-300 font-medium">Género</label>
@@ -77,7 +72,6 @@
                     <option value="otro" th:selected="${usuario.genero == 'otro'}">Otro</option>
                 </select>
             </div>
-
             <!-- Password con checkbox -->
             <div class="flex items-center space-x-4">
                 <div class="flex-1">
@@ -91,7 +85,6 @@
                     <label for="modifyPassword" class="ml-2 text-gray-300 font-medium">Modificar</label>
                 </div>
             </div>
-
             <!-- Roles -->
             <div>
                 <label for="roles" class="block text-gray-300 font-medium">Roles</label>
@@ -101,7 +94,6 @@
                     <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label><br />
                 </div>
             </div>
-
             <!-- Botones de acción -->
             <div class="flex justify-between mt-6">
                 <button type="button" onclick="confirmSave()" class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
@@ -114,7 +106,6 @@
             </div>
         </form>
     </div>
-
     <script>
         function togglePassword() {
             const passwordField = document.getElementById('password');
@@ -129,7 +120,6 @@
                 passwordField.value = '[[${usuario.password}]]';  // Restaura la contraseña
             }
         }
-
         function confirmSave() {
             if (!isRoleSelected()) {
                 Swal.fire({
@@ -139,7 +129,6 @@
                 });
                 return;
             }
-
             Swal.fire({
                 title: '¿Guardar cambios?',
                 text: "¿Estás seguro de que deseas guardar los cambios?",
@@ -154,7 +143,6 @@
                 }
             });
         }
-
         function isRoleSelected() {
             const roles = document.getElementsByName('roles');
             for (let i = 0; i < roles.length; i++) {
