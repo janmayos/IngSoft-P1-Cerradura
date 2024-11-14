@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
     <title>Editar Usuario - Tabla</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -16,14 +16,16 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: [[${error}]]
+                    text: '[[${error}]]'
                 });
             </script>
         </div>
-        
+
         <form id="edit-user-form" th:action="@{'/vista/usuarios/editar/' + ${usuario.idUsuario}}" method="post" class="space-y-4">
             <!-- Campo oculto para el ID del usuario -->
             <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.idUsuario}">
+            <!-- Campo oculto para el ID del usuario actual -->
+            <input type="hidden" id="currentUserId" name="currentUserId" th:value="${currentUserId}">
             <!-- Campo oculto para el parámetro de redirección -->
             <input type="hidden" id="redirect" name="redirect" value="tabla">
             <!-- Nombre -->
@@ -91,7 +93,8 @@
                 <div th:each="rol : ${todosLosRoles}">
                     <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}"
                         th:checked="${usuario.roles.contains(rol)}" />
-                    <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label><br />
+                    <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label>
+                    <br />
                 </div>
             </div>
             <!-- Botones de acción -->
@@ -99,7 +102,7 @@
                 <button type="button" onclick="confirmSave()" class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
                     Guardar
                 </button>
-                <a th:href="@{'/vista/usuarios'}"
+                <a th:href="@{'/vista/usuarios?id=' + ${currentUserId}}"
                     class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 ease-in-out">
                     Cancelar
                 </a>
@@ -145,8 +148,8 @@
         }
         function isRoleSelected() {
             const roles = document.getElementsByName('roles');
-            for (let i = 0; i < roles.length; i++) {
-                if (roles[i].checked) {
+            for (let role of roles) {
+                if (role.checked) {
                     return true;
                 }
             }

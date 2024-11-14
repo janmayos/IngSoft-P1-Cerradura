@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,22 +38,13 @@ public class UsuarioVistasController {
 
     // Endpoint para mostrar la vista de edición de un usuario específico desde la tabla
     @GetMapping("/editar/{id}")
-    public String obtenerUsuarioPorIdDesdeTabla(@PathVariable Long id, Model model) {
+    public String obtenerUsuarioPorIdDesdeTabla(@PathVariable Long id, @RequestParam("currentUserId") Long currentUserId, Model model) {
         Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
         List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
         model.addAttribute("usuario", usuario);
         model.addAttribute("todosLosRoles", todosLosRoles);
+        model.addAttribute("currentUserId", currentUserId);
         return "Usuarios/editarTabla";
-    }
-
-    // Endpoint para mostrar la vista de edición de un usuario específico desde la página de inicio
-    @GetMapping("/editarInicio/{id}")
-    public String obtenerUsuarioPorIdDesdeInicio(@PathVariable Long id, Model model) {
-        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
-        List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("todosLosRoles", todosLosRoles);
-        return "Usuarios/editarInicio";
     }
 
     // Endpoint para actualizar un usuario
@@ -64,27 +54,19 @@ public class UsuarioVistasController {
         @Validated @ModelAttribute("usuario") Usuario usuarioActualizado, 
         BindingResult result, 
         @RequestParam(value = "roles", required = false) List<Long> rolesIds, 
-        @RequestParam(value = "redirect", required = false) String redirect,
+        @RequestParam(value = "currentUserId") Long currentUserId,
         Model model) {
         
-        Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
-        usuarioActualizado.setRoles(rolesSet);
-
-        if (rolesSet.isEmpty()) {
-            result.rejectValue("roles", "error.usuario", "Debe seleccionar al menos un rol.");
-            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
-            model.addAttribute("usuario", usuarioActualizado);
-            model.addAttribute("todosLosRoles", todosLosRoles);
-            model.addAttribute("error", "Debe seleccionar al menos un rol.");
-            return "Usuarios/editar";
-        }
-
         if (result.hasErrors()) {
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("usuario", usuarioActualizado);
             model.addAttribute("todosLosRoles", todosLosRoles);
-            return "Usuarios/editar";
+            model.addAttribute("currentUserId", currentUserId);
+            return "Usuarios/editarTabla";
         }
+
+        Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
+        usuarioActualizado.setRoles(rolesSet);
 
         try {
             usuarioService.actualizarUsuario(id, usuarioActualizado);
@@ -93,13 +75,10 @@ public class UsuarioVistasController {
             model.addAttribute("usuario", usuarioActualizado);
             model.addAttribute("todosLosRoles", todosLosRoles);
             model.addAttribute("error", e.getMessage());
-            return "Usuarios/editar";
+            model.addAttribute("currentUserId", currentUserId);
+            return "Usuarios/editarTabla";
         }
 
-        if ("inicio".equals(redirect)) {
-            return "redirect:/PaginaInicio";
-        } else {
-            return "redirect:/vista/usuarios";
-        }
+        return "redirect:/vista/usuarios?id=" + currentUserId;
     }
 }

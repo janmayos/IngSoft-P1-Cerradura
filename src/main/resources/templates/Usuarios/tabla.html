@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
     <title>Tabla de Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -41,7 +41,7 @@
                         </div>
                     </td>
                     <td class="px-4 py-2">
-                        <a th:href="@{'/vista/usuarios/editar/' + ${usuario.idUsuario}}" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out">Editar</a>
+                        <a th:href="@{'/vista/usuarios/editar/' + ${usuario.idUsuario} + '?currentUserId=' + ${usuarioActual.idUsuario}}" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out">Editar</a>
                         <button type="button" class="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition duration-300 ease-in-out ml-2" th:attr="data-id=${usuario.idUsuario}" onclick="confirmDelete(this)">Eliminar</button>
                     </td>
                 </tr>

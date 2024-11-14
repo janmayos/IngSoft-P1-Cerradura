@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
     <title>Editar Usuario - Inicio</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -92,6 +92,8 @@
                     <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}"
                         th:checked="${usuario.roles.contains(rol)}" />
                     <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label><br />
+                    <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}"
+                        th:checked="${usuario.roles.contains(rol)}" />
                 </div>
             </div>
             <!-- Botones de acción -->
@@ -99,7 +101,7 @@
                 <button type="button" onclick="confirmSave()" class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
                     Guardar
                 </button>
-                <a th:href="@{'/PaginaInicio'}"
+                <a th:href="@{'/PaginaInicio?id=' + ${usuario.idUsuario}}"
                     class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 ease-in-out">
                     Cancelar
                 </a>
