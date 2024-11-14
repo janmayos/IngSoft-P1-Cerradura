@@ -21,6 +21,9 @@
                 document.getElementById("deleteUserBtn").onclick = function() {
                     confirmDelete(id);
                 };
+                document.getElementById("viewUsersBtn").onclick = function() {
+                    window.location.href = "/vista/usuarios";
+                };
             } else {
                 window.location.href = "/formlogin";
             }
@@ -41,34 +44,6 @@
                 }
             });
         }
-
-        function deleteUser(userId) {
-            $.ajax({
-                url: window.location.origin + "/api/usuarios/eliminar/" + userId,
-                method: "DELETE",
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
-                },
-                success: () => {
-                    Swal.fire({
-                        title: "Eliminado!",
-                        text: "Tu cuenta ha sido eliminada.",
-                        icon: "success",
-                        didDestroy: () => {
-                            localStorage.clear();
-                            window.location.href = "/formlogin";
-                        }
-                    });
-                },
-                error: (respServ) => {
-                    Swal.fire({
-                        title: "Error",
-                        text: "Hubo un problema al eliminar tu cuenta.",
-                        icon: "error"
-                    });
-                }
-            });
-        }
     </script>
 </head>
 <body class="h-full bg-gray-900 text-white">
@@ -77,6 +52,13 @@
             <div class="rounded-xl bg-white dark:bg-gray-800 shadow-xl p-6 sm:p-16">
                 <h2 id="username" class="mb-8 text-2xl text-cyan-900 dark:text-cyan-200 font-bold">Bienvenido</h2>
                 <div class="mt-16 grid space-y-4">
+                    <button class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a id="viewUsersBtn" href="/vista/usuarios">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Ver Todos los Usuarios</span>
+                            </a>
+                        </div>
+                    </button>
                     <button class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
                         <div class="relative flex items-center space-x-4 justify-center">
                             <a id="editUserBtn" href="">
@@ -96,6 +78,7 @@
                             </a>
                         </div>
                     </button>
+                    
                 </div>
             </div>
         </div>
