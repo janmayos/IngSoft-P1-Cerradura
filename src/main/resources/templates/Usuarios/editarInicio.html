@@ -16,16 +16,16 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: [[${error}]]
+                    text: '[[${error}]]'
                 });
             </script>
         </div>
         
-        <form id="edit-user-form" th:action="@{'/vista/usuarios/editar/' + ${usuario.idUsuario}}" method="post" class="space-y-4">
+        <form id="edit-user-form" th:action="@{'/vista/usuarios/editarInicio/' + ${usuario.idUsuario}}" method="post" class="space-y-4">
             <!-- Campo oculto para el ID del usuario -->
             <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.idUsuario}">
-            <!-- Campo oculto para el parámetro de redirección -->
-            <input type="hidden" id="redirect" name="redirect" value="inicio">
+            <!-- Campo oculto para el ID del usuario actual -->
+            <input type="hidden" id="currentUserId" name="currentUserId" th:value="${currentUserId}">
             <!-- Nombre -->
             <div>
                 <label for="nombre" class="block text-gray-300 font-medium">Nombre</label>
@@ -92,8 +92,6 @@
                     <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}"
                         th:checked="${usuario.roles.contains(rol)}" />
                     <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label><br />
-                    <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}"
-                        th:checked="${usuario.roles.contains(rol)}" />
                 </div>
             </div>
             <!-- Botones de acción -->
@@ -101,7 +99,7 @@
                 <button type="button" onclick="confirmSave()" class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
                     Guardar
                 </button>
-                <a th:href="@{'/PaginaInicio?id=' + ${usuario.idUsuario}}"
+                <a th:href="@{'/PaginaInicio?id=' + ${currentUserId}}"
                     class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 ease-in-out">
                     Cancelar
                 </a>

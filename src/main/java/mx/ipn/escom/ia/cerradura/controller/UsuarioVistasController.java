@@ -47,6 +47,17 @@ public class UsuarioVistasController {
         return "Usuarios/editarTabla";
     }
 
+    // Endpoint para mostrar la vista de edición del usuario actual desde la página de inicio
+    @GetMapping("/editarInicio/{id}")
+    public String obtenerUsuarioPorIdDesdeInicio(@PathVariable Long id, Model model) {
+        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
+        List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("todosLosRoles", todosLosRoles);
+        model.addAttribute("currentUserId", id);
+        return "Usuarios/editarInicio";
+    }
+
     // Endpoint para actualizar un usuario
     @PostMapping("/editar/{id}")
     public String actualizarUsuario(
@@ -80,5 +91,39 @@ public class UsuarioVistasController {
         }
 
         return "redirect:/vista/usuarios?id=" + currentUserId;
+    }
+
+    // Endpoint para actualizar el usuario actual desde la página de inicio
+    @PostMapping("/editarInicio/{id}")
+    public String actualizarUsuarioDesdeInicio(
+        @PathVariable Long id, 
+        @Validated @ModelAttribute("usuario") Usuario usuarioActualizado, 
+        BindingResult result, 
+        @RequestParam(value = "roles", required = false) List<Long> rolesIds, 
+        Model model) {
+        
+        if (result.hasErrors()) {
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("usuario", usuarioActualizado);
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            model.addAttribute("currentUserId", id);
+            return "Usuarios/editarInicio";
+        }
+
+        Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
+        usuarioActualizado.setRoles(rolesSet);
+
+        try {
+            usuarioService.actualizarUsuario(id, usuarioActualizado);
+        } catch (IllegalArgumentException e) {
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("usuario", usuarioActualizado);
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("currentUserId", id);
+            return "Usuarios/editarInicio";
+        }
+
+        return "redirect:/PaginaInicio?id=" + id;
     }
 }
