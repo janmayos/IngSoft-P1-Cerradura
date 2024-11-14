@@ -29,9 +29,11 @@ public class UsuarioVistasController {
 
     // Endpoint para obtener todos los usuarios
     @GetMapping({"", "/"})
-    public String getClients(Model model) {
+    public String getClients(Model model, @RequestParam("id") Long id) {
         List<Usuario> listaUsuarios = usuarioService.obtenerTodosLosUsuarios();
+        Usuario usuarioActual = usuarioService.obtenerUsuarioPorId(id);
         model.addAttribute("usuarios", listaUsuarios);
+        model.addAttribute("usuarioActual", usuarioActual);
         return "Usuarios/tabla";
     }
 

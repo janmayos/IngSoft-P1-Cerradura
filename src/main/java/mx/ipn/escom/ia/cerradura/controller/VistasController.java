@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import mx.ipn.escom.ia.cerradura.service.UsuarioService;
 import mx.ipn.escom.ia.cerradura.model.Rol;
 import mx.ipn.escom.ia.cerradura.model.Usuario;

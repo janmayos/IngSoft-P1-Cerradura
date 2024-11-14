@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
     <title>Tabla de Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -48,7 +48,7 @@
         </table>
         <!-- Botón para regresar a la página de inicio -->
         <div class="mt-6 text-center">
-            <a href="/PaginaInicio" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">Regresar a Página de Inicio</a>
+            <a th:href="@{'/PaginaInicio?id=' + ${usuarioActual.idUsuario}}" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">Regresar a Página de Inicio</a>
         </div>
     </div>
     <script>
