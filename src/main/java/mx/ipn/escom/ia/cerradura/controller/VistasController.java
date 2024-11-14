@@ -30,5 +30,9 @@ public class VistasController {
 		return "redirect:/formlogin";
 	}
 
+    @GetMapping("/resultadosLibros")
+    public String resultadosLibros() {
+        return "libros/resultados";
+    }
     
 }
