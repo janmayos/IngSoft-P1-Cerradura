@@ -58,6 +58,42 @@ public class UsuarioVistasController {
         return "Usuarios/editarInicio";
     }
 
+    // Endpoint para mostrar la vista de registro de un nuevo usuario desde la tabla
+    @GetMapping("/registrar")
+    public String mostrarFormularioRegistro(@RequestParam("currentUserId") Long currentUserId, Model model) {
+        List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+        model.addAttribute("usuario", new Usuario());
+        model.addAttribute("todosLosRoles", todosLosRoles);
+        model.addAttribute("currentUserId", currentUserId);
+        return "Usuarios/registrarUsuario";
+    }
+
+    // Endpoint para procesar el registro de un nuevo usuario
+    @PostMapping("/registrar")
+    public String registrarUsuario(@Validated @ModelAttribute("usuario") Usuario usuario, BindingResult result, @RequestParam(value = "roles", required = false) List<Long> rolesIds, @RequestParam("currentUserId") Long currentUserId, Model model) {
+        if (result.hasErrors()) {
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            model.addAttribute("currentUserId", currentUserId);
+            return "Usuarios/registrarUsuario";
+        }
+
+        Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
+        usuario.setRoles(rolesSet);
+
+        try {
+            usuarioService.registrarUsuario(usuario);
+        } catch (Exception e) {
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("currentUserId", currentUserId);
+            return "Usuarios/registrarUsuario";
+        }
+
+        return "redirect:/vista/usuarios?id=" + currentUserId;
+    }
+
     // Endpoint para actualizar un usuario
     @PostMapping("/editar/{id}")
     public String actualizarUsuario(
