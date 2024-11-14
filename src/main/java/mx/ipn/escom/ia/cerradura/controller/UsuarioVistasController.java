@@ -58,7 +58,7 @@ public class UsuarioVistasController {
         return "Usuarios/editarInicio";
     }
 
-    // Endpoint para mostrar la vista de registro de un nuevo usuario desde la tabla
+    // Endpoint para mostrar la vista de registro de un nuevo usuario
     @GetMapping("/registrar")
     public String mostrarFormularioRegistro(@RequestParam("currentUserId") Long currentUserId, Model model) {
         List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
@@ -83,7 +83,7 @@ public class UsuarioVistasController {
 
         try {
             usuarioService.registrarUsuario(usuario);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("todosLosRoles", todosLosRoles);
             model.addAttribute("error", e.getMessage());

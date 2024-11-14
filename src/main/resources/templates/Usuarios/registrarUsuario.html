@@ -5,6 +5,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/just-validate@latest/dist/just-validate.production.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
     <div class="container max-w-lg bg-gray-800 rounded-lg shadow-lg p-8">
@@ -45,12 +47,14 @@
                 <label for="correo" class="block text-gray-300 font-medium">Correo</label>
                 <input type="email" id="correo" name="correo"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <span id="correo-error" class="error-message text-red-500"></span>
             </div>
             <!-- Username -->
             <div>
                 <label for="username" class="block text-gray-300 font-medium">Username</label>
                 <input type="text" id="username" name="username"
                     class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <span id="username-error" class="error-message text-red-500"></span>
             </div>
             <!-- Edad -->
             <div>
@@ -96,17 +100,100 @@
     </div>
     <script>
         function confirmSave() {
-            Swal.fire({
-                title: '¿Registrar usuario?',
-                text: "¿Estás seguro de que deseas registrar este usuario?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, registrarlo'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('register-user-form').submit();
+            const roles = document.getElementsByName('roles');
+            const isRoleSelected = Array.from(roles).some(role => role.checked);
+
+            if (!isRoleSelected) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor, selecciona al menos un rol.'
+                });
+                return;
+            }
+
+            const validator = new JustValidate('#register-user-form');
+
+            validator
+                .addField('#nombre', [
+                    { rule: 'required', errorMessage: 'Falta tu nombre' },
+                ])
+                .addField('#apellidoPaterno', [
+                    { rule: 'required', errorMessage: 'Falta tu apellido paterno' },
+                ])
+                .addField('#apellidoMaterno', [
+                    { rule: 'required', errorMessage: 'Falta tu apellido materno' },
+                ])
+                .addField('#correo', [
+                    { rule: 'required', errorMessage: 'Falta tu correo' },
+                    { rule: 'email', errorMessage: 'Formato de correo inválido' }
+                ])
+                .addField('#username', [
+                    { rule: 'required', errorMessage: 'Falta tu nombre de usuario' },
+                ])
+                .addField('#password', [
+                    { rule: 'required', errorMessage: 'Falta tu contraseña' },
+                ])
+                .addField('#edad', [
+                    { rule: 'required', errorMessage: 'Falta tu edad' },
+                ])
+                .addField('#genero', [
+                    { rule: 'required', errorMessage: 'Falta tu género' },
+                ])
+                .onSuccess((event) => {
+                    event.preventDefault();
+                    registrarUsuario();
+                });
+
+            validator.validate();
+        }
+
+        function registrarUsuario() {
+            const formData = {
+                nombre: $("#nombre").val(),
+                apellidoPaterno: $("#apellidoPaterno").val(),
+                apellidoMaterno: $("#apellidoMaterno").val(),
+                correo: $("#correo").val(),
+                username: $("#username").val(),
+                password: $("#password").val(),
+                edad: $("#edad").val(),
+                genero: $("#genero").val(),
+                roles: Array.from(document.querySelectorAll('input[name="roles"]:checked')).map(el => el.value)
+            };
+
+            $.ajax({
+                url: window.location.origin + "/api/usuarios/registrar", // Endpoint de registro
+                method: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                cache: false,
+
+                success: (respServ) => {
+                    Swal.fire({
+                        title: "¡Éxito!",
+                        text: "Usuario registrado correctamente",
+                        icon: "success",
+                        didDestroy: () => {
+                            window.location.href = window.location.origin + "/vista/usuarios?id=" + $("#currentUserId").val();
+                        }
+                    });
+                },
+
+                error: (respServ) => {
+                    const errorMsg = JSON.parse(respServ.responseText).msg;
+
+                    if (errorMsg.includes('correo')) {
+                        $("#correo-error").text(errorMsg);
+                    }
+                    if (errorMsg.includes('usuario')) {
+                        $("#username-error").text(errorMsg);
+                    }
+
+                    Swal.fire({
+                        title: "Upps..",
+                        text: "Error: " + errorMsg,
+                        icon: "error"
+                    });
                 }
             });
         }
