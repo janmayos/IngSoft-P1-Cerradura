@@ -11,17 +11,16 @@ $(document).ready(() => {
     ])
     .addField("#correo", [
       { rule: "required", errorMessage: "Falta tu correo" },
-      { rule: "email", errorMessage: "Formato invalido"
-      }
+      { rule: "email", errorMessage: "Formato invalido" }
     ])
     .addField("#edad", [
       { rule: "required", errorMessage: "Falta tu edad" },
     ])
     .addField("#genero", [
-      { rule: "required", errorMessage: "Falta tu genero"},
+      { rule: "required", errorMessage: "Falta tu genero" },
     ])
     .addField("#username", [
-      { rule: "required", errorMessage: "Falta tu username"},
+      { rule: "required", errorMessage: "Falta tu username" },
     ])
     .addField("#password", [
       { rule: "required", errorMessage: "Falta tu contraseña" },
@@ -30,22 +29,25 @@ $(document).ready(() => {
       event.preventDefault();
 
       let formData = {
-          nombre  : $("#nombre ").val(),
-          apellidoPaterno : $("#apellidoPaterno").val(),
-          apellidoMaterno : $("#apellidoMaterno").val(),
-          correo : $("#correo").val(),
-          username : $("#username").val(),
-          password : $("#password").val(),
-          edad : $("#edad").val(),
-          genero : $("#genero").val(),
-    };
-      
-      //Realiza la solicitud AJAX al backend para hacer el login
+        nombre: $("#nombre").val(),
+        apellidoPaterno: $("#apellidoPaterno").val(),
+        apellidoMaterno: $("#apellidoMaterno").val(),
+        correo: $("#correo").val(),
+        username: $("#username").val(),
+        password: $("#password").val(),
+        edad: $("#edad").val(),
+        genero: $("#genero").val(),
+      };
+
+      // Deshabilitar el botón de envío para evitar múltiples envíos
+      $("button[type='submit']").prop("disabled", true);
+
+      // Realiza la solicitud AJAX al backend para hacer el registro
       $.ajax({
-        url: window.location.origin + "/auth/register", // Endpoint de login
+        url: window.location.origin + "/auth/register", // Endpoint de registro
         method: "POST",
         contentType: 'application/json',
-        data: JSON.stringify(formData),  
+        data: JSON.stringify(formData),
         cache: false,
 
         success: (respServ) => {
@@ -54,54 +56,55 @@ $(document).ready(() => {
 
           // Verifica si la respuesta contiene un token
           if (respServ) {
-            // Almacena el token en localStorage
-            // localStorage.setItem('token', respServ.token);
-            
-            // Almacena la información del usuario en localStorage
-            // localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO
-
             // Muestra mensaje de éxito con Swal
             Swal.fire({
-              title: "Exito!!",
+              title: "¡Éxito!",
               text: "Registro exitoso",
               icon: "success",
               didDestroy: () => {
-                // Redirige a la página de inicio después de login exitoso
+                // Redirige a la página de inicio después de registro exitoso
                 window.location.href = window.location.origin + "/formlogin";
               }
             });
-          } 
+          }
         },
 
         error: (respServ) => {
-
-
           if (respServ.status == 400) {
-             // Si la respuesta no contiene el token
-              Swal.fire({
+            const errorMsg = JSON.parse(respServ.responseText).msg;
+
+            if (errorMsg.includes('correo')) {
+              $("#correo-error").text(errorMsg);
+            }
+            if (errorMsg.includes('usuario')) {
+              $("#username-error").text(errorMsg);
+            }
+
+            Swal.fire({
               title: "Upps..",
-              text: "Error: "+respServ.msg,
+              text: "Error: " + errorMsg,
               icon: "error",
               didDestroy: () => {
-                //location.reload(); // Recarga la página si las credenciales son incorrectas
+                // Puedes recargar la página si es necesario
               }
             });
-          }else{
+          } else {
             // Manejo de error si ocurre algo en la solicitud
-          console.log("Error", respServ.status);
-          console.log("Error details:", respServ.responseText);
+            console.log("Error", respServ.status);
+            console.log("Error details:", respServ.responseText);
 
-          Swal.fire({
-            title: "Upps..",
-            text: "Hubo un error al procesar tu solicitud",
-            icon: "error",
-            didDestroy: () => {
-              //location.reload(); // Recarga la página si hay un error
-            }
-          });
-
+            Swal.fire({
+              title: "Upps..",
+              text: "Hubo un error al procesar tu solicitud",
+              icon: "error",
+              didDestroy: () => {
+                // Puedes recargar la página si es necesario
+              }
+            });
           }
-          
+
+          // Habilitar el botón de envío nuevamente
+          $("button[type='submit']").prop("disabled", false);
         }
       });
     });

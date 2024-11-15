@@ -3,6 +3,7 @@ package mx.ipn.escom.ia.cerradura.service;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Obtener todos los usuarios
     public List<Usuario> obtenerTodosLosUsuarios() {
@@ -25,51 +28,52 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
     }
 
-    // public List<Usuario> buscarUsuarios(String nombre, String correo, Integer edad) {
-    //     // Ejemplo de una consulta simple combinando los parámetros
-    //     if (nombre != null && correo != null && edad != null) {
-    //         return usuarioRepository.findByNombreAndCorreoAndEdad(nombre, correo, edad);
-    //     } else if (nombre != null && correo != null) {
-    //         return usuarioRepository.findByNombreAndCorreo(nombre, correo);
-    //     } else if (nombre != null) {
-    //         return usuarioRepository.findByNombre(nombre);
-    //     } else if (correo != null) {
-    //         return usuarioRepository.findByCorreo(correo);
-    //     } else if (edad != null) {
-    //         return usuarioRepository.findByEdad(edad);
-    //     } else {
-    //         return usuarioRepository.findAll(); // Devuelve todos los usuarios si no se pasa ningún parámetro
-    //     }
-    // }
-
     // Actualizar un usuario
     public Usuario actualizarUsuario(Long id, Usuario detallesUsuario) {
-        return usuarioRepository.findById(id).map(usuarioExistente -> {
-            usuarioExistente.setNombre(detallesUsuario.getNombre());
-            usuarioExistente.setApellidoPaterno(detallesUsuario.getApellidoPaterno());
-            usuarioExistente.setApellidoMaterno(detallesUsuario.getApellidoMaterno());
-            usuarioExistente.setCorreo(detallesUsuario.getCorreo());
-            usuarioExistente.setUsername(detallesUsuario.getUsername());
-            usuarioExistente.setPassword(detallesUsuario.getPassword());
-            usuarioExistente.setEdad(detallesUsuario.getEdad());
-            usuarioExistente.setGenero(detallesUsuario.getGenero());
-
-            // Actualizar roles (verifica que los roles no estén vacíos)
-            if (detallesUsuario.getRoles() != null && !detallesUsuario.getRoles().isEmpty()) {
-                usuarioExistente.setRoles(detallesUsuario.getRoles());
+        Usuario usuarioExistente = obtenerUsuarioPorId(id);
+    
+        // Validar que el nuevo correo no esté en uso por otro usuario
+        Optional<Usuario> usuarioConMismoCorreo = usuarioRepository.findByCorreo(detallesUsuario.getCorreo());
+        if (usuarioConMismoCorreo.isPresent() && !usuarioConMismoCorreo.get().getIdUsuario().equals(id)) {
+            throw new IllegalArgumentException("El correo ya está en uso.");
+        }
+    
+        // Validar que el nuevo username no esté en uso por otro usuario
+        Optional<Usuario> usuarioConMismoUsername = usuarioRepository.findByUsername(detallesUsuario.getUsername());
+        if (usuarioConMismoUsername.isPresent() && !usuarioConMismoUsername.get().getIdUsuario().equals(id)) {
+            throw new IllegalArgumentException("El username ya está en uso.");
+        }
+    
+        usuarioExistente.setNombre(detallesUsuario.getNombre());
+        usuarioExistente.setApellidoPaterno(detallesUsuario.getApellidoPaterno());
+        usuarioExistente.setApellidoMaterno(detallesUsuario.getApellidoMaterno());
+        usuarioExistente.setCorreo(detallesUsuario.getCorreo());
+        usuarioExistente.setUsername(detallesUsuario.getUsername());
+    
+        // Solo actualizar la contraseña si se ha proporcionado una nueva
+        if (detallesUsuario.getPassword() != null && !detallesUsuario.getPassword().isEmpty()) {
+            if (passwordEncoder.matches(detallesUsuario.getPassword(), usuarioExistente.getPassword())) {
+                usuarioExistente.setPassword(usuarioExistente.getPassword());
+            } else {
+                usuarioExistente.setPassword(passwordEncoder.encode(detallesUsuario.getPassword()));
             }
+        }
+    
+        usuarioExistente.setEdad(detallesUsuario.getEdad());
+        usuarioExistente.setGenero(detallesUsuario.getGenero());
+        usuarioExistente.setRoles(detallesUsuario.getRoles());
+        return usuarioRepository.save(usuarioExistente);
+    }
+    
 
-            return usuarioRepository.save(usuarioExistente);
-        }).orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+    // Obtener un usuario por username
+    public Usuario obtenerUsuarioPorUsername(String user) {
+        Optional<Usuario> foundUser = usuarioRepository.findByUsername(user);
+        return foundUser.orElse(null);
     }
 
-    public Usuario obtenerUsuarioPorUsername(String user) {
-        
-        Optional<Usuario> foundUser = usuarioRepository.findByUsername(user);
-        System.out.println(foundUser.isPresent());
-        if (foundUser.isPresent()){
-            return foundUser.get();
-        } 
-        return null;
+    // Eliminar un usuario por ID
+    public void eliminarUsuario(Long id) {
+        usuarioRepository.deleteById(id);
     }
 }
