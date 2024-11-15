@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
     <title>Tabla de Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
     <div class="container max-w-7xl bg-gray-800 rounded-lg shadow-lg p-8">
-        <h1 class="text-3xl font-bold mb-6 text-center text-white">Usuarios</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-white">Usuarios</h1>
+            <a th:href="@{'/vista/usuarios/registrar?currentUserId=' + ${usuarioActual.idUsuario}}" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-300 ease-in-out">Registrar Usuario</a>
+        </div>
         <table class="min-w-full bg-gray-800 text-white">
             <thead>
                 <tr>
@@ -40,12 +44,16 @@
                         </div>
                     </td>
                     <td class="px-4 py-2">
-                        <a th:href="@{'/vista/usuarios/editar/' + ${usuario.idUsuario}}" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out">Editar</a>
+                        <a th:href="@{'/vista/usuarios/editar/' + ${usuario.idUsuario} + '?currentUserId=' + ${usuarioActual.idUsuario}}" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out">Editar</a>
                         <button type="button" class="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition duration-300 ease-in-out ml-2" th:attr="data-id=${usuario.idUsuario}" onclick="confirmDelete(this)">Eliminar</button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <!-- Botón para regresar a la página de inicio -->
+        <div class="mt-6 text-center">
+            <a th:href="@{'/PaginaInicio?id=' + ${usuarioActual.idUsuario}}" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">Regresar a Página de Inicio</a>
+        </div>
     </div>
     <script>
         function confirmDelete(button) {
@@ -60,7 +68,34 @@
                 confirmButtonText: 'Sí, eliminarlo'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/vista/usuarios/eliminar/' + userId;
+                    deleteUser(userId);
+                }
+            });
+        }
+
+        function deleteUser(userId) {
+            $.ajax({
+                url: window.location.origin + "/api/usuarios/eliminar/" + userId,
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                success: () => {
+                    Swal.fire({
+                        title: "Eliminado!",
+                        text: "El usuario ha sido eliminado.",
+                        icon: "success",
+                        didDestroy: () => {
+                            location.reload();
+                        }
+                    });
+                },
+                error: (respServ) => {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un problema al eliminar el usuario.",
+                        icon: "error"
+                    });
                 }
             });
         }
