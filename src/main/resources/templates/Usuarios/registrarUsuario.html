@@ -71,8 +71,10 @@
                 <label th:for="'rol' + ${rol.idRol}" th:text="${rol.nombre}"></label><br />
             </div>
         </div>
+        <!-- Campo oculto para el ID del usuario actual -->
+        <input type="hidden" id="currentUserId" name="currentUserId" th:value="${currentUserId}">
         <button type="submit" id="submitBtn">Registrar</button>
-        <button type="button" onclick="location.href='/formlogin'">Regresar al Login</button>
+        <button type="button" onclick="location.href='/vista/usuarios?id=' + document.getElementById('currentUserId').value">Regresar a la Tabla de Usuarios</button>
     </form>
 </body>
 </html>
