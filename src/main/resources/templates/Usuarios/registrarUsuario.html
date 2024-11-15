@@ -2,79 +2,75 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registro de Usuario</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <link th:href="@{/antes/css/styleRegistro.css}" rel="stylesheet" type="text/css">
     <script th:src="@{/js/plugins/jquery.js}"></script>
     <script th:src="@{/js/materialize/js/materialize.min.js}"></script>
     <script th:src="@{/js/plugins/sweetalert2.js}"></script>
     <script th:src="@{/js/plugins/just-validate.js}"></script>
     <script th:src="@{/js/registrarUsuario.js}"></script>
+    <script th:src="@{https://cdn.tailwindcss.com}"></script>
 </head>
-<body>
-    <div class="background">    
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-    <form id="formRegister" autocomplete="off">
-        <div>
-            <h3>Regístrate</h3>
-        <div>
-            <label for="nombre">Nombre</label>
-            <input type="text" autocomplete="off" placeholder="Vicente" id="nombre">
-        </div>
-        
-        <div>
-            <label for="apellidoPaterno">Apellido paterno</label>
-            <input type="text" autocomplete="off" placeholder="Morales" id="apellidoPaterno">
-        </div>
-        
-        <div>
-            <label for="apellidoMaterno">Apellido materno</label>
-            <input type="text" autocomplete="off" placeholder="Díaz" id="apellidoMaterno">
-        </div>
-        <div>
-            <label for="correo">Correo electrónico</label>
-            <input type="email" autocomplete="off" placeholder="vicente.morales@example.com" id="correo">
-            <span id="correo-error" class="error-message"></span>
-        </div>
-        <div>
-            <label for="username">Nombre de usuario</label>
-            <input type="text" autocomplete="off" placeholder="Strack2112" id="username">
-            <span id="username-error" class="error-message"></span>
-        </div>
-        <div>
-            <label for="password">Contraseña</label>
-            <input type="password" autocomplete="off" placeholder="********" id="password">
-        </div>
-        <div>
-            <label for="edad">Edad</label>
-            <input type="text" autocomplete="off" placeholder="24" id="edad">
-        </div>
-        <!-- Select para género sin estilos personalizados -->
-        <div>
-            <label for="genero">Género</label>
-            <select id="genero" name="genero">
-                <option value="">Seleccionar género</option>
-                <option value="masculino">Masculino</option>
-                <option value="femenino">Femenino</option>
-                <option value="otro">Otro</option>
-            </select>
-        </div>
-        <!-- Roles -->
-        <div>
-            <label for="roles">Roles</label>
-            <div th:each="rol : ${todosLosRoles}">
-                <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.nombre}" />
-                <label th:for="'rol' + ${rol.idRol}" th:text="${rol.nombre}"></label><br />
+<body class="h-full bg-gray-900 text-white">
+    <div class="flex min-h-full flex-col justify-center items-center px-6 py-12 lg:px-8">
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-lg">
+            <div class="rounded-xl bg-gray-800 shadow-xl p-6 sm:p-16">
+                <h2 class="mb-8 text-2xl text-cyan-200 font-bold text-center">Registrar Usuario</h2>
+                <form id="formRegister" autocomplete="off" class="space-y-4">
+                    <div>
+                        <label for="nombre" class="block text-gray-300 font-medium">Nombre</label>
+                        <input type="text" id="nombre" name="nombre" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="apellidoPaterno" class="block text-gray-300 font-medium">Apellido Paterno</label>
+                        <input type="text" id="apellidoPaterno" name="apellidoPaterno" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="apellidoMaterno" class="block text-gray-300 font-medium">Apellido Materno</label>
+                        <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="correo" class="block text-gray-300 font-medium">Correo</label>
+                        <input type="email" id="correo" name="correo" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <span id="correo-error" class="error-message text-red-500"></span>
+                    </div>
+                    <div>
+                        <label for="username" class="block text-gray-300 font-medium">Nombre de usuario</label>
+                        <input type="text" id="username" name="username" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <span id="username-error" class="error-message text-red-500"></span>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-gray-300 font-medium">Contraseña</label>
+                        <input type="password" id="password" name="password" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="edad" class="block text-gray-300 font-medium">Edad</label>
+                        <input type="number" id="edad" name="edad" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="genero" class="block text-gray-300 font-medium">Género</label>
+                        <select id="genero" name="genero" class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Seleccionar género</option>
+                            <option value="masculino">Masculino</option>
+                            <option value="femenino">Femenino</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="roles" class="block text-gray-300 font-medium">Roles</label>
+                        <div th:each="rol : ${todosLosRoles}">
+                            <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.nombre}" class="mr-2">
+                            <label th:for="'rol' + ${rol.idRol}" th:text="${rol.nombre}" class="text-gray-300"></label><br />
+                        </div>
+                    </div>
+                    <!-- Campo oculto para el ID del usuario actual -->
+                    <input type="hidden" id="currentUserId" name="currentUserId" th:value="${currentUserId}">
+                    <div class="flex justify-between mt-6">
+                        <button type="submit" id="submitBtn" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 ease-in-out">Registrar</button>
+                        <button type="button" onclick="location.href='/vista/usuarios?id=' + document.getElementById('currentUserId').value" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 ease-in-out">Regresar a la Tabla de Usuarios</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- Campo oculto para el ID del usuario actual -->
-        <input type="hidden" id="currentUserId" name="currentUserId" th:value="${currentUserId}">
-        <button type="submit" id="submitBtn">Registrar</button>
-        <button type="button" onclick="location.href='/vista/usuarios?id=' + document.getElementById('currentUserId').value">Regresar a la Tabla de Usuarios</button>
-    </form>
+    </div>
 </body>
 </html>
