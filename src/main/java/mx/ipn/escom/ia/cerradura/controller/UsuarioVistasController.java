@@ -137,7 +137,7 @@ public class UsuarioVistasController {
         BindingResult result, 
         @RequestParam(value = "roles", required = false) List<Long> rolesIds, 
         Model model) {
-        
+            
         if (result.hasErrors()) {
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("usuario", usuarioActualizado);
@@ -145,10 +145,8 @@ public class UsuarioVistasController {
             model.addAttribute("currentUserId", id);
             return "Usuarios/editarInicio";
         }
-
         Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
         usuarioActualizado.setRoles(rolesSet);
-
         try {
             usuarioService.actualizarUsuario(id, usuarioActualizado);
         } catch (IllegalArgumentException e) {
@@ -159,7 +157,6 @@ public class UsuarioVistasController {
             model.addAttribute("currentUserId", id);
             return "Usuarios/editarInicio";
         }
-
         return "redirect:/PaginaInicio?id=" + id;
     }
 }
