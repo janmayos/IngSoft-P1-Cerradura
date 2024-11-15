@@ -1,202 +1,78 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Registrar Usuario</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/just-validate@latest/dist/just-validate.production.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Registro de Usuario</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link th:href="@{/antes/css/styleRegistro.css}" rel="stylesheet" type="text/css">
+    <script th:src="@{/js/plugins/jquery.js}"></script>
+    <script th:src="@{/js/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/js/plugins/sweetalert2.js}"></script>
+    <script th:src="@{/js/plugins/just-validate.js}"></script>
+    <script th:src="@{/js/registrarUsuario.js}"></script>
 </head>
-<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
-    <div class="container max-w-lg bg-gray-800 rounded-lg shadow-lg p-8">
-        <h1 class="text-3xl font-bold mb-6 text-center text-white">Registrar Usuario</h1>
-        
-        <!-- Mensajes de error -->
-        <div th:if="${error}">
-            <script th:inline="javascript">
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '[[${error}]]'
-                });
-            </script>
-        </div>
-
-        <form id="register-user-form" th:action="@{'/vista/usuarios/registrar?currentUserId=' + ${currentUserId}}" method="post" class="space-y-4">
-            <!-- Nombre -->
-            <div>
-                <label for="nombre" class="block text-gray-300 font-medium">Nombre</label>
-                <input type="text" id="nombre" name="nombre"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-            <!-- Apellido Paterno -->
-            <div>
-                <label for="apellidoPaterno" class="block text-gray-300 font-medium">Apellido Paterno</label>
-                <input type="text" id="apellidoPaterno" name="apellidoPaterno"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-            <!-- Apellido Materno -->
-            <div>
-                <label for="apellidoMaterno" class="block text-gray-300 font-medium">Apellido Materno</label>
-                <input type="text" id="apellidoMaterno" name="apellidoMaterno"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-            <!-- Correo -->
-            <div>
-                <label for="correo" class="block text-gray-300 font-medium">Correo</label>
-                <input type="email" id="correo" name="correo"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <span id="correo-error" class="error-message text-red-500"></span>
-            </div>
-            <!-- Username -->
-            <div>
-                <label for="username" class="block text-gray-300 font-medium">Username</label>
-                <input type="text" id="username" name="username"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <span id="username-error" class="error-message text-red-500"></span>
-            </div>
-            <!-- Edad -->
-            <div>
-                <label for="edad" class="block text-gray-300 font-medium">Edad</label>
-                <input type="number" id="edad" name="edad"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-            <!-- Género -->
-            <div>
-                <label for="genero" class="block text-gray-300 font-medium">Género</label>
-                <select id="genero" name="genero"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                    <option value="otro">Otro</option>
-                </select>
-            </div>
-            <!-- Password -->
-            <div>
-                <label for="password" class="block text-gray-300 font-medium">Password</label>
-                <input type="password" id="password" name="password"
-                    class="w-full bg-gray-700 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-            <!-- Roles -->
-            <div>
-                <label for="roles" class="block text-gray-300 font-medium">Roles</label>
-                <div th:each="rol : ${todosLosRoles}">
-                    <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}" />
-                    <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label><br />
-                </div>
-            </div>
-            <!-- Botones de acción -->
-            <div class="flex justify-between mt-6">
-                <button type="button" onclick="confirmSave()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 ease-in-out">
-                    Registrar
-                </button>
-                <a th:href="@{'/vista/usuarios?id=' + ${currentUserId}}"
-                    class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 ease-in-out">
-                    Cancelar
-                </a>
-            </div>
-        </form>
+<body>
+    <div class="background">    
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
-    <script>
-        function confirmSave() {
-            const roles = document.getElementsByName('roles');
-            const isRoleSelected = Array.from(roles).some(role => role.checked);
-
-            if (!isRoleSelected) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Por favor, selecciona al menos un rol.'
-                });
-                return;
-            }
-
-            const validator = new JustValidate('#register-user-form');
-
-            validator
-                .addField('#nombre', [
-                    { rule: 'required', errorMessage: 'Falta tu nombre' },
-                ])
-                .addField('#apellidoPaterno', [
-                    { rule: 'required', errorMessage: 'Falta tu apellido paterno' },
-                ])
-                .addField('#apellidoMaterno', [
-                    { rule: 'required', errorMessage: 'Falta tu apellido materno' },
-                ])
-                .addField('#correo', [
-                    { rule: 'required', errorMessage: 'Falta tu correo' },
-                    { rule: 'email', errorMessage: 'Formato de correo inválido' }
-                ])
-                .addField('#username', [
-                    { rule: 'required', errorMessage: 'Falta tu nombre de usuario' },
-                ])
-                .addField('#password', [
-                    { rule: 'required', errorMessage: 'Falta tu contraseña' },
-                ])
-                .addField('#edad', [
-                    { rule: 'required', errorMessage: 'Falta tu edad' },
-                ])
-                .addField('#genero', [
-                    { rule: 'required', errorMessage: 'Falta tu género' },
-                ])
-                .onSuccess((event) => {
-                    event.preventDefault();
-                    registrarUsuario();
-                });
-
-            validator.validate();
-        }
-
-        function registrarUsuario() {
-            const formData = {
-                nombre: $("#nombre").val(),
-                apellidoPaterno: $("#apellidoPaterno").val(),
-                apellidoMaterno: $("#apellidoMaterno").val(),
-                correo: $("#correo").val(),
-                username: $("#username").val(),
-                password: $("#password").val(),
-                edad: $("#edad").val(),
-                genero: $("#genero").val(),
-                roles: Array.from(document.querySelectorAll('input[name="roles"]:checked')).map(el => el.value)
-            };
-
-            $.ajax({
-                url: window.location.origin + "/api/usuarios/registrar", // Endpoint de registro
-                method: "POST",
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                cache: false,
-
-                success: (respServ) => {
-                    Swal.fire({
-                        title: "¡Éxito!",
-                        text: "Usuario registrado correctamente",
-                        icon: "success",
-                        didDestroy: () => {
-                            window.location.href = window.location.origin + "/vista/usuarios?id=" + $("#currentUserId").val();
-                        }
-                    });
-                },
-
-                error: (respServ) => {
-                    const errorMsg = JSON.parse(respServ.responseText).msg;
-
-                    if (errorMsg.includes('correo')) {
-                        $("#correo-error").text(errorMsg);
-                    }
-                    if (errorMsg.includes('usuario')) {
-                        $("#username-error").text(errorMsg);
-                    }
-
-                    Swal.fire({
-                        title: "Upps..",
-                        text: "Error: " + errorMsg,
-                        icon: "error"
-                    });
-                }
-            });
-        }
-    </script>
+    <form id="formRegister" autocomplete="off">
+        <div>
+            <h3>Regístrate</h3>
+        <div>
+            <label for="nombre">Nombre</label>
+            <input type="text" autocomplete="off" placeholder="Vicente" id="nombre">
+        </div>
+        
+        <div>
+            <label for="apellidoPaterno">Apellido paterno</label>
+            <input type="text" autocomplete="off" placeholder="Morales" id="apellidoPaterno">
+        </div>
+        
+        <div>
+            <label for="apellidoMaterno">Apellido materno</label>
+            <input type="text" autocomplete="off" placeholder="Díaz" id="apellidoMaterno">
+        </div>
+        <div>
+            <label for="correo">Correo electrónico</label>
+            <input type="email" autocomplete="off" placeholder="vicente.morales@example.com" id="correo">
+            <span id="correo-error" class="error-message"></span>
+        </div>
+        <div>
+            <label for="username">Nombre de usuario</label>
+            <input type="text" autocomplete="off" placeholder="Strack2112" id="username">
+            <span id="username-error" class="error-message"></span>
+        </div>
+        <div>
+            <label for="password">Contraseña</label>
+            <input type="password" autocomplete="off" placeholder="********" id="password">
+        </div>
+        <div>
+            <label for="edad">Edad</label>
+            <input type="text" autocomplete="off" placeholder="24" id="edad">
+        </div>
+        <!-- Select para género sin estilos personalizados -->
+        <div>
+            <label for="genero">Género</label>
+            <select id="genero" name="genero">
+                <option value="">Seleccionar género</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+                <option value="otro">Otro</option>
+            </select>
+        </div>
+        <!-- Roles -->
+        <div>
+            <label for="roles">Roles</label>
+            <div th:each="rol : ${todosLosRoles}">
+                <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.nombre}" />
+                <label th:for="'rol' + ${rol.idRol}" th:text="${rol.nombre}"></label><br />
+            </div>
+        </div>
+        <button type="submit" id="submitBtn">Registrar</button>
+        <button type="button" onclick="location.href='/formlogin'">Regresar al Login</button>
+    </form>
 </body>
 </html>
