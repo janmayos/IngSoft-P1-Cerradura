@@ -145,20 +145,21 @@ public class UsuarioVistasController {
 
     // Endpoint para actualizar el usuario actual desde la página de inicio
     @PostMapping("/editarInicio/{id}")
-    public String actualizarUsuarioDesdeInicio(
+    public ResponseEntity<?> actualizarUsuarioDesdeInicio(
         @PathVariable Long id, 
         @Validated @ModelAttribute("usuario") Usuario usuarioActualizado, 
         BindingResult result, 
         @RequestParam(value = "roles", required = false) List<Long> rolesIds, 
         Model model) {
-            
+        
         if (result.hasErrors()) {
             List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
             model.addAttribute("usuario", usuarioActualizado);
             model.addAttribute("todosLosRoles", todosLosRoles);
             model.addAttribute("currentUserId", id);
-            return "Usuarios/editarInicio";
+            return ResponseEntity.badRequest().body("Error en los datos del formulario");
         }
+
         Set<Rol> rolesSet = rolesIds != null ? rolesIds.stream().map(rolService::obtenerRolPorId).collect(Collectors.toSet()) : Set.of();
         usuarioActualizado.setRoles(rolesSet);
         try {
@@ -169,9 +170,10 @@ public class UsuarioVistasController {
             model.addAttribute("todosLosRoles", todosLosRoles);
             model.addAttribute("error", e.getMessage());
             model.addAttribute("currentUserId", id);
-            return "Usuarios/editarInicio";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return "redirect:/PaginaInicio?id=" + id;
+
+        return ResponseEntity.ok("Usuario actualizado exitosamente");
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")

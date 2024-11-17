@@ -5,6 +5,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/just-validate@latest/dist/just-validate.production.min.js"></script>
+    <script th:src="@{/js/Usuarios/editarInicio.js}"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
     <div class="container max-w-lg bg-gray-800 rounded-lg shadow-lg p-8">
@@ -91,9 +94,10 @@
             <div>
                 <label for="roles" class="block text-gray-300 font-medium">Roles</label>
                 <div th:each="rol : ${todosLosRoles}">
-                    <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.idRol}"
-                        th:checked="${usuario.roles.contains(rol)}" class="mr-2">
-                    <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label><br />
+                    <input type="checkbox" th:id="'rol' + ${rol.idRol}" th:name="roles" th:value="${rol.nombre}" th:data-role-name="${rol.nombre}"
+                        th:checked="${usuario.roles.contains(rol)}" />
+                    <label th:for="'rol' + ${rol.idRol}" class="text-gray-300" th:text="${rol.nombre}"></label>
+                    <br />
                 </div>
             </div>
             <!-- Botones de acción -->
