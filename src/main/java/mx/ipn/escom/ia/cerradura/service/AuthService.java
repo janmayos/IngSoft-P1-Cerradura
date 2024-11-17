@@ -49,6 +49,7 @@ public class AuthService {
             return ResponseEntity.ok().body(AuthResponse.builder()
                     .token(token)
                     .nombre(foundUser.get().getNombre())
+                    .id(foundUser.get().getIdUsuario()) // Incluye el id del usuario
                     .build());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.builder().msg("Error usuario y/o contraseña invalidad").build());

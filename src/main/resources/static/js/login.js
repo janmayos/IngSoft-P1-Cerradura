@@ -31,7 +31,8 @@ $(document).ready(() => {
             localStorage.setItem('token', respServ.token);
             
             // Almacena la información del usuario en localStorage
-            localStorage.setItem('nombre', respServ.nombre); // Almacena el objeto usuarioDTO
+            localStorage.setItem('nombre', respServ.nombre); // Almacena el nombre del usuario
+            localStorage.setItem('id', respServ.id); // Almacena el id del usuario
 
             // Muestra mensaje de éxito con Swal
             Swal.fire({
@@ -39,16 +40,14 @@ $(document).ready(() => {
               text: "Bienvenido " + respServ.nombre, // Muestra el nombre del usuario desde la respuesta
               icon: "success",
               didDestroy: () => {
-                // Redirige a la página de inicio después de login exitoso
-                window.location.href = window.location.origin + "/PaginaInicio";
+                // Redirige a la página de inicio con el ID del usuario después de login exitoso
+                window.location.href = window.location.origin + "/PaginaInicio?id=" + respServ.id;
               }
             });
           } 
         },
 
         error: (respServ) => {
-
-
           if (respServ.status == 401) {
              // Si la respuesta no contiene el token
               Swal.fire({
@@ -59,22 +58,20 @@ $(document).ready(() => {
                 location.reload(); // Recarga la página si las credenciales son incorrectas
               }
             });
-          }else{
+          } else {
             // Manejo de error si ocurre algo en la solicitud
-          console.log("Error", respServ.status);
-          console.log("Error details:", respServ.responseText);
+            console.log("Error", respServ.status);
+            console.log("Error details:", respServ.responseText);
 
-          Swal.fire({
-            title: "Upps..",
-            text: "Hubo un error al procesar tu solicitud",
-            icon: "error",
-            didDestroy: () => {
-              location.reload(); // Recarga la página si hay un error
-            }
-          });
-
+            Swal.fire({
+              title: "Upps..",
+              text: "Hubo un error al procesar tu solicitud",
+              icon: "error",
+              didDestroy: () => {
+                location.reload(); // Recarga la página si hay un error
+              }
+            });
           }
-          
         }
       });
     });
