@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import mx.ipn.escom.ia.cerradura.model.Usuario;
 
 @Service
 public class JwtService {
@@ -23,11 +25,15 @@ public class JwtService {
         return getTokenInternal(new HashMap<>(), user);
     }
 
-    public String getToken(Map<String, Object> extraClaims,UserDetails user) {
+    public String getToken(Map<String, Object> extraClaims, UserDetails user) {
         return getTokenInternal(extraClaims, user);
     }
 
     private String getTokenInternal(Map<String, Object> extraClaims, UserDetails user) {
+        if (user instanceof Usuario) {
+            Usuario usuario = (Usuario) user;
+            extraClaims.put("roles", usuario.getRoles().stream().map(rol -> rol.getNombre()).collect(Collectors.toList()));
+        }
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -52,7 +58,7 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private Claims getAllClaims(String token) {
+    public Claims getAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getKey())
@@ -73,5 +79,4 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
     }
-
 }
