@@ -26,7 +26,7 @@ $(document).ready(() => {
           console.log(respServ);
 
           // Verifica si la respuesta contiene un token
-          if (respServ) {
+          if (respServ.token) {
             // Almacena el token en localStorage
             localStorage.setItem('token', respServ.token);
             
@@ -44,7 +44,16 @@ $(document).ready(() => {
                 window.location.href = window.location.origin + "/PaginaInicio?id=" + respServ.id;
               }
             });
-          } 
+          } else {
+            Swal.fire({
+              title: "Upps..",
+              text: "No se recibió el token de autenticación",
+              icon: "error",
+              didDestroy: () => {
+                location.reload(); // Recarga la página si no se recibe el token
+              }
+            });
+          }
         },
 
         error: (respServ) => {

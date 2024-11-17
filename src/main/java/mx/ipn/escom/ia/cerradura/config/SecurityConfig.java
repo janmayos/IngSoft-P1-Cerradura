@@ -3,6 +3,7 @@ package mx.ipn.escom.ia.cerradura.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +15,7 @@ import mx.ipn.escom.ia.cerradura.jwt.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -25,12 +27,12 @@ public class SecurityConfig {
                 http.csrf(csrf -> csrf.disable())
                                 .cors(cors -> cors.disable())
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**",
-                                                                "/images/**", "/antes/**")
+                                                .requestMatchers("/", "/formlogin", "/formregister", "/css/**",
+                                                                "/js/**", "/images/**", "/antes/**")
                                                 .permitAll()
+                                                .requestMatchers("/PaginaInicio").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
-                                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers("/vista/usuarios/**").permitAll()
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

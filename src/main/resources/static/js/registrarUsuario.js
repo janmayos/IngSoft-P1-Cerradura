@@ -43,6 +43,9 @@ $(document).ready(() => {
       // Deshabilitar el botón de envío para evitar múltiples envíos
       $("button[type='submit']").prop("disabled", true);
 
+      // Obtener el token del localStorage
+      const token = localStorage.getItem('token');
+
       // Realiza la solicitud AJAX al backend para hacer el registro
       $.ajax({
         url: window.location.origin + "/api/usuarios/registro/registrar", // Endpoint de registro
@@ -50,27 +53,27 @@ $(document).ready(() => {
         contentType: 'application/json',
         data: JSON.stringify(formData),
         cache: false,
-
+        headers: {
+          'Authorization': 'Bearer ' + token // Agregar el token en los encabezados
+        },
         success: (respServ) => {
           console.log(respServ.status);
           console.log(respServ);
 
-          // Verifica si la respuesta contiene un token
-         
-        // Muestra mensaje de éxito con Swal
-        Swal.fire({
+          
+            // Muestra mensaje de éxito con Swal
+          Swal.fire({
             title: "¡Éxito!",
             text: "Registro exitoso",
             icon: "success",
             didDestroy: () => {
-            // Redirige a la vista de usuarios después de registro exitoso
-            const currentUserId = $("#currentUserId").val();
-            window.location.href = window.location.origin + "/vista/usuarios?id=" + currentUserId;
+              // Redirige a la vista de usuarios después de registro exitoso
+              const currentUserId = $("#currentUserId").val();
+              window.location.href = window.location.origin + "/vista/usuarios?id=" + currentUserId;
             }
-        });
+          });
         
         },
-
         error: (respServ) => {
           if (respServ.status == 400) {
             const errorMsg = JSON.parse(respServ.responseText).msg;
@@ -94,6 +97,9 @@ $(document).ready(() => {
             // Manejo de error si ocurre algo en la solicitud
             console.log("Error", respServ.status);
             console.log("Error details:", respServ.responseText);
+            console.log(token);
+            console.log((formData))
+            console.log((JSON.stringify(formData)))
 
             Swal.fire({
               title: "Upps..",
