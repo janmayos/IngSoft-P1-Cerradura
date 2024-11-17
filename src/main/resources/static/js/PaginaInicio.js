@@ -85,11 +85,21 @@ function deleteUser(userId) {
             });
         },
         error: (respServ) => {
-            Swal.fire({
-                title: "Error",
-                text: "Hubo un problema al eliminar tu cuenta.",
-                icon: "error"
-            });
+            console.log('Error:', respServ.status);
+            if(respServ.status == 403) {
+                Swal.fire({
+                    title: "Permiso denegado",
+                    text: "No tienes permiso para eliminar su cuenta. Contáctese con el administrador.",
+                    icon: "error"
+                });
+            }else{
+                Swal.fire({
+                    title: "Error",
+                    text: "Hubo un problema al eliminar tu cuenta.",
+                    icon: "error"
+                });
+            }
+            
         }
     });
 }

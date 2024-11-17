@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +39,8 @@ public class UsuarioController {
         Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
         return ResponseEntity.ok(usuario);
     }
-
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
