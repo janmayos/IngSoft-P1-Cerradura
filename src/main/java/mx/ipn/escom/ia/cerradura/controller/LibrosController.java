@@ -84,6 +84,14 @@ public class LibrosController {
             libro.setTitle(doc.path("title").asText());
             libro.setFirstPublishYear(doc.path("first_publish_year").asInt(0));
 
+            // Intentar obtener la portada del primer sitio
+            String coverUrl = doc.path("cover_i").isMissingNode() ? "" : "https://covers.openlibrary.org/b/id/" + doc.path("cover_i").asText() + "-M.jpg";
+            if (coverUrl.isEmpty()) {
+                // Intentar obtener la portada del segundo sitio
+                coverUrl = doc.path("cover_edition_key").isMissingNode() ? "" : "https://covers.openlibrary.org/b/olid/" + doc.path("cover_edition_key").asText() + "-M.jpg";
+            }
+            libro.setCoverUrl(coverUrl);
+
             libros.add(libro);
         }
 

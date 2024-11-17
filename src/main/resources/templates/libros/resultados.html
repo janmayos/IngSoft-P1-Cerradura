@@ -3,13 +3,14 @@
 <head>
     <title>Resultados de Búsqueda de Libros</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
     <div class="container mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
         <h1 class="text-3xl font-bold mb-6 text-center text-white">Buscar Libros</h1>
         
         <!-- Formulario de búsqueda -->
-        <form action="/libros/buscar" method="get" class="mb-6 flex flex-col items-center space-y-4">
+        <form id="search-form" class="mb-6 flex flex-col items-center space-y-4">
             <div>
                 <label for="titulo" class="text-gray-300">Título:</label>
                 <input type="text" id="titulo" name="titulo" class="rounded p-2 bg-gray-600 text-white border border-gray-500" placeholder="Ingrese el título">
@@ -28,28 +29,59 @@
             <table class="min-w-full bg-gray-700 border border-gray-600 rounded-lg">
                 <thead class="bg-gray-600">
                     <tr>
+                        <th class="px-4 py-3 text-gray-300 font-medium">Portada</th>
                         <th class="px-4 py-3 text-gray-300 font-medium">Clave del Libro</th>
                         <th class="px-4 py-3 text-gray-300 font-medium">Clave del Autor</th>
                         <th class="px-4 py-3 text-gray-300 font-medium">Nombre del Autor</th>
                         <th class="px-4 py-3 text-gray-300 font-medium">Nombre del Libro</th>
                         <th class="px-4 py-3 text-gray-300 font-medium">Primera Publicación</th>
-                        <th class="px-4 py-3 text-gray-300 font-medium">Editar</th>
+                        <th class="px-4 py-3 text-gray-300 font-medium">Agregar a Favoritos</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr th:each="libro : ${resultados}" class="text-center border-b border-gray-600 hover:bg-gray-600">
-                        <td class="px-4 py-2 text-gray-300" th:text="${libro.bookId}"></td>
-                        <td class="px-4 py-2 text-gray-300" th:text="${libro.authorId}"></td>
-                        <td class="px-4 py-2 text-gray-300" th:text="${libro.authorName}"></td>
-                        <td class="px-4 py-2 text-gray-300" th:text="${libro.title}"></td>
-                        <td class="px-4 py-2 text-gray-300" th:text="${libro.firstPublishYear}"></td>
-                        <td class="px-4 py-2">
-                            <a th:href="@{'/libros/editar/' + ${libro.bookId}}" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out">Editar</a>
-                        </td>
-                    </tr>
+                <tbody id="resultados">
+                    <!-- Los resultados se inyectarán aquí -->
                 </tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#search-form').on('submit', function(event) {
+                event.preventDefault();
+                const titulo = $('#titulo').val();
+                const autor = $('#autor').val();
+
+                $.ajax({
+                    url: '/libros/buscar',
+                    method: 'GET',
+                    data: { titulo: titulo, autor: autor },
+                    success: function(data) {
+                        const resultados = $('#resultados');
+                        resultados.empty();
+                        data.forEach(libro => {
+                            const row = `
+                                <tr class="text-center border-b border-gray-600 hover:bg-gray-600">
+                                    <td class="px-4 py-2 text-gray-300"><img src="${libro.coverUrl}" alt="Portada" class="w-16 h-16 object-cover"></td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.bookId}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.authorId}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.authorName}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.title}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.firstPublishYear}</td>
+                                    <td class="px-4 py-2">
+                                        <button class="bg-red-500 text-white px-3 py-1 rounded-full border border-red-700 hover:bg-red-600 transition duration-300 ease-in-out">Agregar a Favoritos</button>
+                                    </td>
+                                </tr>
+                            `;
+                            resultados.append(row);
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Error al buscar libros:', error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

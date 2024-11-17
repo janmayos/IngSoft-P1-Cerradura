@@ -6,6 +6,29 @@ public class Libro {
     private String authorName;
     private String title;
     private int firstPublishYear;
+    private String coverUrl; // Add this field
+
+
+
+    // Add other fields if necessary
+
+
+
+    // Add getter and setter for coverUrl
+
+    public String getCoverUrl() {
+
+        return coverUrl;
+
+    }
+
+
+
+    public void setCoverUrl(String coverUrl) {
+
+        this.coverUrl = coverUrl;
+
+    }
 
     // Getters y Setters
     public String getBookId() {
