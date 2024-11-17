@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin",
                                 "/PaginaInicio","/api/usuarios/**","favicon.ico","/vista/usuarios/**","/vista/usuarios/editar/**","/usuarios/editar/**")
                         .permitAll()
-                        .anyRequest().permitAll())//authenticated())
+                        .anyRequest().permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Desactivar sesiones
 
