@@ -26,6 +26,14 @@ $(document).ready(() => {
             submitForm();
         });
 
+    // Deshabilitar el botón de guardar si el usuario no es administrador
+    const roles = Array.from(document.querySelectorAll('input[name="roles"]:checked')).map(el => el.getAttribute('data-role-name'));
+    if (!roles.includes('ROLE_ADMIN')) {
+        document.getElementById('saveButton').disabled = true;
+        document.getElementById('saveButton').classList.add('bg-gray-500', 'cursor-not-allowed');
+        document.getElementById('saveButton').classList.remove('bg-indigo-500', 'hover:bg-indigo-600');
+    }
+
     window.togglePassword = function() {
         const passwordField = document.getElementById('password');
         const modifyPassword = document.getElementById('modifyPassword');

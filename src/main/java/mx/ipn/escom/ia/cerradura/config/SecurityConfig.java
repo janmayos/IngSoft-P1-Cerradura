@@ -33,6 +33,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/PaginaInicio").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
                                                 .requestMatchers("/vista/usuarios/**").permitAll()
+                                                .requestMatchers("/resultadosLibros").permitAll()
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
