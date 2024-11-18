@@ -52,8 +52,9 @@ public class VistasController {
     }
 
     @GetMapping("/resultadosLibros")
-    public String resultadosLibros() {
-        return "resultadosLibros";
+    public String libros(@RequestParam("id") Long id, Model model) {
+        model.addAttribute("currentUserId", id);
+        return "libros/resultados";
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
