@@ -33,6 +33,7 @@ public class JwtService {
         if (user instanceof Usuario) {
             Usuario usuario = (Usuario) user;
             extraClaims.put("roles", usuario.getRoles().stream().map(rol -> rol.getNombre()).collect(Collectors.toList()));
+            extraClaims.put("id", usuario.getIdUsuario()); // Agregar el ID del usuario al token
         }
         return Jwts
                 .builder()
@@ -51,6 +52,11 @@ public class JwtService {
 
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
+    }
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = getAllClaims(token);
+        return claims.get("id", Long.class);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

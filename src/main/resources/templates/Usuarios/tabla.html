@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/js/validarTokenAndID.js}"></script>
+    <script th:src="@{/js/validarToken.js}"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
     <script>
@@ -56,7 +56,7 @@
         </table>
         <!-- Botón para regresar a la página de inicio -->
         <div class="mt-6 text-center">
-            <a th:href="@{'/PaginaInicio?id=' + ${usuarioActual.idUsuario}}" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">Regresar a Página de Inicio</a>
+            <a th:href="@{/paginaDeInicio}" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">Regresar a Página de Inicio</a>
         </div>
     </div>
     <script>

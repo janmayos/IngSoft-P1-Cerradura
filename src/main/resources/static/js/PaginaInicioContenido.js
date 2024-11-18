@@ -1,19 +1,13 @@
 window.onload = function() {
-    const token = localStorage.getItem('token');
-    const id = localStorage.getItem('id');
-
-    if (token && id) {
-        document.getElementById("editUserBtn").href = "/vista/usuarios/editarInicio/" + id;
-        document.getElementById("deleteUserBtn").onclick = function() {
-            confirmDelete(id);
-        };
-        document.getElementById("logoutBtn").onclick = function() {
-            confirmLogout();
-        };
-
-    } else {
-        window.location.href = "/formlogin";
-    }
+    // document.getElementById("editUserBtn").onclick = function() {
+    //     // Aquí puedes agregar la funcionalidad para editar el usuario
+    // };
+    document.getElementById("deleteUserBtn").onclick = function() {
+        confirmDelete();
+    };
+    document.getElementById("logoutBtn").onclick = function() {
+        confirmLogout();
+    };
 };
 
 function viewAllUsers() {
@@ -49,7 +43,7 @@ function viewAllUsers() {
     }
 }
 
-function confirmDelete(userId) {
+function confirmDelete() {
     Swal.fire({
         title: '¿Estás seguro?',
         text: "¡No podrás revertir esto!",
@@ -60,15 +54,16 @@ function confirmDelete(userId) {
         confirmButtonText: 'Sí, eliminarlo'
     }).then((result) => {
         if (result.isConfirmed) {
-            deleteUser(userId);
+            deleteUser();
         }
     });
 }
 
-function deleteUser(userId) {
+function deleteUser() {
     const token = localStorage.getItem('token');
+    const id = localStorage.getItem('id');
     $.ajax({
-        url: window.location.origin + "/api/usuarios/eliminar/" + userId,
+        url: window.location.origin + "/api/usuarios/eliminar/" + id,
         method: "DELETE",
         headers: {
             "Authorization": "Bearer " + token
@@ -86,20 +81,19 @@ function deleteUser(userId) {
         },
         error: (respServ) => {
             console.log('Error:', respServ.status);
-            if(respServ.status == 403) {
-                Swal.fire({
-                    title: "Permiso denegado",
-                    text: "No tienes permiso para eliminar su cuenta. Contáctese con el administrador.",
-                    icon: "error"
-                });
-            }else{
+            if (respServ.status == 403) {
                 Swal.fire({
                     title: "Error",
-                    text: "Hubo un problema al eliminar tu cuenta.",
+                    text: "No tienes permiso para realizar esta acción.",
+                    icon: "error"
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "Ocurrió un error al eliminar la cuenta.",
                     icon: "error"
                 });
             }
-            
         }
     });
 }

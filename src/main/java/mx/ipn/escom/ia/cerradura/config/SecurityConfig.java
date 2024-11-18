@@ -31,7 +31,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/", "/formlogin", "/formregister", "/css/**",
                                                                 "/js/**", "/images/**", "/antes/**")
                                                 .permitAll()
-                                                .requestMatchers("/PaginaInicio").permitAll()
+                                                .requestMatchers("/paginaDeInicio").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
                                                 .requestMatchers("/vista/usuarios/**").permitAll()
                                                 .requestMatchers("/resultadosLibros").permitAll()
