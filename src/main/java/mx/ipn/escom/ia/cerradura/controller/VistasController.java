@@ -52,7 +52,11 @@ public class VistasController {
     }
 
     @GetMapping("/resultadosLibros")
-    public String libros(@RequestParam("id") Long id, Model model) {
+    public String libros(@RequestParam(name = "id", required = false, defaultValue = "0") Long id, Model model) {
+        if (id == 0) {
+            return "redirect:/formlogin";
+        }
+
         model.addAttribute("currentUserId", id);
         return "libros/resultados";
     }
