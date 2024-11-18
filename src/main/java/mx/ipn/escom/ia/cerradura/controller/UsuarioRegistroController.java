@@ -1,34 +1,36 @@
 package mx.ipn.escom.ia.cerradura.controller;
 
-import mx.ipn.escom.ia.cerradura.model.Rol;
-import mx.ipn.escom.ia.cerradura.model.Usuario;
-import mx.ipn.escom.ia.cerradura.repository.RolRepository;
-import mx.ipn.escom.ia.cerradura.response.RegisterRequest;
-import mx.ipn.escom.ia.cerradura.service.RolService;
-import mx.ipn.escom.ia.cerradura.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import mx.ipn.escom.ia.cerradura.model.Rol;
+import mx.ipn.escom.ia.cerradura.model.Usuario;
+import mx.ipn.escom.ia.cerradura.repository.RolRepository;
+import mx.ipn.escom.ia.cerradura.response.RegisterRequest;
+import mx.ipn.escom.ia.cerradura.service.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios/registro")
 public class UsuarioRegistroController {
+
     @Autowired
     private UsuarioService usuarioService;
 
     @Autowired
-    private RolService rolService;
 
-    @Autowired
     private RolRepository rolRepository;
 
+    
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarUsuario(@RequestBody RegisterRequest request) {
         try {
@@ -42,18 +44,18 @@ public class UsuarioRegistroController {
             usuario.setEdad(request.getEdad());
             usuario.setGenero(request.getGenero());
 
-             Set<Rol> roles = new HashSet<>();
-        if (request.getRoles() == null) {
-            Optional<Rol> existingRol = rolRepository.findByNombre("ROLE_USER");
-            existingRol.ifPresent(roles::add);
-        } else {
-            for (Rol rol : request.getRoles()) {
-                Rol existingRol = rolRepository.findByNombre(rol.getNombre())
-                        .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rol.getNombre()));
-                roles.add(existingRol);
+            Set<Rol> roles = new HashSet<>();
+            if (request.getRoles() == null) {
+                Optional<Rol> existingRol = rolRepository.findByNombre("ROLE_USER");
+                existingRol.ifPresent(roles::add);
+            } else {
+                for (Rol rol : request.getRoles()) {
+                    Rol existingRol = rolRepository.findByNombre(rol.getNombre())
+                            .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rol.getNombre()));
+                    roles.add(existingRol);
+                }
             }
-        }
-        usuario.setRoles(roles);
+            usuario.setRoles(roles);
 
             usuarioService.registrarUsuario(usuario);
             return ResponseEntity.ok().build();

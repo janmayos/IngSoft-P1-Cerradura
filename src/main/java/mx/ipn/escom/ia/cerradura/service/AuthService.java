@@ -44,6 +44,7 @@ public class AuthService {
             UserDetails user = foundUser.orElseThrow();
             HashMap<String, Object> claims = new HashMap<>();
             claims.put("nombre", foundUser.get().getNombre());
+            claims.put("id", foundUser.get().getIdUsuario()); // Incluye el id del usuario
             String token = jwtService.getToken(claims, user);
 
             return ResponseEntity.ok().body(AuthResponse.builder()

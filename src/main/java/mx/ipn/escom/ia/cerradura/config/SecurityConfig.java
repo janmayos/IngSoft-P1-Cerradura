@@ -3,6 +3,7 @@ package mx.ipn.escom.ia.cerradura.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,29 +15,31 @@ import mx.ipn.escom.ia.cerradura.jwt.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authProvider;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final AuthenticationProvider authProvider;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable()) // Configura CORS si es necesario en lugar de deshabilitarlo
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/formlogin", "/formregister", "/css/**", "/js/**", "/images/**", "/antes/**","/Usuarios/**")
-                        .permitAll()
-                        .requestMatchers("/auth/**", "/api/check-connection", "/", "/formlogin",
-                                "/PaginaInicio","/api/usuarios/**","favicon.ico","/vista/usuarios/**","/vista/usuarios/editar/**","/usuarios/editar/**")
-                        .permitAll()
-                        .anyRequest().permitAll())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Desactivar sesiones
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http.csrf(csrf -> csrf.disable())
+                                .cors(cors -> cors.disable())
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/", "/formlogin", "/formregister", "/css/**",
+                                                                "/js/**", "/images/**", "/antes/**")
+                                                .permitAll()
+                                                .requestMatchers("/PaginaInicio").permitAll()
+                                                .requestMatchers("/auth/**").permitAll()
+                                                .requestMatchers("/vista/usuarios/**").permitAll()
+                                                .requestMatchers("/resultadosLibros").permitAll()
+                                                .anyRequest().authenticated())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authenticationProvider(authProvider)
+                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-                ).authenticationProvider(authProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
+                return http.build();
+        }
 }

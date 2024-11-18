@@ -2,6 +2,7 @@ package mx.ipn.escom.ia.cerradura.controller;
 
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class VistasController {
         return "auth/Registro";
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/PaginaInicio")
     public String paginaInicio(@RequestParam("id") Long id, Model model) {
         Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
