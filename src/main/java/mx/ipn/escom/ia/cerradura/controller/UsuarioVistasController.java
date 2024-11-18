@@ -116,7 +116,7 @@ public class UsuarioVistasController {
             return "Usuarios/registrarUsuario";
         }
 
-        return "redirect:/vista/usuarios?id=" + currentUserId;
+        return "redirect:/admin/usuarios";
     }
 
     // Endpoint para actualizar un usuario
@@ -151,7 +151,7 @@ public class UsuarioVistasController {
             return "Usuarios/editarTabla";
         }
 
-        return "redirect:/vista/usuarios?id=" + currentUserId;
+        return "redirect:/admin/usuarios";
     }
 
     // Endpoint para actualizar el usuario actual desde la página de inicio

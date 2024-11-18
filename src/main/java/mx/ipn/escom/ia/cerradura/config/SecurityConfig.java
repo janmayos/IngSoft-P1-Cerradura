@@ -34,6 +34,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/paginaDeInicio").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
                                                 .requestMatchers("/admin/usuarios/**").permitAll() // Permitir acceso a /admin/usuarios/**
+                                                .requestMatchers("/vista/usuarios/**").permitAll() // Permitir acceso a /admin/usuarios/**
                                                 .requestMatchers("/resultadosLibros").permitAll()
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session

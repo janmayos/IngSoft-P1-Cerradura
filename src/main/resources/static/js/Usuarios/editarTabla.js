@@ -103,7 +103,7 @@ $(document).ready(() => {
                     text: "Usuario actualizado exitosamente",
                     icon: "success",
                     didDestroy: () => {
-                        window.location.href = window.location.origin + "/vista/usuarios?id=" + $("#currentUserId").val();
+                        window.location.href = window.location.origin + "/admin/usuarios";
                     }
                 });
             },
