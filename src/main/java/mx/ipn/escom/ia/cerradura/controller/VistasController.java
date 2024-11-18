@@ -2,11 +2,15 @@ package mx.ipn.escom.ia.cerradura.controller;
 
 import java.util.stream.Collectors;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.http.HttpStatus;
 
 import mx.ipn.escom.ia.cerradura.service.UsuarioService;
 import mx.ipn.escom.ia.cerradura.model.Rol;
@@ -29,10 +33,14 @@ public class VistasController {
         return "auth/Registro";
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/PaginaInicio")
-    public String paginaInicio(@RequestParam("id") Long id, Model model) {
+    public String paginaInicio(@RequestParam(name = "id", required = false, defaultValue = "0") Long id, Model model) {
+        if (id == 0) {
+            return "redirect:/formlogin";
+        }
+
         Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
+
         model.addAttribute("usuario", usuario);
         model.addAttribute("roles", usuario.getRoles().stream().map(Rol::getNombre).collect(Collectors.toList()));
         return "auth/PaginaInicio";
@@ -44,8 +52,18 @@ public class VistasController {
     }
 
     @GetMapping("/resultadosLibros")
-    public String libros(@RequestParam("id") Long id, Model model) {
+    public String libros(@RequestParam(name = "id", required = false, defaultValue = "0") Long id, Model model) {
+        if (id == 0) {
+            return "redirect:/formlogin";
+        }
+
         model.addAttribute("currentUserId", id);
         return "libros/resultados";
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleMissingParams(MissingServletRequestParameterException ex) {
+        return "redirect:/formlogin";
     }
 }

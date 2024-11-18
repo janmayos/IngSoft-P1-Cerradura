@@ -42,7 +42,10 @@ public class UsuarioVistasController {
     // Endpoint para obtener todos los usuarios
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping({"", "/"})
-    public String getClients(Model model, @RequestParam("id") Long id) {
+    public String getClients(Model model, @RequestParam(name = "id", required = false, defaultValue = "0") Long id) {
+        if (id == 0) {
+            return "redirect:/formlogin";
+        }
         List<Usuario> listaUsuarios = usuarioService.obtenerTodosLosUsuarios();
         Usuario usuarioActual = usuarioService.obtenerUsuarioPorId(id);
         model.addAttribute("usuarios", listaUsuarios);
@@ -51,14 +54,22 @@ public class UsuarioVistasController {
     }
 
     // Endpoint para mostrar la vista de edición de un usuario específico desde la tabla
+    
     @GetMapping("/editar/{id}")
-    public String obtenerUsuarioPorIdDesdeTabla(@PathVariable Long id, @RequestParam("currentUserId") Long currentUserId, Model model) {
-        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
-        List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("todosLosRoles", todosLosRoles);
-        model.addAttribute("currentUserId", currentUserId);
-        return "Usuarios/editarTabla";
+    public String obtenerUsuarioPorIdDesdeTabla(@PathVariable(required = false) Long id, @RequestParam(name = "currentUserId", required = false, defaultValue = "0")  Long currentUserId, Model model) {
+        if (id == null || id == 0 || currentUserId == null || currentUserId == 0) {
+            return "redirect:/formlogin";
+        }
+        try {
+            Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
+            List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            model.addAttribute("currentUserId", currentUserId);
+            return "Usuarios/editarTabla";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/formlogin";
+        }
     }
 
     // Endpoint para mostrar la vista de edición del usuario actual desde la página de inicio
