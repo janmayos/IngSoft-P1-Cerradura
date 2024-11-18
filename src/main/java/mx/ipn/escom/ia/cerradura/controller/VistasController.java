@@ -1,23 +1,18 @@
 package mx.ipn.escom.ia.cerradura.controller;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.http.HttpStatus;
-
 import mx.ipn.escom.ia.cerradura.service.UsuarioService;
 import mx.ipn.escom.ia.cerradura.jwt.JwtService;
-import mx.ipn.escom.ia.cerradura.model.Rol;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
+import mx.ipn.escom.ia.cerradura.model.Rol;
 import mx.ipn.escom.ia.cerradura.response.InicioRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +36,29 @@ public class VistasController {
     @GetMapping("/paginaDeInicio")
     public String paginaDeInicio() {
         return "auth/paginaDeInicio";
+    }
+
+    @GetMapping("/admin/usuarios")
+    public String tablaAdmin() {
+        return "Usuarios/tablaAdmin";
+    }
+    
+    @PostMapping("/admin/usuarios/contenido")
+    public String tablaContenido(@RequestBody InicioRequest request, Model model) {
+        String token = request.getToken();
+        Long userId = jwtService.getUserIdFromToken(token);
+
+        // Verificar el token y cargar la información del usuario
+        Usuario usuarioActual = usuarioService.obtenerUsuarioPorId(userId);
+        List<Usuario> listaUsuarios = usuarioService.obtenerTodosLosUsuarios();
+
+        if (usuarioActual != null) {
+            model.addAttribute("usuarios", listaUsuarios);
+            model.addAttribute("usuarioActual", usuarioActual);
+            return "Usuarios/tabla";
+        } else {
+            return "redirect:/formlogin";
+        }
     }
 
     @PostMapping("/PaginaInicioContenido")
@@ -73,11 +91,5 @@ public class VistasController {
 
         model.addAttribute("currentUserId", id);
         return "libros/resultados";
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleMissingParams(MissingServletRequestParameterException ex) {
-        return "redirect:/formlogin";
     }
 }

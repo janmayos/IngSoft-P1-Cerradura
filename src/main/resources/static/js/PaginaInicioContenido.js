@@ -13,7 +13,7 @@ window.onload = function() {
 function viewAllUsers() {
     const token = localStorage.getItem('token');
     if (token) {
-        fetch('/vista/usuarios', {
+        fetch('/admin/usuarios', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -21,7 +21,7 @@ function viewAllUsers() {
         })
         .then(response => {
             if (response.ok) {
-                window.location.href = '/vista/usuarios';
+                window.location.href = '/admin/usuarios';
             } else {
                 Swal.fire({
                     title: "Error",

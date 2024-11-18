@@ -29,11 +29,11 @@ public class SecurityConfig {
                                 .cors(cors -> cors.disable())
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/", "/formlogin", "/formregister", "/css/**",
-                                                                "/js/**", "/images/**", "/antes/**")
+                                                                "/js/**", "/images/**", "/antes/**","/Usuarios/**")
                                                 .permitAll()
                                                 .requestMatchers("/paginaDeInicio").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
-                                                .requestMatchers("/vista/usuarios/**").permitAll()
+                                                .requestMatchers("/admin/usuarios/**").permitAll() // Permitir acceso a /admin/usuarios/**
                                                 .requestMatchers("/resultadosLibros").permitAll()
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
