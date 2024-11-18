@@ -32,6 +32,26 @@ function initializePage() {
     });
 }
 
+function editUser(id) {
+    const token = localStorage.getItem('token');
+    fetch('/admin/usuarios/editarTablaPublica', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ id_modificar: id })
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('content').innerHTML = html;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        window.location.href = "/formlogin";
+    });
+}
+
 function confirmDelete(button) {
     const userId = button.getAttribute('data-id');
     Swal.fire({
