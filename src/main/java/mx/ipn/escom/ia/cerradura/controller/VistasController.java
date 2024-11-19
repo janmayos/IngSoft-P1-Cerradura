@@ -123,4 +123,23 @@ public class VistasController {
         model.addAttribute("currentUserId", id);
         return "libros/resultados";
     }
+
+    @PostMapping("/admin/usuarios/editarTablaContenido")
+    public String editarTablaContenido(@RequestBody IdRequest request, @RequestHeader("Authorization") String token, Model model) {
+        Long id = request.getIdModificar();
+        Long userId = jwtService.getUserIdFromToken(token.replace("Bearer ", ""));
+
+        // Verificar el token y cargar la información del usuario
+        Usuario usuarioActual = usuarioService.obtenerUsuarioPorId(userId);
+        Usuario usuario = usuarioService.obtenerUsuarioPorId(id);
+        List<Rol> todosLosRoles = rolService.obtenerTodosLosRoles();
+
+        if (usuarioActual != null && usuario != null) {
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("todosLosRoles", todosLosRoles);
+            return "Usuarios/editarTabla";
+        } else {
+            return "redirect:/formlogin";
+        }
+    }
 }

@@ -30,18 +30,18 @@ public class AuthController {
         return authService.register(request);
     }
 
-    @PostMapping("/inicio")
-    public ResponseEntity<?> cargarPaginaInicio(@RequestBody InicioRequest request) {
-        String token = request.getToken();
-        Long userId = request.getUserId();
+    // @PostMapping("/inicio")
+    // public ResponseEntity<?> cargarPaginaInicio(@RequestBody InicioRequest request) {
+    //     String token = request.getToken();
+    //     Long userId = request.getUserId();
 
-        // Verificar el token y cargar la información del usuario
-        Usuario usuario = usuarioService.obtenerUsuarioPorId(userId);
+    //     // Verificar el token y cargar la información del usuario
+    //     Usuario usuario = usuarioService.obtenerUsuarioPorId(userId);
 
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.status(404).body("Usuario no encontrado");
-        }
-    }
+    //     if (usuario != null) {
+    //         return ResponseEntity.ok(usuario);
+    //     } else {
+    //         return ResponseEntity.status(404).body("Usuario no encontrado");
+    //     }
+    // }
 }

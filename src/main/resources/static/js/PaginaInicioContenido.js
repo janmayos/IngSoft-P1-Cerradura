@@ -1,13 +1,18 @@
 window.onload = function() {
-    // document.getElementById("editUserBtn").onclick = function() {
-    //     // Aquí puedes agregar la funcionalidad para editar el usuario
-    // };
+    console.log("Pagina de inicio contenido");
     document.getElementById("deleteUserBtn").onclick = function() {
         confirmDelete();
     };
     document.getElementById("logoutBtn").onclick = function() {
         confirmLogout();
     };
+    document.querySelectorAll('button[data-action="edit"]').forEach(button => {
+        button.onclick = function() {
+            const id = this.getAttribute('data-id');
+            localStorage.setItem('idModificar', id);
+            window.location.href = "/admin/usuarios/editarTablaPublica";
+        };
+    });
 };
 
 function viewAllUsers() {

@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+    const idModificar = localStorage.getItem('idModificar');
 
-    if (token && id) {
+    if (token && idModificar) {
         fetch('/admin/usuarios/editarTablaContenido', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token
             },
-            body: JSON.stringify({ token: token, id: id })
+            body: JSON.stringify({ idModificar: idModificar })
         })
         .then(response => response.text())
         .then(html => {

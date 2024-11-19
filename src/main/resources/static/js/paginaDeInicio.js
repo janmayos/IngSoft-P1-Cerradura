@@ -32,6 +32,23 @@ function initializePage() {
     document.getElementById("logoutBtn").onclick = function() {
         confirmLogout();
     };
+    document.querySelectorAll('button[data-action="edit"]').forEach(button => {
+        button.onclick = function() {
+            const id = this.getAttribute('data-id');
+            localStorage.setItem('idModificar', id);
+            window.location.href = window.location.origin + "/admin/usuarios/editarTablaPublica";
+        };
+    });
+
+    // Agregar funcionalidad para el botón editUserBtn
+    const editUserBtn = document.getElementById("editUserBtn");
+    if (editUserBtn) {
+        editUserBtn.onclick = function() {
+            const id = this.getAttribute('data-id');
+            localStorage.setItem('idModificar', id);
+            window.location.href = window.location.origin + "/admin/usuarios/editarTablaPublica";
+        };
+    }
 }
 
 function confirmLogout() {
