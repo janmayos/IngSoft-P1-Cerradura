@@ -4,6 +4,8 @@ import mx.ipn.escom.ia.cerradura.model.UserProfilePicture;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.service.UserProfilePictureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,17 +18,27 @@ public class UserProfilePictureController {
     private UserProfilePictureService service;
 
     @GetMapping("/{userId}")
-    public UserProfilePicture getProfilePicture(@PathVariable Long userId) {
-        return service.getProfilePicture(userId);
+    public ResponseEntity<UserProfilePicture> getProfilePicture(@PathVariable Long userId) {
+        UserProfilePicture profilePicture = service.getProfilePicture(userId);
+        if (profilePicture != null) {
+            return new ResponseEntity<>(profilePicture, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/{userId}")
-    public UserProfilePicture uploadProfilePicture(@PathVariable Long userId, @RequestParam("file") MultipartFile file) throws IOException {
-        UserProfilePicture profilePicture = new UserProfilePicture();
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(userId);
-        profilePicture.setUsuario(usuario);
-        profilePicture.setPicture(file.getBytes());
-        return service.saveProfilePicture(profilePicture);
+    public ResponseEntity<String> uploadProfilePicture(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
+        try {
+            UserProfilePicture profilePicture = new UserProfilePicture();
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(userId);
+            profilePicture.setUsuario(usuario);
+            profilePicture.setPicture(file.getBytes());
+            service.saveProfilePicture(profilePicture);
+            return new ResponseEntity<>("Profile picture uploaded successfully", HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Failed to upload profile picture", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
