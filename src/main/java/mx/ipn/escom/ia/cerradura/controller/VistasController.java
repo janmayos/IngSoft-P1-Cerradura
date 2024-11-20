@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Map;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -115,15 +116,11 @@ public class VistasController {
     }
 
     @GetMapping("/resultadosLibros")
-    public String libros(@RequestParam(name = "id", required = false, defaultValue = "0") Long id, Model model) {
-        if (id == 0) {
-            return "redirect:/formlogin";
-        }
-
-        model.addAttribute("currentUserId", id);
+    public String libros(Model model) {
         return "libros/resultados";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/admin/usuarios/editarTablaContenido")
     public String editarTablaContenido(@RequestBody IdRequest request, @RequestHeader("Authorization") String token, Model model) {
         Long id = request.getIdModificar();

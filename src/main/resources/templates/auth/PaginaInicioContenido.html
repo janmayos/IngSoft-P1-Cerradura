@@ -42,6 +42,14 @@
                             <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-red-600 dark:group-hover:text-red-400 sm:text-base">Eliminar usuario</span>
                         </div>
                     </button>
+                    <!-- Botón para consultar libros -->
+                    <button class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a th:href="@{/resultadosLibros}">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Consultar libros</span>
+                            </a>
+                        </div>
+                    </button>
                     <!-- Botón para cerrar sesión -->
                     <button id="logoutBtn" class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-red-400 focus:bg-red-50 active:bg-red-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
                         <div class="relative flex items-center space-x-4 justify-center">
