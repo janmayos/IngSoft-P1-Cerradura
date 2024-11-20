@@ -8,6 +8,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import com.mysql.cj.log.Log;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 
@@ -43,7 +46,7 @@ public class UsuarioController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
-        usuarioService.eliminarUsuario(id);
+        usuarioService.eliminarUsuario(Long.parseLong(id.toString()));
         return ResponseEntity.ok().build();
     }
 

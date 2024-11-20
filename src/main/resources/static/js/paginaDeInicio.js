@@ -27,28 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializePage() {
     document.getElementById("deleteUserBtn").onclick = function() {
-        confirmDelete();
+        const idActual = this.getAttribute('data-id');
+        confirmDelete(idActual);
     };
-    document.getElementById("logoutBtn").onclick = function() {
-        confirmLogout();
-    };
-    document.querySelectorAll('button[data-action="edit"]').forEach(button => {
-        button.onclick = function() {
-            const id = this.getAttribute('data-id');
-            localStorage.setItem('idModificar', id);
-            window.location.href = window.location.origin + "/admin/usuarios/editarTablaPublica";
-        };
-    });
-
-    // Agregar funcionalidad para el botón editUserBtn
-    const editUserBtn = document.getElementById("editUserBtn");
-    if (editUserBtn) {
-        editUserBtn.onclick = function() {
-            const id = this.getAttribute('data-id');
-            localStorage.setItem('idModificar', id);
-            window.location.href = window.location.origin + "/admin/usuarios/editarTablaPublica";
-        };
-    }
 }
 
 function confirmLogout() {
@@ -68,7 +49,7 @@ function confirmLogout() {
     });
 }
 
-function confirmDelete() {
+function confirmDelete(idActual) {
     Swal.fire({
         title: '¿Estás seguro?',
         text: "¡No podrás revertir esto!",
@@ -79,16 +60,15 @@ function confirmDelete() {
         confirmButtonText: 'Sí, eliminarlo'
     }).then((result) => {
         if (result.isConfirmed) {
-            deleteUser();
+            deleteUser(idActual);
         }
     });
 }
 
-function deleteUser() {
+function deleteUser(idActual) {
     const token = localStorage.getItem('token');
-    const id = localStorage.getItem('id');
     $.ajax({
-        url: window.location.origin + "/api/usuarios/eliminar/" + id,
+        url: window.location.origin + "/api/usuarios/eliminar/" + idActual,
         method: "DELETE",
         headers: {
             "Authorization": "Bearer " + token

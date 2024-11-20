@@ -51,13 +51,14 @@ function confirmDelete(button) {
         confirmButtonText: 'Sí, eliminarlo'
     }).then((result) => {
         if (result.isConfirmed) {
-            deleteUser(userId);
+            deleteUser(button);
         }
     });
 }
 
-function deleteUser(userId) {
+function deleteUser(button) {
     const token = localStorage.getItem('token');
+    const userId = button.getAttribute('data-id');
     $.ajax({
         url: window.location.origin + "/api/usuarios/eliminar/" + userId,
         method: "DELETE",

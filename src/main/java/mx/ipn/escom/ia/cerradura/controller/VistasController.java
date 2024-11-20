@@ -61,6 +61,7 @@ public class VistasController {
         List<Usuario> listaUsuarios = usuarioService.obtenerTodosLosUsuarios();
 
         if (usuarioActual != null) {
+            model.addAttribute("id_actual", userId);
             model.addAttribute("usuarios", listaUsuarios);
             model.addAttribute("usuarioActual", usuarioActual);
             return "Usuarios/tabla";
