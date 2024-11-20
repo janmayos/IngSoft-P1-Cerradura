@@ -69,7 +69,7 @@ $(document).ready(() => {
             didDestroy: () => {
               // Redirige a la vista de usuarios después de registro exitoso
               const currentUserId = $("#currentUserId").val();
-              window.location.href = window.location.origin + "/vista/usuarios?id=" + currentUserId;
+              window.location.href = window.location.origin + "/admin/usuarios";
             }
           });
         

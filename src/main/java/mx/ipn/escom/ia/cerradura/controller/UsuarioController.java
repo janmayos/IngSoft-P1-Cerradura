@@ -40,7 +40,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMIN')")    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);

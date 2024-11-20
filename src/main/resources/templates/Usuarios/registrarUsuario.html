@@ -8,7 +8,7 @@
     <script th:src="@{/js/materialize/js/materialize.min.js}"></script>
     <script th:src="@{/js/plugins/sweetalert2.js}"></script>
     <script th:src="@{/js/plugins/just-validate.js}"></script>
-    <script th:src="@{/js/validarTokenAndID.js}"></script>
+    <script th:src="@{/js/validarToken.js}"></script>
     <script th:src="@{/js/registrarUsuario.js}"></script>
     <script th:src="@{https://cdn.tailwindcss.com}"></script>
 </head>
@@ -68,7 +68,7 @@
                     <input type="hidden" id="currentUserId" name="currentUserId" th:value="${currentUserId}">
                     <div class="flex justify-between mt-6">
                         <button type="submit" id="submitBtn" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 ease-in-out">Registrar</button>
-                        <button type="button" onclick="location.href='/vista/usuarios?id=' + document.getElementById('currentUserId').value" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 ease-in-out">Regresar a la Tabla de Usuarios</button>
+                        <button type="button" onclick="location.href='/admin/usuarios'" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 ease-in-out">Regresar a la Tabla de Usuarios</button>
                     </div>
                 </form>
             </div>

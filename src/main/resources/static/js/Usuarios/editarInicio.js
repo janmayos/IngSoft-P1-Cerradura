@@ -111,7 +111,7 @@ $(document).ready(() => {
                     text: "Usuario actualizado exitosamente",
                     icon: "success",
                     didDestroy: () => {
-                        window.location.href = window.location.origin + "/PaginaInicio?id=" + $("#currentUserId").val();
+                        window.location.href = window.location.origin + "/paginaDeInicio";
                     }
                 });
             },
