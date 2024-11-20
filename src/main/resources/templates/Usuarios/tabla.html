@@ -48,8 +48,8 @@
                         </div>
                     </td>
                     <td class="px-4 py-2">
-                        <button type="button" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out" th:attr="data-id=${usuario.idUsuario}" data-action="edit">Editar</button>
-                        <button type="button" class="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition duration-300 ease-in-out ml-2" th:attr="data-id=${usuario.idUsuario}" data-action="delete">Eliminar</button>
+                        <button type="button" class="bg-indigo-500 text-white px-3 py-1 rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out" th:attr="data-id=${usuario.idUsuario}" onclick="editUser(this)">Editar</button>
+                        <button type="button" class="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition duration-300 ease-in-out ml-2" th:attr="data-id=${usuario.idUsuario}" onclick="deleteUser(this)">Eliminar</button>
                     </td>
                 </tr>
             </tbody>

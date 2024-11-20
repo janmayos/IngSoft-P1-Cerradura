@@ -41,6 +41,7 @@ $(document).ready(() => {
     }
 
     window.confirmSave = function() {
+        console.log("confirmSave");
         if (!isRoleSelected()) {
             Swal.fire({
                 icon: 'error',

@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.text())
         .then(html => {
             document.getElementById('content').innerHTML = html;
+            // Cargar el script de editarTabla.js después de insertar el contenido dinámico
+            const script = document.createElement('script');
+            script.src = '/js/Usuarios/editarTabla.js';
+            document.body.appendChild(script);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -23,3 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = "/formlogin";
     }
 });
+
+// function editUser(button) {
+//     const userId = button.getAttribute('data-id');
+//     localStorage.setItem('idModificar', userId);
+//     console.log(userId);
+//     //window.location.href = "/admin/usuarios/editarTablaPublica";
+// }
