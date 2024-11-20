@@ -62,6 +62,10 @@ public class Usuario  implements UserDetails{
     @JsonManagedReference
     private Set<Rol> roles;
 
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private UserProfilePicture profilePicture;
+
     // Getters y Setters
     public Long getIdUsuario() {
         return idUsuario;

@@ -1,0 +1,21 @@
+package mx.ipn.escom.ia.cerradura.service;
+
+
+import mx.ipn.escom.ia.cerradura.model.UserProfilePicture;
+import mx.ipn.escom.ia.cerradura.repository.UserProfilePictureRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserProfilePictureService {
+    @Autowired
+    private UserProfilePictureRepository repository;
+
+    public UserProfilePicture getProfilePicture(Long userId) {
+        return repository.findByUsuarioId(userId);
+    }
+
+    public UserProfilePicture saveProfilePicture(UserProfilePicture profilePicture) {
+        return repository.save(profilePicture);
+    }
+}
