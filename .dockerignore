@@ -1,6 +1,6 @@
 target
 README-Ejecutar.md
 sonar-project.properties
-.mvn
+#.mvn
 .scannerwork
 .vscode

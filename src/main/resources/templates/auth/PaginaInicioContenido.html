@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" class="h-full dark:bg-gray-900">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina de Inicio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <script th:src="@{/js/plugins/jquery.js}"></script>
+    <script th:src="@{/js/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/js/plugins/sweetalert2.js}"></script>
+    <script th:src="@{/js/PaginaInicioContenido.js}"></script>
+    <script th:src="@{https://cdn.tailwindcss.com}"></script>
+</head>
+<body class="h-full bg-gray-900 text-white" data-id-actual="[[${id_actual}]]">
+    <div class="flex min-h-full flex-col justify-center items-center px-6 py-12 lg:px-8">
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div class="rounded-xl bg-white dark:bg-gray-800 shadow-xl p-6 sm:p-16">
+                <h2 id="username" class="mb-8 text-2xl text-cyan-900 dark:text-cyan-200 font-bold">
+                    Bienvenido <span th:text="${usuario.nombre}"></span>
+                </h2>
+                <div class="mt-16 grid space-y-4">
+                    <!-- Botón para ver todos los usuarios, solo visible si el usuario tiene el rol de administrador -->
+                    <button id="viewUsersBtn" th:if="${roles.contains('ROLE_ADMIN')}" class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a th:href="@{/admin/usuarios}">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Ver Todos los Usuarios</span>
+                            </a>
+                        </div>
+                    </button>
+                    <!-- Botón para modificar datos -->
+                    <button id="editUserBtn" class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a th:href="@{'/vista/usuarios/editarInicio/' + ${usuario.idUsuario}}">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Modificar datos</span>
+                            </a>
+                        </div>
+                    </button>
+                    <!-- Botón para eliminar usuario -->
+                    <button id="deleteUserBtn" th:data-id="${usuario.idUsuario}" class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-red-400 focus:bg-red-50 active:bg-red-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-red-600 dark:group-hover:text-red-400 sm:text-base">Eliminar usuario</span>
+                        </div>
+                    </button>
+                    <!-- Botón para consultar libros -->
+                    <button class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <a th:href="@{/resultadosLibros}">
+                                <span class="block w-max font-semibold tracking-wide text-gray-700 dark:text-gray-200 text-sm transition duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 sm:text-base">Consultar libros</span>
+                            </a>
+                        </div>
+                    </button>
+                    <!-- Botón para cerrar sesión -->
+                    <button id="logoutBtn" class="group h-12 px-6 border-2 border-gray-300 dark:border-gray-600 rounded-full transition duration-300 hover:border-red-400 focus:bg-red-50 active:bg-red-100 dark:focus:bg-gray-700 dark:active:bg-gray-800">
+                        <div class="relative flex items-center space-x-4 justify-center">
+                            <span class="block w-max font-semibold tracking-wide text-red-700 dark:text-red-200 text-sm transition duration-300 group-hover:text-red-600 dark:group-hover:text-red-400 sm:text-base">Cerrar sesión</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
