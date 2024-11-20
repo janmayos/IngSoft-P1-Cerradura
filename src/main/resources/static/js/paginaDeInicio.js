@@ -30,6 +30,10 @@ function initializePage() {
         const idActual = this.getAttribute('data-id');
         confirmDelete(idActual);
     };
+
+    document.getElementById("logoutBtn").onclick = function() {
+        confirmLogout();
+    };
 }
 
 function confirmLogout() {
