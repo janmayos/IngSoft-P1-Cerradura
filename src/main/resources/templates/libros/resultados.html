@@ -26,6 +26,9 @@
             </select>
             <input type="text" id="search-value" class="form-input px-4 py-2 border border-gray-600 bg-gray-700 text-gray-300 rounded-md" placeholder="Buscar...">
             <button type="submit" class="btn btn-primary px-4 py-2 bg-blue-500 text-white rounded-md">Buscar</button>
+            <button id="ver-favoritos" type="button" class="btn btn-secondary px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ease-in-out">
+                Ver Favoritos
+            </button>
         </form>
         
         <!-- Tabla de resultados -->
@@ -51,6 +54,7 @@
 
     <script>
         $(document).ready(function() {
+            // Funcionalidad del formulario de búsqueda
             $('#search-form').on('submit', function(event) {
                 event.preventDefault();
                 const searchType = $('#search-type').val();
@@ -76,7 +80,9 @@
                                     <td class="px-4 py-2 text-gray-300">${libro.title}</td>
                                     <td class="px-4 py-2 text-gray-300">${libro.firstPublishYear}</td>
                                     <td class="px-4 py-2">
-                                        <button class="bg-red-500 text-white px-3 py-1 rounded-full border border-red-700 hover:bg-red-600 transition duration-300 ease-in-out">Agregar a Favoritos</button>
+                                        <button class="agregar-favoritos bg-red-500 text-white px-3 py-1 rounded-full border border-red-700 hover:bg-red-600 transition duration-300 ease-in-out">
+                                            Agregar a Favoritos
+                                        </button>
                                     </td>
                                 </tr>
                             `;
@@ -85,6 +91,75 @@
                     },
                     error: function(error) {
                         console.error('Error al buscar libros:', error);
+                    }
+                });
+            });
+
+            // Funcionalidad del botón "Ver favoritos"
+            $('#ver-favoritos').on('click', function() {
+                const token = localStorage.getItem('token');
+                $.ajax({
+                    url: '/libros/favoritos',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(data) {
+                        const resultados = $('#resultados');
+                        resultados.empty();
+                        data.forEach(libro => {
+                            const row = `
+                                <tr class="text-center border-b border-gray-600 hover:bg-gray-600">
+                                    <td class="px-4 py-2 text-gray-300"><img src="${libro.coverUrl}" alt="Portada" class="w-16 h-16 object-cover"></td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.bookId}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.authorId}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.authorName}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.title}</td>
+                                    <td class="px-4 py-2 text-gray-300">${libro.firstPublishYear}</td>
+                                    <td class="px-4 py-2">
+                                        <button class="bg-red-500 text-white px-3 py-1 rounded-full border border-red-700 hover:bg-red-600 transition duration-300 ease-in-out disabled:opacity-50" disabled>
+                                            Ya en Favoritos
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                            resultados.append(row);
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Error al obtener favoritos:', error);
+                        alert('Ocurrió un error al cargar los favoritos.');
+                    }
+                });
+            });
+
+            // Funcionalidad del botón "Agregar a Favoritos"
+            $(document).on('click', '.agregar-favoritos', function() {
+                const fila = $(this).closest('tr');
+                const libro = {
+                    bookId: fila.find('td').eq(1).text(),
+                    authorId: fila.find('td').eq(2).text(),
+                    authorName: fila.find('td').eq(3).text(),
+                    title: fila.find('td').eq(4).text(),
+                    firstPublishYear: parseInt(fila.find('td').eq(5).text(), 10),
+                    coverUrl: fila.find('img').attr('src')
+                };
+
+                const token = localStorage.getItem('token');
+                $.ajax({
+                    url: '/libros/favoritos',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    data: JSON.stringify(libro),
+                    success: function(response) {
+                        alert('Libro agregado a favoritos correctamente.');
+                    },
+                    error: function(error) {
+                        console.error('Error al agregar a favoritos:', error);
+                        alert('Ocurrió un error al agregar a favoritos.');
                     }
                 });
             });
