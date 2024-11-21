@@ -12,7 +12,7 @@ public class UserProfilePictureService {
     private UserProfilePictureRepository repository;
 
     public UserProfilePicture getProfilePicture(Long userId) {
-        return repository.findByUsuarioId(userId);
+        return repository.findByUsuarioIdUsuario(userId);
     }
 
     public UserProfilePicture saveProfilePicture(UserProfilePicture profilePicture) {

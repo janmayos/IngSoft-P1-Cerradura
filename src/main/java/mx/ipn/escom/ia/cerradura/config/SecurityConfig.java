@@ -36,6 +36,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/admin/usuarios/**").permitAll() // Permitir acceso a /admin/usuarios/**
                                                 .requestMatchers("/vista/usuarios/**").permitAll() // Permitir acceso a /admin/usuarios/**
                                                 .requestMatchers("/resultadosLibros").permitAll()
+                                                .requestMatchers("/api/profile-picture").permitAll()
+
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

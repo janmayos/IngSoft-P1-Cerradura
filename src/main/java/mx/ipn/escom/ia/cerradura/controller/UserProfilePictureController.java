@@ -4,6 +4,7 @@ import mx.ipn.escom.ia.cerradura.model.UserProfilePicture;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.service.UserProfilePictureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +18,20 @@ public class UserProfilePictureController {
     @Autowired
     private UserProfilePictureService service;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserProfilePicture> getProfilePicture(@PathVariable Long userId) {
+    @GetMapping
+    public ResponseEntity<byte[]> getProfilePicture(@RequestParam Long userId) {
         UserProfilePicture profilePicture = service.getProfilePicture(userId);
-        if (profilePicture != null) {
-            return new ResponseEntity<>(profilePicture, HttpStatus.OK);
+        if (profilePicture != null && profilePicture.getPicture() != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "image/jpeg"); // Ajusta el tipo de contenido según el formato de la imagen
+            return new ResponseEntity<>(profilePicture.getPicture(), headers, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<String> uploadProfilePicture(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
+    @PostMapping
+    public ResponseEntity<String> uploadProfilePicture(@RequestParam Long userId, @RequestParam("file") MultipartFile file) {
         try {
             UserProfilePicture profilePicture = new UserProfilePicture();
             Usuario usuario = new Usuario();

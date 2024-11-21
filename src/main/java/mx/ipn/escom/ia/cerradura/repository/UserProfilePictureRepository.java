@@ -4,5 +4,6 @@ import mx.ipn.escom.ia.cerradura.model.UserProfilePicture;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserProfilePictureRepository extends JpaRepository<UserProfilePicture, Long> {
-    UserProfilePicture findByUsuarioId(Long userId);
+    UserProfilePicture findByUsuarioIdUsuario(Long idUsuario);
+
 }
