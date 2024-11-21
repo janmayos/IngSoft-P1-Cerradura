@@ -3,6 +3,9 @@ package mx.ipn.escom.ia.cerradura.controller;
 import mx.ipn.escom.ia.cerradura.model.UserProfilePicture;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.service.UserProfilePictureService;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,13 +13,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/api/profile-picture")
 public class UserProfilePictureController {
     @Autowired
     private UserProfilePictureService service;
+
+    @GetMapping("/data-user")
+    public ResponseEntity<UserProfilePicture> getProfilePictureUser(@RequestParam Long userId) {
+        UserProfilePicture profilePicture = service.getProfilePicture(userId);
+        if (profilePicture != null) {
+            return new ResponseEntity<>(profilePicture, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
 
     @GetMapping
     public ResponseEntity<byte[]> getProfilePicture(@RequestParam Long userId) {
