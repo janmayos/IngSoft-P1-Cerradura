@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(html => {
             document.body.innerHTML = html;
             initializePage();
+            loadProfilePicture();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -34,6 +35,33 @@ function initializePage() {
     document.getElementById("logoutBtn").onclick = function() {
         confirmLogout();
     };
+}
+
+function loadProfilePicture() {
+    const token = localStorage.getItem('token');
+
+    fetch(`/api/profile-picture-blob`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.blob();
+        } else {
+            throw new Error('Failed to fetch profile picture');
+        }
+    })
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const img = document.getElementById('profile-picture');
+        img.src = url;
+        img.classList.remove('hidden');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 function confirmLogout() {
