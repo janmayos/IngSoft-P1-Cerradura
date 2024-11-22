@@ -40,6 +40,15 @@ CREATE TABLE usuario_rol (
 -- Insertar roles en la tabla rol
 INSERT INTO rol (nombre) VALUES ('ROLE_ADMIN'), ('ROLE_USER');
 
+--- Crear tabla de imagenes
+
+CREATE TABLE user_profile_pictures ( 
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    picture LONGBLOB,
+    FOREIGN KEY (user_id) REFERENCES usuario(id_usuario) );
+
+
 -- Eliminar el usuario 'admin' si ya existe
 DROP USER IF EXISTS 'admin'@'localhost';
 FLUSH PRIVILEGES;
