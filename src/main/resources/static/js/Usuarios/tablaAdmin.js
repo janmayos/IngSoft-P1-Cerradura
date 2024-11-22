@@ -28,7 +28,8 @@ function initializePage() {
     document.querySelectorAll('.editUserBtn').forEach(button => {
         button.onclick = function() {
             const idActual = this.getAttribute('data-id');
-            editUser(idActual);
+            console.log(idActual);
+           // editUser(idActual);
         };
     });
 
@@ -47,9 +48,10 @@ function initializePage() {
     });
 }
 
-function showProfilePictureOptions(userId) {
+function showProfilePictureOptions(button) {
+    const userId = button.getAttribute('data-id');
     const token = localStorage.getItem('token');
-
+    console.log(userId);
     fetch(`/api/profile-picture-blob?userId=${userId}`, {
         method: 'GET',
         headers: {
@@ -127,8 +129,9 @@ function uploadProfilePicture(file, userId) {
     const token = localStorage.getItem('token');
     const formData = new FormData();
     formData.append('file', file);
+    console.log(userId);
 
-    fetch(`/api/profile-picture?userId=${userId}`, {
+    fetch(`/api/profile-picture/admin?userId=${userId}`, {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + token
@@ -174,13 +177,16 @@ function deleteProfilePicture(userId) {
     });
 }
 
-function editUser(userId) {
+function editUser(button) {
+    const userId = button.getAttribute('data-id');
     localStorage.setItem('idModificar', userId);
-    console.log(userId);
+    
     window.location.href = "/admin/usuarios/editarTablaPublica";
 }
 
-function confirmDelete(idActual) {
+function confirmDelete(button) {
+
+    const idActual = button.getAttribute('data-id');
     Swal.fire({
         title: '¿Estás seguro?',
         text: "¡No podrás revertir esto!",

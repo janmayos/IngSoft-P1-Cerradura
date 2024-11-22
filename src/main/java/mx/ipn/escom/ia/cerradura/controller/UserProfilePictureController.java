@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,15 +56,45 @@ public class UserProfilePictureController {
 
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
-        System.out.println(userId);
+
         try {
-            Usuario user = new Usuario();
-            user.setIdUsuario(userId);
             byte[] pictureBytes = file.getBytes();
-            UserProfilePicture profilePicture = new UserProfilePicture();
-            profilePicture.setUsuario(user);
-            profilePicture.setPicture(pictureBytes);
-            service.saveProfilePicture(profilePicture);
+            UserProfilePicture existingProfilePicture = service.getProfilePicture(userId);
+            if (existingProfilePicture != null) {
+                existingProfilePicture.setPicture(pictureBytes);
+                service.saveProfilePicture(existingProfilePicture);
+            } else {
+                UserProfilePicture profilePicture = new UserProfilePicture();
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(userId);
+                profilePicture.setUsuario(usuario);
+                profilePicture.setPicture(pictureBytes);
+
+                service.saveProfilePicture(profilePicture);
+            }
+            return new ResponseEntity<>("Profile picture uploaded successfully", HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Failed to upload profile picture", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/admin")
+    public ResponseEntity<String> uploadProfilePictureById(@RequestParam("userId") Long userId, @RequestParam("file") MultipartFile file) {
+        try {
+            byte[] pictureBytes = file.getBytes();
+            UserProfilePicture existingProfilePicture = service.getProfilePicture(userId);
+            if (existingProfilePicture != null) {
+                existingProfilePicture.setPicture(pictureBytes);
+                service.saveProfilePicture(existingProfilePicture);
+            } else {
+                UserProfilePicture profilePicture = new UserProfilePicture();
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(userId);
+                profilePicture.setUsuario(usuario);
+                profilePicture.setPicture(pictureBytes);
+                service.saveProfilePicture(profilePicture);
+            }
             return new ResponseEntity<>("Profile picture uploaded successfully", HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>("Failed to upload profile picture", HttpStatus.INTERNAL_SERVER_ERROR);
