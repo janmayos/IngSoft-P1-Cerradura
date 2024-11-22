@@ -1,15 +1,13 @@
 package mx.ipn.escom.ia.cerradura.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mx.ipn.escom.ia.cerradura.model.Libro;
-
+import mx.ipn.escom.ia.cerradura.repository.LibroRepository;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,6 +21,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/libros")
 public class LibrosController {
+
+    @Autowired
+    private LibroRepository libroRepository;
 
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
@@ -51,6 +52,26 @@ public class LibrosController {
         }
 
         return new ResponseEntity<>(resultados, HttpStatus.OK);
+    }
+
+    @PostMapping("/favoritos")
+    public ResponseEntity<Libro> agregarAFavoritos(@RequestBody Libro libro) {
+        try {
+            Libro libroGuardado = libroRepository.save(libro);
+            return new ResponseEntity<>(libroGuardado, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/favoritos")
+    public ResponseEntity<List<Libro>> obtenerFavoritos() {
+        try {
+            List<Libro> librosFavoritos = libroRepository.findAll();
+            return new ResponseEntity<>(librosFavoritos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private List<Libro> realizarBusqueda(String url) throws IOException, InterruptedException {
