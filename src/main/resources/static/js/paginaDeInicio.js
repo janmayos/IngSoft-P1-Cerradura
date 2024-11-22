@@ -56,11 +56,14 @@ function loadProfilePicture() {
     .then(blob => {
         const url = URL.createObjectURL(blob);
         const img = document.getElementById('profile-picture');
+        const defaultIcon = document.getElementById('default-profile-icon');
         img.src = url;
         img.classList.remove('hidden');
+        defaultIcon.classList.add('hidden');
     })
     .catch(error => {
         console.error('Error:', error);
+        // No need to change the src as it already has the default image
     });
 }
 

@@ -20,8 +20,11 @@
                     <h2 id="username" class="mb-8 text-2xl text-cyan-900 dark:text-cyan-200 font-bold">
                         Bienvenido <span th:text="${usuario.nombre}"></span>
                     </h2>
-                    <div id="profile-picture-container" class="w-32 h-32 rounded-full overflow-hidden mb-4">
+                    <div id="profile-picture-container" class="w-32 h-32 rounded-full overflow-hidden mb-4 flex items-center justify-center bg-gray-200 dark:bg-gray-700">
                         <img id="profile-picture" src="" alt="Profile Picture" class="w-full h-full object-cover hidden">
+                        <svg id="default-profile-icon" class="h-24 w-24 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
                     </div>
                 </div>
                 <div class="mt-16 grid space-y-4">
