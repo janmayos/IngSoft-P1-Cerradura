@@ -19,8 +19,8 @@
     <script th:src="@{https://cdn.tailwindcss.com}"></script>
     <script th:src="@{https://cdn.jsdelivr.net/npm/superagent}"></script>
 
-    
-    
+    <!-- Script de Google para autenticación -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="h-full bg-gray-900 text-white">
@@ -55,41 +55,50 @@
                         Ingresa
                     </button>
                 </div>
-                
             </form>
 
             <p class="mt-10 text-center text-sm text-gray-400">
                 ¿No tienes usuario?
                 <a th:href="@{/formregister}" class="font-semibold text-indigo-600 hover:text-indigo-500">Registrate</a>
             </p>
+
+            <!-- Botón de inicio de sesión con Google -->
+            <div class="mt-10">
+                <div id="g_id_onload"
+                     data-client_id="226251044074-or4u73qcs17bj0k70jli3pia63lo1d5q.apps.googleusercontent.com"
+                     data-callback="handleCredentialResponse">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="outline"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-logo_alignment="left">
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+      function handleCredentialResponse(response) {
+          fetch('/auth/google-login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token: response.credential })
+          })
+          .then(res => res.json())
+          .then(data => {
+              if (data.success) {
+                  alert('Inicio de sesión exitoso con Google');
+                  window.location.href = "/dashboard"; // Redirige a tu dashboard
+              } else {
+                  alert('Error al iniciar sesión con Google');
+              }
+          })
+          .catch(error => console.error('Error:', error));
+      }
+    </script>
 </body>
 
 </html>
-
-
-<!-- <body>
-    <h1 class="titulo">Bienvenido ingresa tus credenciales!</h1>
-
-    <main class="container">
-        <h2>Login</h2>
-        <form th:action="@{/auth/login}" method="post">
-            <div class="input-field">
-                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
-                <div class="underline"></div>
-            </div>
-
-            <div class="input-field">
-                <input type="password" name="passwordU" id="passwordU" placeholder="Ingresa contraseña" />
-                <div class="underline"></div>
-            </div>
-            
-            <input type="submit" value="Ingresar" />
-            
-        </form>
-
-    </main>
-</body>
-
-</html> -->

@@ -75,6 +75,11 @@ public class UsuarioService {
     public void eliminarUsuario(Long id) {
         usuarioRepository.deleteById(id);
     }
+    
+    public Usuario obtenerUsuarioPorCorreo(String correo) {
+        return usuarioRepository.findByCorreo(correo).orElse(null);
+    }
+    
 
     // Registrar un nuevo usuario
     public Usuario registrarUsuario(Usuario usuario) {
