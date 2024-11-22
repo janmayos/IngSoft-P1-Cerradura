@@ -18,4 +18,11 @@ public class UserProfilePictureService {
     public UserProfilePicture saveProfilePicture(UserProfilePicture profilePicture) {
         return repository.save(profilePicture);
     }
+
+    public void deleteProfilePicture(Long userId) {
+        UserProfilePicture profilePicture = repository.findByUsuarioIdUsuario(userId);
+        if (profilePicture != null) {
+            repository.delete(profilePicture);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package mx.ipn.escom.ia.cerradura.controller;
 
+import mx.ipn.escom.ia.cerradura.jwt.JwtService;
 import mx.ipn.escom.ia.cerradura.model.UserProfilePicture;
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.service.UserProfilePictureService;
@@ -16,8 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/profile-picture")
 public class UserProfilePictureController {
+
     @Autowired
     private UserProfilePictureService service;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/data-user")
     public ResponseEntity<UserProfilePicture> getProfilePictureUser(@RequestParam Long userId) {
@@ -43,17 +48,38 @@ public class UserProfilePictureController {
     }
 
     @PostMapping
-    public ResponseEntity<String> uploadProfilePicture(@RequestParam Long userId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadProfilePicture(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid token", HttpStatus.BAD_REQUEST);
+        }
+
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+        System.out.println(userId);
         try {
+            Usuario user = new Usuario();
+            user.setIdUsuario(userId);
+            byte[] pictureBytes = file.getBytes();
             UserProfilePicture profilePicture = new UserProfilePicture();
-            Usuario usuario = new Usuario();
-            usuario.setIdUsuario(userId);
-            profilePicture.setUsuario(usuario);
-            profilePicture.setPicture(file.getBytes());
+            profilePicture.setUsuario(user);
+            profilePicture.setPicture(pictureBytes);
             service.saveProfilePicture(profilePicture);
             return new ResponseEntity<>("Profile picture uploaded successfully", HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>("Failed to upload profile picture", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteProfilePicture(@RequestHeader("Authorization") String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Invalid token", HttpStatus.BAD_REQUEST);
+        }
+
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+
+        service.deleteProfilePicture(userId);
+        return new ResponseEntity<>("Profile picture deleted successfully", HttpStatus.OK);
     }
 }
