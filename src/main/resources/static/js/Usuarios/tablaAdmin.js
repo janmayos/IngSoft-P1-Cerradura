@@ -52,7 +52,7 @@ function showProfilePictureOptions(button) {
     const userId = button.getAttribute('data-id');
     const token = localStorage.getItem('token');
     console.log(userId);
-    fetch(`/api/profile-picture-blob?userId=${userId}`, {
+    fetch(`/api/profile-picture-blob/admin?userId=${userId}`, {
         method: 'GET',
         headers: {
             'Authorization': 'Bearer ' + token
@@ -70,9 +70,11 @@ function showProfilePictureOptions(button) {
         Swal.fire({
             title: 'Actualizar Foto de Perfil',
             html: `
-                <img src="${url}" alt="Profile Picture" class="w-32 h-32 rounded-full mb-4 object-cover">
+                <div class="flex justify-center mb-4">
+                    <img src="${url}" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover">
+                </div>
                 <input type="file" id="profilePictureInput" class="swal2-file">
-                <button id="deleteProfilePictureBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 ease-in-out">Eliminar Foto de Perfil</button>
+                <button id="deleteProfilePictureBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 ease-in-out mt-4">Eliminar Foto de Perfil</button>
             `,
             showCancelButton: true,
             confirmButtonText: 'Subir',
@@ -156,7 +158,7 @@ function uploadProfilePicture(file, userId) {
 function deleteProfilePicture(userId) {
     const token = localStorage.getItem('token');
 
-    fetch(`/api/profile-picture?userId=${userId}`, {
+    fetch(`/api/profile-picture/admin?userId=${userId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': 'Bearer ' + token

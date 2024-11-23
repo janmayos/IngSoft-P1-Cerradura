@@ -113,4 +113,11 @@ public class UserProfilePictureController {
         service.deleteProfilePicture(userId);
         return new ResponseEntity<>("Profile picture deleted successfully", HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/admin")
+    public ResponseEntity<String> deleteProfilePictureById(@RequestParam("userId") Long userId) {
+        service.deleteProfilePicture(userId);
+        return new ResponseEntity<>("Profile picture deleted successfully", HttpStatus.OK);
+    }
 }
