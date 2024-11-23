@@ -2,6 +2,7 @@ package mx.ipn.escom.ia.cerradura.service;
 
 import mx.ipn.escom.ia.cerradura.model.Usuario;
 import mx.ipn.escom.ia.cerradura.repository.UsuarioRepository;
+import mx.ipn.escom.ia.cerradura.service.UserProfilePictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,12 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserProfilePictureService userProfilePictureService;
 
     // Obtener todos los usuarios
     public List<Usuario> obtenerTodosLosUsuarios() {
@@ -73,6 +78,9 @@ public class UsuarioService {
 
     // Eliminar un usuario por ID
     public void eliminarUsuario(Long id) {
+        // Eliminar la foto de perfil asociada al usuario
+        userProfilePictureService.deleteProfilePicture(id);
+        // Eliminar el usuario
         usuarioRepository.deleteById(id);
     }
 
