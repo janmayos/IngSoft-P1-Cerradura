@@ -63,42 +63,50 @@
             </p>
 
             <!-- Botón de inicio de sesión con Google -->
-            <div class="mt-10">
-                <div id="g_id_onload"
-                     data-client_id="226251044074-or4u73qcs17bj0k70jli3pia63lo1d5q.apps.googleusercontent.com"
-                     data-callback="handleCredentialResponse">
-                </div>
-                <div class="g_id_signin"
-                     data-type="standard"
-                     data-shape="rectangular"
-                     data-theme="outline"
-                     data-text="signin_with"
-                     data-size="large"
-                     data-logo_alignment="left">
-                </div>
+            <div id="g_id_onload"
+                data-client_id="226251044074-or4u73qcs17bj0k70jli3pia63lo1d5q.apps.googleusercontent.com"
+                data-auto_prompt="false"
+                data-callback="handleCredentialResponse">
             </div>
+            <div class="g_id_signin"
+                data-type="standard"
+                data-size="large"
+                data-theme="outline"
+                data-text="sign_in_with"
+                data-shape="rectangular"
+                data-logo_alignment="left">
+            </div>
+            
         </div>
     </div>
-
+    <script src="https://accounts.google.com/gsi/client" async></script>
     <script>
-      function handleCredentialResponse(response) {
-          fetch('/auth/google-login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ token: response.credential })
-          })
-          .then(res => res.json())
-          .then(data => {
-              if (data.success) {
-                  alert('Inicio de sesión exitoso con Google');
-                  window.location.href = "/dashboard"; // Redirige a tu dashboard
-              } else {
-                  alert('Error al iniciar sesión con Google');
-              }
-          })
-          .catch(error => console.error('Error:', error));
-      }
-    </script>
+        function handleCredentialResponse(response) {
+           // decodeJwtResponse() is a custom function defined by you
+           // to decode the credential response.
+        //    const responsePayload = decodeJwtResponse(response.credential);
+        //    console.log("ID: " + responsePayload.sub);
+        //    console.log('Full Name: ' + responsePayload.name);
+        //    console.log('Given Name: ' + responsePayload.given_name);
+        //    console.log('Family Name: ' + responsePayload.family_name);
+        //    console.log("Image URL: " + responsePayload.picture);
+        //    console.log("Email: " + responsePayload.email);
+        const bodytoken = {id_token: response.credential}
+        fetch('/auth/google-login',{//convertirlo a peticios POST
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bodytoken)
+        })
+        .then(resp =>resp.json())
+        .then(resp =>{
+
+        })
+        .catch(console.warn)
+        }
+      </script>
 </body>
+
 
 </html>
