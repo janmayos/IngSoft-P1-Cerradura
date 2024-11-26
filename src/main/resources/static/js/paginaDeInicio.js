@@ -142,7 +142,7 @@ function deleteProfilePicture() {
     .then(response => {
         if (response.ok) {
             Swal.fire('Éxito', 'Foto de perfil eliminada', 'success').then(() => {
-                loadProfilePicture();
+                location.reload(); // Recarga la página después de eliminar la foto de perfil
             });
         } else {
             throw new Error('Failed to delete profile picture');
