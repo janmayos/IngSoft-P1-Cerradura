@@ -82,30 +82,35 @@
     <script src="https://accounts.google.com/gsi/client" async></script>
     <script>
         function handleCredentialResponse(response) {
-           // decodeJwtResponse() is a custom function defined by you
-           // to decode the credential response.
-        //    const responsePayload = decodeJwtResponse(response.credential);
-        //    console.log("ID: " + responsePayload.sub);
-        //    console.log('Full Name: ' + responsePayload.name);
-        //    console.log('Given Name: ' + responsePayload.given_name);
-        //    console.log('Family Name: ' + responsePayload.family_name);
-        //    console.log("Image URL: " + responsePayload.picture);
-        //    console.log("Email: " + responsePayload.email);
-        const bodytoken = {id_token: response.credential}
-        fetch('/auth/google-login',{//convertirlo a peticios POST
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(bodytoken)
-        })
-        .then(resp =>resp.json())
-        .then(resp =>{
-
-        })
-        .catch(console.warn)
+            const bodytoken = { id_token: response.credential };
+            fetch('/auth/google-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodytoken)
+            })
+            .then(resp => {
+                if (!resp.ok) {
+                    return resp.text().then(text => { throw new Error(text) });
+                }
+                return resp.json();
+            })
+            .then(resp => {
+                console.log(resp);
+                if (resp.token) {
+                    localStorage.setItem('token', resp.token);
+                    console.log("Exito!! Bienvenido " + resp.nombre);
+                    window.location.href = window.location.origin + "/paginaDeInicio";
+                } else {
+                    console.log("No se recibió el token de autenticación");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error.message);
+            });
         }
-      </script>
+    </script>
 </body>
 
 
