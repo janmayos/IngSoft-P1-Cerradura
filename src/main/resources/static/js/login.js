@@ -25,6 +25,11 @@ $(document).ready(() => {
               title: "Exito!!",
               text: "Bienvenido " + respServ.nombre,
               icon: "success",
+              customClass: {
+                popup: 'dark:bg-gray-800 dark:text-white',
+                icon: 'dark:bg-gray-800',
+                confirmButton: 'bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 ease-in-out'
+              },
               didDestroy: () => {
                 window.location.href = window.location.origin + "/paginaDeInicio";
               }
@@ -34,6 +39,10 @@ $(document).ready(() => {
               title: "Upps..",
               text: "No se recibió el token de autenticación",
               icon: "error",
+              customClass: {
+                popup: 'dark:bg-gray-800 dark:text-white',
+                confirmButton: 'bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 ease-in-out'
+              },
               didDestroy: () => {
                 location.reload();
               }
@@ -45,6 +54,10 @@ $(document).ready(() => {
             title: "Upps..",
             text: "Credenciales inválidas",
             icon: "error",
+            customClass: {
+              popup: 'dark:bg-gray-800 dark:text-white',
+              confirmButton: 'bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 ease-in-out'
+            },
             didDestroy: () => {
               location.reload();
             }
