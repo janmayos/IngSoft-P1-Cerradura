@@ -37,6 +37,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/vista/usuarios/**").permitAll() // Permitir acceso a /admin/usuarios/**
                                                 .requestMatchers("/resultadosLibros").permitAll()
                                                 .requestMatchers("/api/profile-picture-blob").permitAll()
+                                                .requestMatchers("/api/check-connection").permitAll()
+
 
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
