@@ -181,8 +181,8 @@ ALTER TABLE `usuario`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- Restricciones para tablas volcadas
---
+-- Restricciones para tablas volcadas                                     
+--                                                                                                            
 
 --
 -- Filtros para la tabla `favorito`
