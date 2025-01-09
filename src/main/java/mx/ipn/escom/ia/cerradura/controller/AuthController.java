@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
@@ -35,6 +36,9 @@ public class AuthController {
     private final AuthService authService;
     private final UsuarioService usuarioService;
     private final JwtService jwtService;
+
+    @Value("${google.client.id}")
+    private String googleClientId;
 
     @PostMapping(value = "login")
     public ResponseEntity<?> login(@RequestParam String userU, @RequestParam String passwordU) {
@@ -62,7 +66,7 @@ public class AuthController {
 
             // Verificar el token
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                    .setAudience(Collections.singletonList("226251044074-or4u73qcs17bj0k70jli3pia63lo1d5q.apps.googleusercontent.com"))
+                    .setAudience(Collections.singletonList(googleClientId))
                     .build();
 
             GoogleIdToken idToken = verifier.verify(idTokenString);
