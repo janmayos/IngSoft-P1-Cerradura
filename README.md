@@ -30,3 +30,40 @@ https://github.com/Dany0343/TeoriaDeLaComputacion/blob/main/P1/Programa1.py
 <input> 1 2 3
 /cerradura/estrella/<input> Σ^*={λ,0,1} Σ^*={λ,0,1,00,01,10,11} Σ^*={λ,0,1,00,01,10,11,000,001,010,011,100,101,110,111}
 /cerradura/positiva/<input> Σ^+={0,1} Σ^+={0,1,00,01,10,11} Σ^+={0,1,00,01,10,11,000,001,010,011,100,101,110,111}
+
+# IA-P1-Cerradura
+
+Ejercicio 2: Implementación de un API Rest para operaciones de conjuntos
+
+## Descripción
+
+Este proyecto implementa un API Rest utilizando Spring Boot para realizar operaciones de conjuntos, específicamente la cerradura de Kleene y la cerradura positiva de un conjunto de cadenas binarias.
+
+## Estructura del Proyecto
+
+
+## Requisitos
+
+- Docker
+- Docker Compose
+
+## Variables de Entorno
+
+Asegúrate de definir las siguientes variables de entorno en un archivo `.env` en la raíz del proyecto:
+
+```env
+DATASOURCE_URL=
+DATASOURCE_USERNAME=
+DATASOURCE_PASSWORD=
+JWT_SECRET_KEY=
+JWT_EXPIRATION=
+JWT_REFRESH_TOKEN_EXPIRATION=86400000
+GOOGLE_CLIENT_ID=
+
+#Levantar app 
+
+git clone https://github.com/tu-usuario/IA-P1-Cerradura.git
+cd IA-P1-Cerradura
+docker-compose up --build
+
+Para la base de datos importar el esquema en practica2.sql
