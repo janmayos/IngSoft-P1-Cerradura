@@ -19,8 +19,8 @@
     <script th:src="@{https://cdn.tailwindcss.com}"></script>
     <script th:src="@{https://cdn.jsdelivr.net/npm/superagent}"></script>
 
-    
-    
+    <!-- Script de Google para autenticación -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="h-full bg-gray-900 text-white">
@@ -55,41 +55,63 @@
                         Ingresa
                     </button>
                 </div>
-                
             </form>
 
             <p class="mt-10 text-center text-sm text-gray-400">
                 ¿No tienes usuario?
                 <a th:href="@{/formregister}" class="font-semibold text-indigo-600 hover:text-indigo-500">Registrate</a>
             </p>
+
+            <!-- Botón de inicio de sesión con Google -->
+            <div id="g_id_onload"
+                data-client_id="226251044074-or4u73qcs17bj0k70jli3pia63lo1d5q.apps.googleusercontent.com"
+                data-auto_prompt="false"
+                data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin"
+                data-type="standard"
+                data-size="large"
+                data-theme="outline"
+                data-text="sign_in_with"
+                data-shape="rectangular"
+                data-logo_alignment="left">
+            </div>
+            
         </div>
     </div>
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <script>
+        function handleCredentialResponse(response) {
+            const bodytoken = { id_token: response.credential };
+            fetch('/auth/google-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodytoken)
+            })
+            .then(resp => {
+                if (!resp.ok) {
+                    return resp.text().then(text => { throw new Error(text) });
+                }
+                return resp.json();
+            })
+            .then(resp => {
+                console.log(resp);
+                if (resp.token) {
+                    localStorage.setItem('token', resp.token);
+                    console.log("Exito!! Bienvenido " + resp.nombre);
+                    window.location.href = window.location.origin + "/paginaDeInicio";
+                } else {
+                    console.log("No se recibió el token de autenticación");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error.message);
+            });
+        }
+    </script>
 </body>
+
 
 </html>
-
-
-<!-- <body>
-    <h1 class="titulo">Bienvenido ingresa tus credenciales!</h1>
-
-    <main class="container">
-        <h2>Login</h2>
-        <form th:action="@{/auth/login}" method="post">
-            <div class="input-field">
-                <input type="text" name="userU" id="userU" placeholder="Ingresa tu usuario" />
-                <div class="underline"></div>
-            </div>
-
-            <div class="input-field">
-                <input type="password" name="passwordU" id="passwordU" placeholder="Ingresa contraseña" />
-                <div class="underline"></div>
-            </div>
-            
-            <input type="submit" value="Ingresar" />
-            
-        </form>
-
-    </main>
-</body>
-
-</html> -->

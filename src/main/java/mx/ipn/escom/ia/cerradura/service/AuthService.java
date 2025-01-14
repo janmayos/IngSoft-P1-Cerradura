@@ -1,3 +1,4 @@
+
 package mx.ipn.escom.ia.cerradura.service;
 
 import mx.ipn.escom.ia.cerradura.jwt.JwtService;
@@ -12,6 +13,7 @@ import mx.ipn.escom.ia.cerradura.response.RegisterRequest;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +38,9 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    
+    private final UsuarioRepository usuarioRepository;
+   
 
     public ResponseEntity<?> login(LoginRequest request) {
         Optional<Usuario> foundUser = userRepository.findByUsername(request.getUsername());
@@ -56,6 +61,21 @@ public class AuthService {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.builder().msg("Error usuario y/o contraseña invalidad").build());
     }
 
+    public ResponseEntity<?> loginGoogle(String email) {
+        // Buscar el usuario por correo
+        Usuario usuario = usuarioRepository.findByCorreo(email).orElse(null);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found.");
+        }
+
+        // Generar el token
+        String token = jwtService.getToken(usuario);
+
+        // Devolver la respuesta con el token
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("token", token);
+        return ResponseEntity.ok(responseBody);
+    }
     public ResponseEntity<?> register(RegisterRequest request) {
         // Validar si el correo ya existe
         if (userRepository.findByCorreo(request.getCorreo()).isPresent()) {

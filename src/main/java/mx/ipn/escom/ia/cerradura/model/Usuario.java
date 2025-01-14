@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @AllArgsConstructor
 @Entity
 @Table(name = "usuario")
-public class Usuario  implements UserDetails{
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -149,5 +149,4 @@ public class Usuario  implements UserDetails{
                     .map(role -> new SimpleGrantedAuthority(role.getNombre())) 
                     .collect(Collectors.toList());
     }
-    
 }
